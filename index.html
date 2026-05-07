@@ -822,7 +822,22 @@
       syncTechnicianFields();
     }
 
-    function connectBackend() { if (!hasBackend() || !LINE_READY) return; apiCall('getConfig', {}, function (cfg) { if (cfg) { CONFIG.rooms = cfg.rooms && cfg.rooms.length ? cfg.rooms : CONFIG.rooms; CONFIG.openHour = Number(cfg.openHour || CONFIG.openHour); CONFIG.closeHour = Number(cfg.closeHour || CONFIG.closeHour); fillAllSelects(); renderServiceTargetOptions(); renderServiceChecks(); updateAvailableSlots(); loadSummary(); } }, function (err) { showMessage(err || T.backendFail, true); }); }
+    function connectBackend() {
+      if (!hasBackend() || !LINE_READY) return;
+      apiCall('getConfig', {}, function (cfg) {
+        if (!cfg) return;
+        CONFIG.rooms = cfg.rooms && cfg.rooms.length ? cfg.rooms : CONFIG.rooms;
+        CONFIG.openHour = Number(cfg.openHour || CONFIG.openHour);
+        CONFIG.closeHour = Number(cfg.closeHour || CONFIG.closeHour);
+        fillAllSelects();
+        renderServiceTargetOptions();
+        renderServiceChecks();
+        if (byId('bookPanel') && byId('bookPanel').classList.contains('active')) updateAvailableSlots();
+        if (byId('summaryPanel') && byId('summaryPanel').classList.contains('active')) loadSummary();
+      }, function (err) {
+        showMessage(err || T.backendFail, true);
+      });
+    }
 
     function getInitialPageParam() {
       var search = window.location.search || '';
