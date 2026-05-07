@@ -116,15 +116,15 @@
     }
     .tab.active { background: linear-gradient(135deg, var(--green), var(--green2)); color: #fff; }
     .homeTabs { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-    .homeTabs.portalTabs { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin-top: 14px; }
+    .homeTabs.portalTabs { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin-top: 16px; }
     .homeTabs.portalTabs .tab {
       position: relative;
-      min-height: clamp(128px, 29vw, 190px);
+      min-height: clamp(150px, 33vw, 220px);
       display: grid;
       grid-template-rows: 1fr auto;
       align-items: stretch;
       gap: 0;
-      padding: 8px;
+      padding: 9px;
       border-radius: 20px;
       border: 2px solid #f0d9ca;
       background:
@@ -151,7 +151,7 @@
     .portalIcon {
       width: 100%;
       height: 100%;
-      min-height: clamp(82px, 21vw, 126px);
+      min-height: clamp(106px, 25vw, 156px);
       display: grid;
       place-items: center;
       border-radius: 16px 16px 8px 8px;
@@ -174,12 +174,12 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      min-height: clamp(30px, 7vw, 44px);
-      padding: 4px 4px;
+      min-height: clamp(34px, 7.6vw, 50px);
+      padding: 5px 4px;
       border-radius: 999px;
       background: #202020;
       color: #fff;
-      font-size: clamp(10px, 2.55vw, 18px);
+      font-size: clamp(11px, 2.75vw, 20px);
       line-height: 1.05;
       font-weight: 950;
       letter-spacing: 0;
@@ -547,10 +547,10 @@
       .topNowCard { flex-direction: column; align-items: flex-start; padding: 20px; }
       .tabs { gap: 10px; }
       .homeTabs { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-      .homeTabs.portalTabs { gap: 7px; }
-      .homeTabs.portalTabs .tab { min-height: clamp(120px, 30vw, 150px); padding: 6px; border-radius: 16px; }
-      .portalIcon { min-height: clamp(78px, 21vw, 96px); border-radius: 13px 13px 8px 8px; }
-      .portalText { min-height: 30px; font-size: clamp(10px, 2.55vw, 14px); padding: 3px 2px; }
+      .homeTabs.portalTabs { gap: 8px; }
+      .homeTabs.portalTabs .tab { min-height: clamp(138px, 33vw, 172px); padding: 7px; border-radius: 17px; }
+      .portalIcon { min-height: clamp(96px, 25vw, 116px); border-radius: 13px 13px 8px 8px; }
+      .portalText { min-height: 32px; font-size: clamp(10px, 2.7vw, 15px); padding: 4px 2px; }
     body.headcountOnly .modeSwitcher,
     body.headcountOnly .homeTabs,
     body.headcountOnly .subTabs { display: none !important; }
@@ -748,7 +748,7 @@
       var app = document.getElementById('app');
       app.innerHTML = [
         '<main class="page">',
-          '<section class="hero"><div class="heroMain"><h1>', T.title, '</h1><div class="sub" id="statusText">', T.subtitle, '</div></div><div class="heroTimeGrid"><div class="heroTimeRow"><div class="todayLabel">\u4eca\u5929\u65e5\u671f</div><div class="todayValue" id="todayDateText"></div></div><div class="heroTimeRow"><div class="todayLabel">\u73fe\u5728\u6642\u9593</div><div class="todayValue" id="todayTimeText"></div></div></div></section>',
+          '<section class="hero"><button class="reportIcon" id="reportBtn" type="button" title="report"><span></span><span></span><span></span></button><div class="heroMain"><h1>', T.title, '</h1><div class="sub" id="statusText">', T.subtitle, '</div></div><div class="heroTimeGrid"><div class="heroTimeRow"><div class="todayLabel">\u4eca\u5929\u65e5\u671f</div><div class="todayValue" id="todayDateText"></div></div><div class="heroTimeRow"><div class="todayLabel">\u73fe\u5728\u6642\u9593</div><div class="todayValue" id="todayTimeText"></div></div></div></section>',
           '<section class="modeSwitcher" id="modeSwitcher"><button class="modeBtn" id="modeManageBtn" type="button">\u7ba1\u7406\u8005\u6a21\u5f0f</button><button class="modeBtn" id="modeReadBtn" type="button">\u552f\u8b80\u6a21\u5f0f</button></section>',
           '<nav class="tabs homeTabs portalTabs" id="homeTabs"><button class="tab" id="portalBookingBtn" type="button"><span class="portalIcon portalIconBooking"></span><span class="portalText">排房預約系統</span></button><button class="tab" id="portalHeadcountBtn" type="button"><span class="portalIcon portalIconHeadcount"></span><span class="portalText">美技人頭計算</span></button><button class="tab" id="portalScheduleBtn" type="button"><span class="portalIcon portalIconSchedule"></span><span class="portalText">美技班表</span></button><button class="tab" id="portalBonusBtn" type="button"><span class="portalIcon portalIconBonus"></span><span class="portalText">工獎計算</span></button><button class="tab" id="portalSalesBtn" type="button"><span class="portalIcon portalIconSales"></span><span class="portalText">個人當月業績</span></button><button class="tab" id="portalServicesBtn" type="button"><span class="portalIcon portalIconServices"></span><span class="portalText">個人當月服務一覽</span></button><button class="tab" id="tabSchedule" type="button" style="display:none"></button><button class="tab" id="tabPeople" type="button" style="display:none"></button></nav>',
           '<nav class="tabs subTabs" id="scheduleTabs"><button class="tab active" id="tabSummary" type="button">', T.summary, '</button><button class="tab" id="tabBook" type="button">', T.book, '</button><button class="tab" id="tabCancel" type="button">', T.cancel, '</button></nav>',
