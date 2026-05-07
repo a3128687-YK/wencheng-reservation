@@ -279,6 +279,24 @@
     .headcountDetailMain { font-size: clamp(19px, 4.5vw, 27px); font-weight: 950; line-height: 1.25; }
     .headcountDetailSub { margin-top: 6px; font-size: clamp(15px, 3.7vw, 21px); font-weight: 820; color: var(--muted); line-height: 1.45; }
     .headcountBack { margin-bottom: 14px; background: #60746a; }
+    body.scheduleOnly .modeSwitcher,
+    body.scheduleOnly .homeTabs,
+    body.scheduleOnly .subTabs { display: none !important; }
+    body.scheduleOnly .topNowCard { display: none; }
+    body.scheduleOnly #techSchedulePanel { display: block; margin-top: 12px; }
+    .scheduleHero { display: grid; gap: 10px; padding: 18px; border-radius: 20px; background: linear-gradient(135deg, #fff8ef, #eef7ef); border: 2px solid rgba(70,126,88,.22); margin-bottom: 16px; }
+    .scheduleGrid { display: grid; gap: 12px; margin-top: 16px; }
+    .scheduleStaffCard { border: 2px solid #d9eadf; background: rgba(255,255,255,.96); border-radius: 18px; padding: 14px; text-align: left; box-shadow: 0 8px 20px rgba(53,82,61,.08); }
+    .scheduleStaffName { font-size: clamp(22px, 5vw, 31px); font-weight: 950; color: var(--ink); }
+    .scheduleBadges { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+    .scheduleBadge { border-radius: 999px; padding: 7px 10px; background: #f3eee5; color: var(--ink); font-weight: 900; font-size: clamp(13px, 3.3vw, 18px); }
+    .scheduleBadge.empty { background: #edf6ef; color: #557264; }
+    .scheduleDetailDay { border: 2px solid #e4d8c9; border-radius: 16px; background: #fffdf8; padding: 12px; margin-top: 10px; }
+    .scheduleDetailDate { font-size: clamp(18px, 4.3vw, 26px); font-weight: 950; color: var(--ink); }
+    .scheduleDetailSub { font-size: clamp(14px, 3.6vw, 20px); font-weight: 820; color: var(--muted); line-height: 1.45; margin-top: 5px; }
+    .scheduleEditBox { display: none; border: 2px solid #d9eadf; border-radius: 18px; padding: 14px; margin-top: 14px; background: #fffdf8; }
+    .scheduleEditBox.active { display: grid; gap: 12px; }
+    @media (min-width: 760px) { .scheduleGrid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
     @media (min-width: 760px) { .headcountGrid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
     .bookingItem { background: #fffdf7; border: 2px solid rgba(75,100,78,.22); border-radius: 18px; padding: 16px; display: grid; grid-template-columns: 1fr; gap: 12px; align-items: stretch; overflow: hidden; cursor: pointer; }
     .bookingMain { font-size: clamp(21px, 4.6vw, 28px); font-weight: 950; line-height: 1.28; word-break: keep-all; }
@@ -605,6 +623,7 @@
           '<section class="panel" id="adminPanel"><div class="sectionTitle">\u7ba1\u7406\u54e1\u6a21\u5f0f</div><div class="sectionNote">\u4f9d\u65e5\u671f\u8207\u623f\u9593\u67e5\u8a62\u7576\u65e5\u6b77\u53f2\u64cd\u4f5c\u7d00\u9304</div><div class="summaryControls queryControls adminSearchControls"><div><label for="adminDateInput">\u65e5\u671f</label><input id="adminDateInput" type="date"></div><div><label for="adminRoomSelect">\u623f\u9593</label><select id="adminRoomSelect"></select></div></div><div class="adminActionGrid"><button class="btn refresh" id="adminRefreshBtn" type="button">\u641c\u5c0b log</button><button class="btn refresh" id="adminHistoryBtn" type="button">\u6b77\u53f2\u67e5\u8a62</button><button class="btn reset" id="adminArchiveBtn" type="button">\u5c01\u5b58 60 \u5929\u524d\u8cc7\u6599</button></div><div id="adminMessage" class="message"></div><div id="adminLogList" class="bookingList"></div></section>',
           '<section class="panel reportPanel" id="reportPanel"><button class="btn reportBack" id="reportBackBtn" type="button">\u8fd4\u56de\u9996\u9801</button><div class="sectionTitle">\u623f\u9593\u5831\u8868</div><div class="reportControls"><div><label for="reportDateInput">\u5831\u8868\u65e5\u671f</label><input id="reportDateInput" type="date"></div><button class="btn refresh" id="reportSearchBtn" type="button">\u67e5\u8a62</button></div><div class="sectionNote" id="reportDateText">\u8f09\u5165\u4e2d...</div><div id="reportArea"></div></section>',
           '<section class="panel" id="techHeadcountPanel"><button class="btn headcountBack" id="headcountHomeBtn" type="button">\u8fd4\u56de\u9996\u9801</button><div class="sectionTitle">\u7f8e\u6280\u4eba\u982d\u8a08\u7b97</div><div class="sectionNote">\u53ea\u986f\u793a\u7f8e\u537f\u3001\u96ef\u8431\u3001\u839b\u7a4e\u3001\u4f73\u59a4\u3001\u7f8e\u73b2\u3001\u66fc\u73b2\uff1b\u4f9d\u670d\u52d9\u65e5\u671f\u7d71\u8a08\u7576\u6708\u6709\u6548\u9810\u7d04\u3002</div><div class="summaryControls"><div><label for="headcountMonthInput">\u67e5\u8a62\u6708\u4efd</label><input id="headcountMonthInput" type="month"></div><button class="btn refresh" id="headcountSearchBtn" type="button">\u67e5\u8a62</button></div><div id="headcountMessage" class="message"></div><div id="headcountArea"></div><div id="headcountDetailArea"></div></section>',
+          '<section class="panel" id="techSchedulePanel"><button class="btn headcountBack" id="scheduleHomeBtn" type="button">\u8fd4\u56de\u9996\u9801</button><div class="sectionTitle">\u7f8e\u6280\u73ed\u8868</div><div class="sectionNote">\u6ac3\u9577\u54c1\u85df\u8207\u516d\u4f4d\u6280\u5e2b\u7576\u6708\u73ed\u8868\uff1b\u7a7a\u767d\u4ee3\u8868\u6b63\u5e38\u4e0a\u73ed\uff0c\u53ea\u986f\u793a\u4f8b\u4f11\u3001\u7279\u4f11\u3001\u4e8b\u5047\u3001\u98b1\u98a8\u5047\u3001\u66e0\u8077\u3002</div><div class="summaryControls"><div><label for="scheduleMonthInput">\u67e5\u8a62\u6708\u4efd</label><input id="scheduleMonthInput" type="month"></div><button class="btn refresh" id="scheduleSearchBtn" type="button">\u67e5\u8a62</button></div><div id="scheduleMessage" class="message"></div><div id="scheduleArea"></div><div id="scheduleDetailArea"></div><div id="scheduleEditBox" class="scheduleEditBox"><div class="sectionNote">\u53ea\u6709\u54c1\u85df\u53ef\u4ee5\u8a2d\u5b9a\u73ed\u8868</div><div class="grid"><div><label for="scheduleEditStaff">\u4eba\u54e1</label><select id="scheduleEditStaff"></select></div><div><label for="scheduleEditDate">\u65e5\u671f</label><input id="scheduleEditDate" type="date"></div><div><label for="scheduleEditStatus">\u72c0\u614b</label><select id="scheduleEditStatus"></select></div><div><label for="scheduleEditNote">\u5099\u8a3b</label><input id="scheduleEditNote" type="text"></div></div><button class="btn refresh" id="scheduleSaveBtn" type="button">\u5132\u5b58\u73ed\u8868</button></div></section>',
         '</main>'
       ].join('');
 
@@ -649,6 +668,10 @@
       byId('headcountSearchBtn').onclick = loadTechHeadcount;
       byId('headcountMonthInput').onchange = loadTechHeadcount;
       byId('headcountHomeBtn').onclick = showHome;
+      byId('scheduleHomeBtn').onclick = showHome;
+      byId('scheduleSearchBtn').onclick = loadTechSchedule;
+      byId('scheduleMonthInput').onchange = loadTechSchedule;
+      byId('scheduleSaveBtn').onclick = saveTechScheduleDay;
     }
 
 
@@ -692,12 +715,17 @@
         showTechHeadcountPanel();
         return;
       }
+      if (page === 'techSchedule') {
+        showTechSchedulePanel();
+        return;
+      }
       loadSummary();
     }
 
     function showTechHeadcountPanel() {
       document.body.classList.remove('reportShotMode');
       document.body.classList.add('headcountOnly');
+      document.body.classList.remove('scheduleOnly');
       byId('reportPanel').classList.remove('active');
       byId('adminPanel').classList.remove('active');
       byId('scheduleTabs').classList.remove('active');
@@ -769,12 +797,111 @@
       byId('headcountDetailArea').innerHTML = html;
       byId('headcountDetailArea').scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
+    function showTechSchedulePanel() {
+      document.body.classList.remove('reportShotMode');
+      document.body.classList.remove('headcountOnly');
+      document.body.classList.add('scheduleOnly');
+      byId('reportPanel').classList.remove('active');
+      byId('adminPanel').classList.remove('active');
+      byId('scheduleTabs').classList.remove('active');
+      byId('tabSchedule').classList.remove('active');
+      byId('tabPeople').classList.remove('active');
+      ['book','cancel','summary','query'].forEach(function (tab) {
+        var tabBtn = byId('tab' + cap(tab));
+        var panel = byId(tab + 'Panel');
+        if (tabBtn) tabBtn.classList.remove('active');
+        if (panel) panel.classList.remove('active');
+      });
+      if (byId('techHeadcountPanel')) byId('techHeadcountPanel').classList.remove('active');
+      byId('techSchedulePanel').classList.add('active');
+      if (!byId('scheduleMonthInput').value) byId('scheduleMonthInput').value = currentMonthValue();
+      fillScheduleEditControls();
+      loadTechSchedule();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function fillScheduleEditControls() {
+      fillSelect('scheduleEditStaff', ['\u54c1\u85df','\u7f8e\u537f','\u96ef\u8431','\u839b\u7a4e','\u4f73\u59a4','\u7f8e\u73b2','\u66fc\u73b2'], '', '\u8acb\u9078\u64c7');
+      fillSelect('scheduleEditStatus', ['','\u4f8b\u4f11','\u7279\u4f11','\u4e8b\u5047','\u98b1\u98a8\u5047','\u66e0\u8077'], '', '\u6b63\u5e38\u4e0a\u73ed');
+    }
+
+    function loadTechSchedule() {
+      var month = byId('scheduleMonthInput').value || currentMonthValue();
+      byId('scheduleMonthInput').value = month;
+      clearBox('scheduleMessage');
+      byId('scheduleDetailArea').innerHTML = '';
+      byId('scheduleArea').innerHTML = '<div class="slotBox empty">' + T.loading + '</div>';
+      if (!hasBackend() || !LINE_READY) {
+        byId('scheduleArea').innerHTML = '<div class="slotBox empty">' + T.backendFail + '</div>';
+        return;
+      }
+      apiCall('getTechScheduleMonthly', { month: month }, renderTechSchedule, function (err) {
+        showPanelMessage('scheduleMessage', err, true);
+        byId('scheduleArea').innerHTML = '';
+      });
+    }
+
+    function renderTechSchedule(result) {
+      result = result || {};
+      window.TECH_SCHEDULE_RESULT = result;
+      var canEdit = !!result.canEdit;
+      byId('scheduleEditBox').classList.toggle('active', canEdit);
+      var staff = result.staff || [];
+      var cards = staff.map(function (person, index) {
+        var statuses = person.statuses || [];
+        var badges = statuses.length ? statuses.map(function (s) {
+          return '<span class="scheduleBadge">' + escapeHtml(s.day + '\u65e5 ' + s.status) + '</span>';
+        }).join('') : '<span class="scheduleBadge empty">\u672c\u6708\u6b63\u5e38\u4e0a\u73ed</span>';
+        return '<button class="scheduleStaffCard" type="button" data-schedule-index="' + index + '"><div class="scheduleStaffName">' + escapeHtml(person.name) + '</div><div class="scheduleBadges">' + badges + '</div></button>';
+      }).join('');
+      byId('scheduleArea').innerHTML = '<div class="scheduleHero"><div class="headcountTotalLabel">' + escapeHtml(String(result.month || '').replace('-', '/')) + ' \u73ed\u8868\u7e3d\u8868</div></div><div class="scheduleGrid">' + cards + '</div>';
+      Array.prototype.forEach.call(document.querySelectorAll('[data-schedule-index]'), function (btn) {
+        btn.onclick = function () { renderTechScheduleDetail(Number(btn.getAttribute('data-schedule-index'))); };
+      });
+    }
+
+    function renderTechScheduleDetail(index) {
+      var result = window.TECH_SCHEDULE_RESULT || {};
+      var person = (result.staff || [])[index];
+      if (!person) return;
+      var html = '<div class="headcountDetailTitle">' + escapeHtml(person.name) + ' \u6bcf\u65e5\u6392\u5ba2\u72c0\u6cc1</div>';
+      html += '<div class="headcountDetailList">' + (person.days || []).map(function (day) {
+        var status = day.status ? '\u73ed\u8868\uff1a' + day.status : '\u73ed\u8868\uff1a\u6b63\u5e38\u4e0a\u73ed';
+        var bookings = (day.bookings || []).length ? day.bookings.map(function (b) {
+          return escapeHtml((b.start || '') + '-' + (b.end || '') + ' ' + (b.room || '') + ' / ' + (b.customer || '') + ' / ' + (b.service || ''));
+        }).join('<br>') : '\u7576\u65e5\u7121\u9810\u7d04';
+        return '<div class="scheduleDetailDay"><div class="scheduleDetailDate">' + escapeHtml(day.dateText) + '</div><div class="scheduleDetailSub">' + escapeHtml(status) + '<br>' + bookings + '</div></div>';
+      }).join('') + '</div>';
+      byId('scheduleDetailArea').innerHTML = html;
+      byId('scheduleDetailArea').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function saveTechScheduleDay() {
+      var data = {
+        staff: byId('scheduleEditStaff').value,
+        date: byId('scheduleEditDate').value,
+        status: byId('scheduleEditStatus').value,
+        note: byId('scheduleEditNote').value
+      };
+      if (!data.staff || !data.date) {
+        showPanelMessage('scheduleMessage', '\u8acb\u9078\u64c7\u4eba\u54e1\u8207\u65e5\u671f', true);
+        return;
+      }
+      apiCall('setTechScheduleDay', data, function () {
+        showPanelMessage('scheduleMessage', '\u5df2\u5132\u5b58\u73ed\u8868', false);
+        loadTechSchedule();
+      }, function (err) {
+        showPanelMessage('scheduleMessage', err, true);
+      });
+    }
     function showHome() {
       document.body.classList.remove('reportShotMode');
       document.body.classList.remove('headcountOnly');
+      document.body.classList.remove('scheduleOnly');
       byId('reportPanel').classList.remove('active');
       byId('adminPanel').classList.remove('active');
       if (byId('techHeadcountPanel')) byId('techHeadcountPanel').classList.remove('active');
+      if (byId('techSchedulePanel')) byId('techSchedulePanel').classList.remove('active');
       byId('scheduleTabs').classList.remove('active');
       byId('tabSchedule').classList.remove('active');
       byId('tabPeople').classList.remove('active');
@@ -803,11 +930,13 @@
 
     function showTab(name) {
       document.body.classList.remove('headcountOnly');
+      document.body.classList.remove('scheduleOnly');
       if ((name === 'book' || name === 'cancel') && !canManageBookings()) { denyManageAction(name === 'cancel' ? 'cancelMessage' : 'message'); name = 'summary'; }
       document.body.classList.remove('reportShotMode');
       byId('reportPanel').classList.remove('active');
       byId('adminPanel').classList.remove('active');
       if (byId('techHeadcountPanel')) byId('techHeadcountPanel').classList.remove('active');
+      if (byId('techSchedulePanel')) byId('techSchedulePanel').classList.remove('active');
       ['book','cancel','summary','query'].forEach(function (tab) {
         var tabBtn = byId('tab' + cap(tab));
         var panel = byId(tab + 'Panel');
@@ -914,6 +1043,7 @@
 
     function showAdminPanel() {
       document.body.classList.remove('headcountOnly');
+      document.body.classList.remove('scheduleOnly');
       if (!canManageBookings()) { denyManageAction('adminMessage'); return; }
       if (!requireLineReady('adminMessage')) return;
       document.body.classList.remove('reportShotMode');
@@ -928,6 +1058,7 @@
       byId('tabPeople').classList.remove('active');
       byId('reportPanel').classList.remove('active');
       if (byId('techHeadcountPanel')) byId('techHeadcountPanel').classList.remove('active');
+      if (byId('techSchedulePanel')) byId('techSchedulePanel').classList.remove('active');
       byId('adminPanel').classList.add('active');
       setToday('adminDateInput');
       byId('adminLogList').innerHTML = '';
@@ -1248,6 +1379,7 @@
     function isTodayDate(dateValue) { var d = parseLocalDate(dateValue); if (!d) return false; var today = new Date(); return d.getFullYear() === today.getFullYear() && d.getMonth() === today.getMonth() && d.getDate() === today.getDate(); }
     function showTomorrowReport() {
       document.body.classList.remove('headcountOnly');
+      document.body.classList.remove('scheduleOnly');
       if (!canManageBookings()) { denyManageAction('message'); return; }
       document.body.classList.add('reportShotMode');
       ['book','cancel','summary','query'].forEach(function (tab) {
@@ -1261,6 +1393,7 @@
       byId('tabPeople').classList.remove('active');
       byId('adminPanel').classList.remove('active');
       if (byId('techHeadcountPanel')) byId('techHeadcountPanel').classList.remove('active');
+      if (byId('techSchedulePanel')) byId('techSchedulePanel').classList.remove('active');
       byId('reportPanel').classList.add('active');
       byId('reportDateInput').value = dateOffsetString(1);
       loadReportByDate();
@@ -1887,6 +2020,7 @@
   </script>
 </body>
 </html>
+
 
 
 
