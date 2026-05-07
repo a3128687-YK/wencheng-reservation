@@ -305,6 +305,7 @@
     .scheduleDetailDay { border: 2px solid #e4d8c9; border-radius: 16px; background: #fffdf8; padding: 12px; margin-top: 10px; }
     .scheduleDetailDate { font-size: clamp(18px, 4.3vw, 26px); font-weight: 950; color: var(--ink); }
     .scheduleDetailSub { font-size: clamp(14px, 3.6vw, 20px); font-weight: 820; color: var(--muted); line-height: 1.45; margin-top: 5px; }
+    .scheduleEditToggle { display: none; width: 100%; margin: 12px 0 6px; min-height: 66px; border-radius: 18px; background: linear-gradient(135deg, #3f8f62, #6ead7e); box-shadow: 0 10px 22px rgba(47,112,75,.22); font-size: clamp(22px, 4.8vw, 30px); }
     .scheduleEditBox { display: none; border: 2px solid #d9eadf; border-radius: 18px; padding: 14px; margin-top: 14px; background: #fffdf8; }
     .scheduleEditBox.active { display: grid; gap: 12px; }
     @media (min-width: 760px) { .scheduleGrid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
@@ -634,7 +635,7 @@
           '<section class="panel" id="adminPanel"><div class="sectionTitle">\u7ba1\u7406\u54e1\u6a21\u5f0f</div><div class="sectionNote">\u4f9d\u65e5\u671f\u8207\u623f\u9593\u67e5\u8a62\u7576\u65e5\u6b77\u53f2\u64cd\u4f5c\u7d00\u9304</div><div class="summaryControls queryControls adminSearchControls"><div><label for="adminDateInput">\u65e5\u671f</label><input id="adminDateInput" type="date"></div><div><label for="adminRoomSelect">\u623f\u9593</label><select id="adminRoomSelect"></select></div></div><div class="adminActionGrid"><button class="btn refresh" id="adminRefreshBtn" type="button">\u641c\u5c0b log</button><button class="btn refresh" id="adminHistoryBtn" type="button">\u6b77\u53f2\u67e5\u8a62</button><button class="btn reset" id="adminArchiveBtn" type="button">\u5c01\u5b58 60 \u5929\u524d\u8cc7\u6599</button></div><div id="adminMessage" class="message"></div><div id="adminLogList" class="bookingList"></div></section>',
           '<section class="panel reportPanel" id="reportPanel"><button class="btn reportBack" id="reportBackBtn" type="button">\u8fd4\u56de\u9996\u9801</button><div class="sectionTitle">\u623f\u9593\u5831\u8868</div><div class="reportControls"><div><label for="reportDateInput">\u5831\u8868\u65e5\u671f</label><input id="reportDateInput" type="date"></div><button class="btn refresh" id="reportSearchBtn" type="button">\u67e5\u8a62</button></div><div class="sectionNote" id="reportDateText">\u8f09\u5165\u4e2d...</div><div id="reportArea"></div></section>',
           '<section class="panel" id="techHeadcountPanel"><button class="btn headcountBack" id="headcountHomeBtn" type="button">\u8fd4\u56de\u9996\u9801</button><div class="sectionTitle">\u7f8e\u6280\u4eba\u982d\u8a08\u7b97</div><div class="sectionNote">\u53ea\u986f\u793a\u7f8e\u537f\u3001\u96ef\u8431\u3001\u839b\u7a4e\u3001\u4f73\u59a4\u3001\u7f8e\u73b2\u3001\u66fc\u7433\uff1b\u4f9d\u670d\u52d9\u65e5\u671f\u7d71\u8a08\u7576\u6708\u6709\u6548\u9810\u7d04\u3002</div><div class="summaryControls"><div><label for="headcountMonthInput">\u67e5\u8a62\u6708\u4efd</label><input id="headcountMonthInput" type="month"></div><button class="btn refresh" id="headcountSearchBtn" type="button">\u67e5\u8a62</button></div><div id="headcountMessage" class="message"></div><div id="headcountArea"></div><div id="headcountDetailArea"></div></section>',
-          '<section class="panel" id="techSchedulePanel"><button class="btn headcountBack" id="scheduleHomeBtn" type="button">\u8fd4\u56de\u9996\u9801</button><div class="sectionTitle">\u7f8e\u6280\u73ed\u8868</div><div class="sectionNote">\u6ac3\u9577\u54c1\u85df\u8207\u516d\u4f4d\u6280\u5e2b\u7576\u6708\u73ed\u8868\uff1b\u7a7a\u767d\u4ee3\u8868\u6b63\u5e38\u4e0a\u73ed\uff0c\u7e3d\u8868\u53ea\u986f\u793a\u7c21\u5beb\uff1a\u4f8b\u3001\u7279\u3001\u4e8b\u3001\u98b1\u3001\u66e0\u3001\u503c\u3002</div><div class="summaryControls"><div><label for="scheduleMonthInput">\u67e5\u8a62\u6708\u4efd</label><input id="scheduleMonthInput" type="month"></div><button class="btn refresh" id="scheduleSearchBtn" type="button">\u67e5\u8a62</button></div><div id="scheduleMessage" class="message"></div><div id="scheduleArea"></div><div id="scheduleDetailArea"></div><div id="scheduleEditBox" class="scheduleEditBox"><div class="sectionNote">\u54c1\u85df\u8207\u7ba1\u7406\u54e1\u53ef\u8a2d\u5b9a\u73ed\u8868</div><div class="grid"><div><label for="scheduleEditStaff">\u4eba\u54e1</label><select id="scheduleEditStaff"></select></div><div><label for="scheduleEditDate">\u65e5\u671f</label><input id="scheduleEditDate" type="date"></div><div><label for="scheduleEditStatus">\u72c0\u614b</label><select id="scheduleEditStatus"></select></div><div><label for="scheduleEditNote">\u5099\u8a3b</label><input id="scheduleEditNote" type="text"></div></div><button class="btn refresh" id="scheduleSaveBtn" type="button">\u5132\u5b58\u73ed\u8868</button></div></section>',
+          '<section class="panel" id="techSchedulePanel"><button class="btn headcountBack" id="scheduleHomeBtn" type="button">\u8fd4\u56de\u9996\u9801</button><div class="sectionTitle">\u7f8e\u6280\u73ed\u8868</div><div class="sectionNote">\u6ac3\u9577\u54c1\u85df\u8207\u516d\u4f4d\u6280\u5e2b\u7576\u6708\u73ed\u8868\uff1b\u7a7a\u767d\u4ee3\u8868\u6b63\u5e38\u4e0a\u73ed\uff0c\u7e3d\u8868\u53ea\u986f\u793a\u7c21\u5beb\uff1a\u4f8b\u3001\u7279\u3001\u4e8b\u3001\u98b1\u3001\u66e0\u3001\u503c\u3002</div><div class="summaryControls"><div><label for="scheduleMonthInput">\u67e5\u8a62\u6708\u4efd</label><input id="scheduleMonthInput" type="month"></div><button class="btn refresh" id="scheduleSearchBtn" type="button">\u67e5\u8a62</button></div><button class="btn scheduleEditToggle" id="scheduleEditToggleBtn" type="button">\u2699\ufe0f \u8a2d\u5b9a\u73ed\u8868</button><div id="scheduleMessage" class="message"></div><div id="scheduleArea"></div><div id="scheduleDetailArea"></div><div id="scheduleEditBox" class="scheduleEditBox"><div class="sectionNote">\u54c1\u85df\u8207\u7ba1\u7406\u54e1\u53ef\u8a2d\u5b9a\u73ed\u8868</div><div class="grid"><div><label for="scheduleEditStaff">\u4eba\u54e1</label><select id="scheduleEditStaff"></select></div><div><label for="scheduleEditDate">\u65e5\u671f</label><input id="scheduleEditDate" type="date"></div><div><label for="scheduleEditStatus">\u72c0\u614b</label><select id="scheduleEditStatus"></select></div><div><label for="scheduleEditNote">\u5099\u8a3b</label><input id="scheduleEditNote" type="text"></div></div><button class="btn refresh" id="scheduleSaveBtn" type="button">\u5132\u5b58\u73ed\u8868</button></div></section>',
         '</main>'
       ].join('');
 
@@ -682,6 +683,7 @@
       byId('scheduleHomeBtn').onclick = showHome;
       byId('scheduleSearchBtn').onclick = loadTechSchedule;
       byId('scheduleMonthInput').onchange = loadTechSchedule;
+      byId('scheduleEditToggleBtn').onclick = toggleScheduleEditBox;
       byId('scheduleSaveBtn').onclick = saveTechScheduleDay;
     }
 
@@ -827,6 +829,7 @@
       byId('techSchedulePanel').classList.add('active');
       if (!byId('scheduleMonthInput').value) byId('scheduleMonthInput').value = currentMonthValue();
       fillScheduleEditControls();
+      byId('scheduleEditBox').classList.remove('active');
       loadTechSchedule();
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
@@ -852,6 +855,16 @@
       });
     }
 
+    function toggleScheduleEditBox() {
+      var box = byId('scheduleEditBox');
+      box.classList.toggle('active');
+      if (box.classList.contains('active') && byId('scheduleEditDate')) {
+        var month = byId('scheduleMonthInput').value || currentMonthValue();
+        if (!byId('scheduleEditDate').value) byId('scheduleEditDate').value = month + '-01';
+        setTimeout(function () { box.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 80);
+      }
+    }
+
     function formatScheduleShortStatus(status) {
       var map = {
         '\u4f8b\u4f11': '\u4f8b',
@@ -868,7 +881,8 @@
       result = result || {};
       window.TECH_SCHEDULE_RESULT = result;
       var canEdit = !!result.canEdit;
-      byId('scheduleEditBox').classList.toggle('active', canEdit);
+      byId('scheduleEditToggleBtn').style.display = canEdit ? 'flex' : 'none';
+      if (!canEdit) byId('scheduleEditBox').classList.remove('active');
       var staff = result.staff || [];
       var maxDays = staff.reduce(function (max, person) { return Math.max(max, (person.days || []).length); }, 0);
       var header = '<tr><th class="dayCol"></th>' + staff.map(function (person, index) {
