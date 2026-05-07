@@ -844,6 +844,7 @@
       byId('scheduleMonthInput').value = month;
       clearBox('scheduleMessage');
       byId('scheduleDetailArea').innerHTML = '';
+      updateScheduleEditVisibility(false);
       byId('scheduleArea').innerHTML = '<div class="slotBox empty">' + T.loading + '</div>';
       if (!hasBackend() || !LINE_READY) {
         byId('scheduleArea').innerHTML = '<div class="slotBox empty">' + T.backendFail + '</div>';
@@ -853,6 +854,18 @@
         showPanelMessage('scheduleMessage', err, true);
         byId('scheduleArea').innerHTML = '';
       });
+    }
+
+    function isScheduleLocalAdmin() {
+      return !!(LINE_PROFILE && (LINE_PROFILE.isAdmin || LINE_PROFILE.role === 'ADMIN' || LINE_PROFILE.displayName === '\u54c1\u85df'));
+    }
+
+    function updateScheduleEditVisibility(canEdit) {
+      var btn = byId('scheduleEditToggleBtn');
+      var box = byId('scheduleEditBox');
+      var allowed = !!canEdit || isScheduleLocalAdmin();
+      if (btn) btn.style.display = allowed ? 'flex' : 'none';
+      if (!allowed && box) box.classList.remove('active');
     }
 
     function toggleScheduleEditBox() {
@@ -880,9 +893,8 @@
     function renderTechSchedule(result) {
       result = result || {};
       window.TECH_SCHEDULE_RESULT = result;
-      var canEdit = !!result.canEdit;
-      byId('scheduleEditToggleBtn').style.display = canEdit ? 'flex' : 'none';
-      if (!canEdit) byId('scheduleEditBox').classList.remove('active');
+      var canEdit = !!result.canEdit || isScheduleLocalAdmin();
+      updateScheduleEditVisibility(canEdit);
       var staff = result.staff || [];
       var maxDays = staff.reduce(function (max, person) { return Math.max(max, (person.days || []).length); }, 0);
       var header = '<tr><th class="dayCol"></th>' + staff.map(function (person, index) {
