@@ -286,6 +286,16 @@
     body.scheduleOnly #techSchedulePanel { display: block; margin-top: 12px; }
     .scheduleHero { display: grid; gap: 10px; padding: 18px; border-radius: 20px; background: linear-gradient(135deg, #fff8ef, #eef7ef); border: 2px solid rgba(70,126,88,.22); margin-bottom: 16px; }
     .scheduleGrid { display: grid; gap: 12px; margin-top: 16px; }
+    .scheduleTableWrap { overflow-x: auto; border: 2px solid rgba(75,100,78,.22); border-radius: 14px; background: rgba(255,255,255,.96); margin-top: 12px; }
+    .scheduleMonthTable { width: 100%; border-collapse: collapse; table-layout: fixed; min-width: 660px; }
+    .scheduleMonthTable th, .scheduleMonthTable td { border: 1px solid rgba(55,65,55,.45); text-align: center; vertical-align: middle; padding: 5px 3px; height: 30px; font-weight: 850; color: var(--ink); }
+    .scheduleMonthTable th { background: #f7f2e9; font-size: clamp(12px, 2.9vw, 16px); position: sticky; top: 0; z-index: 1; }
+    .scheduleMonthTable .dayCol { width: 34px; background: #fbfaf5; font-size: clamp(11px, 2.7vw, 15px); }
+    .schedulePersonBtn { appearance: none; border: 0; background: transparent; color: var(--ink); font: inherit; font-weight: 950; padding: 0; }
+    .scheduleStatusCell { font-size: clamp(11px, 2.8vw, 16px); line-height: 1.08; word-break: keep-all; }
+    .scheduleStatusCell.duty { color: #2c7a55; }
+    .scheduleStatusCell.leave { color: #9a4c22; }
+    .scheduleHint { font-size: clamp(13px, 3.2vw, 18px); font-weight: 850; color: var(--muted); margin-top: 8px; }
     .scheduleStaffCard { border: 2px solid #d9eadf; background: rgba(255,255,255,.96); border-radius: 18px; padding: 14px; text-align: left; box-shadow: 0 8px 20px rgba(53,82,61,.08); }
     .scheduleStaffName { font-size: clamp(22px, 5vw, 31px); font-weight: 950; color: var(--ink); }
     .scheduleBadges { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
@@ -622,7 +632,7 @@
           '<section class="panel" id="queryPanel"><div class="sectionTitle">', T.queryTitle, '</div><div class="sectionNote">', T.queryNote, '</div><div class="summaryControls queryControls"><div><label for="queryDateInput">', T.date, '</label><input id="queryDateInput" type="date"></div><div><label for="queryTechSelect">', T.tech, '</label><select id="queryTechSelect"></select></div><div id="queryNameWrap" class="queryNameWrap"><label for="queryNameSelect">姓名</label><select id="queryNameSelect"></select></div></div><button class="btn refresh" id="queryBtn" type="button">', T.search, '</button><div id="queryMessage" class="message"></div><div id="queryList" class="bookingList"></div></section>',
           '<section class="panel" id="adminPanel"><div class="sectionTitle">\u7ba1\u7406\u54e1\u6a21\u5f0f</div><div class="sectionNote">\u4f9d\u65e5\u671f\u8207\u623f\u9593\u67e5\u8a62\u7576\u65e5\u6b77\u53f2\u64cd\u4f5c\u7d00\u9304</div><div class="summaryControls queryControls adminSearchControls"><div><label for="adminDateInput">\u65e5\u671f</label><input id="adminDateInput" type="date"></div><div><label for="adminRoomSelect">\u623f\u9593</label><select id="adminRoomSelect"></select></div></div><div class="adminActionGrid"><button class="btn refresh" id="adminRefreshBtn" type="button">\u641c\u5c0b log</button><button class="btn refresh" id="adminHistoryBtn" type="button">\u6b77\u53f2\u67e5\u8a62</button><button class="btn reset" id="adminArchiveBtn" type="button">\u5c01\u5b58 60 \u5929\u524d\u8cc7\u6599</button></div><div id="adminMessage" class="message"></div><div id="adminLogList" class="bookingList"></div></section>',
           '<section class="panel reportPanel" id="reportPanel"><button class="btn reportBack" id="reportBackBtn" type="button">\u8fd4\u56de\u9996\u9801</button><div class="sectionTitle">\u623f\u9593\u5831\u8868</div><div class="reportControls"><div><label for="reportDateInput">\u5831\u8868\u65e5\u671f</label><input id="reportDateInput" type="date"></div><button class="btn refresh" id="reportSearchBtn" type="button">\u67e5\u8a62</button></div><div class="sectionNote" id="reportDateText">\u8f09\u5165\u4e2d...</div><div id="reportArea"></div></section>',
-          '<section class="panel" id="techHeadcountPanel"><button class="btn headcountBack" id="headcountHomeBtn" type="button">\u8fd4\u56de\u9996\u9801</button><div class="sectionTitle">\u7f8e\u6280\u4eba\u982d\u8a08\u7b97</div><div class="sectionNote">\u53ea\u986f\u793a\u7f8e\u537f\u3001\u96ef\u8431\u3001\u839b\u7a4e\u3001\u4f73\u59a4\u3001\u7f8e\u73b2\u3001\u66fc\u73b2\uff1b\u4f9d\u670d\u52d9\u65e5\u671f\u7d71\u8a08\u7576\u6708\u6709\u6548\u9810\u7d04\u3002</div><div class="summaryControls"><div><label for="headcountMonthInput">\u67e5\u8a62\u6708\u4efd</label><input id="headcountMonthInput" type="month"></div><button class="btn refresh" id="headcountSearchBtn" type="button">\u67e5\u8a62</button></div><div id="headcountMessage" class="message"></div><div id="headcountArea"></div><div id="headcountDetailArea"></div></section>',
+          '<section class="panel" id="techHeadcountPanel"><button class="btn headcountBack" id="headcountHomeBtn" type="button">\u8fd4\u56de\u9996\u9801</button><div class="sectionTitle">\u7f8e\u6280\u4eba\u982d\u8a08\u7b97</div><div class="sectionNote">\u53ea\u986f\u793a\u7f8e\u537f\u3001\u96ef\u8431\u3001\u839b\u7a4e\u3001\u4f73\u59a4\u3001\u7f8e\u73b2\u3001\u66fc\u7433\uff1b\u4f9d\u670d\u52d9\u65e5\u671f\u7d71\u8a08\u7576\u6708\u6709\u6548\u9810\u7d04\u3002</div><div class="summaryControls"><div><label for="headcountMonthInput">\u67e5\u8a62\u6708\u4efd</label><input id="headcountMonthInput" type="month"></div><button class="btn refresh" id="headcountSearchBtn" type="button">\u67e5\u8a62</button></div><div id="headcountMessage" class="message"></div><div id="headcountArea"></div><div id="headcountDetailArea"></div></section>',
           '<section class="panel" id="techSchedulePanel"><button class="btn headcountBack" id="scheduleHomeBtn" type="button">\u8fd4\u56de\u9996\u9801</button><div class="sectionTitle">\u7f8e\u6280\u73ed\u8868</div><div class="sectionNote">\u6ac3\u9577\u54c1\u85df\u8207\u516d\u4f4d\u6280\u5e2b\u7576\u6708\u73ed\u8868\uff1b\u7a7a\u767d\u4ee3\u8868\u6b63\u5e38\u4e0a\u73ed\uff0c\u53ea\u986f\u793a\u4f8b\u4f11\u3001\u7279\u4f11\u3001\u4e8b\u5047\u3001\u98b1\u98a8\u5047\u3001\u66e0\u8077\u3002</div><div class="summaryControls"><div><label for="scheduleMonthInput">\u67e5\u8a62\u6708\u4efd</label><input id="scheduleMonthInput" type="month"></div><button class="btn refresh" id="scheduleSearchBtn" type="button">\u67e5\u8a62</button></div><div id="scheduleMessage" class="message"></div><div id="scheduleArea"></div><div id="scheduleDetailArea"></div><div id="scheduleEditBox" class="scheduleEditBox"><div class="sectionNote">\u53ea\u6709\u54c1\u85df\u53ef\u4ee5\u8a2d\u5b9a\u73ed\u8868</div><div class="grid"><div><label for="scheduleEditStaff">\u4eba\u54e1</label><select id="scheduleEditStaff"></select></div><div><label for="scheduleEditDate">\u65e5\u671f</label><input id="scheduleEditDate" type="date"></div><div><label for="scheduleEditStatus">\u72c0\u614b</label><select id="scheduleEditStatus"></select></div><div><label for="scheduleEditNote">\u5099\u8a3b</label><input id="scheduleEditNote" type="text"></div></div><button class="btn refresh" id="scheduleSaveBtn" type="button">\u5132\u5b58\u73ed\u8868</button></div></section>',
         '</main>'
       ].join('');
@@ -821,8 +831,8 @@
     }
 
     function fillScheduleEditControls() {
-      fillSelect('scheduleEditStaff', ['\u54c1\u85df','\u7f8e\u537f','\u96ef\u8431','\u839b\u7a4e','\u4f73\u59a4','\u7f8e\u73b2','\u66fc\u73b2'], '', '\u8acb\u9078\u64c7');
-      fillSelect('scheduleEditStatus', ['','\u4f8b\u4f11','\u7279\u4f11','\u4e8b\u5047','\u98b1\u98a8\u5047','\u66e0\u8077'], '', '\u6b63\u5e38\u4e0a\u73ed');
+      fillSelect('scheduleEditStaff', ['\u54c1\u85df','\u7f8e\u537f','\u96ef\u8431','\u839b\u7a4e','\u4f73\u59a4','\u7f8e\u73b2','\u66fc\u7433'], '', '\u8acb\u9078\u64c7');
+      fillSelect('scheduleEditStatus', ['','\u4f8b\u4f11','\u7279\u4f11','\u4e8b\u5047','\u98b1\u98a8\u5047','\u66e0\u8077','\u503c\u65e5\u751f'], '', '\u6b63\u5e38\u4e0a\u73ed');
     }
 
     function loadTechSchedule() {
@@ -847,14 +857,22 @@
       var canEdit = !!result.canEdit;
       byId('scheduleEditBox').classList.toggle('active', canEdit);
       var staff = result.staff || [];
-      var cards = staff.map(function (person, index) {
-        var statuses = person.statuses || [];
-        var badges = statuses.length ? statuses.map(function (s) {
-          return '<span class="scheduleBadge">' + escapeHtml(s.day + '\u65e5 ' + s.status) + '</span>';
-        }).join('') : '<span class="scheduleBadge empty">\u672c\u6708\u6b63\u5e38\u4e0a\u73ed</span>';
-        return '<button class="scheduleStaffCard" type="button" data-schedule-index="' + index + '"><div class="scheduleStaffName">' + escapeHtml(person.name) + '</div><div class="scheduleBadges">' + badges + '</div></button>';
-      }).join('');
-      byId('scheduleArea').innerHTML = '<div class="scheduleHero"><div class="headcountTotalLabel">' + escapeHtml(String(result.month || '').replace('-', '/')) + ' \u73ed\u8868\u7e3d\u8868</div></div><div class="scheduleGrid">' + cards + '</div>';
+      var maxDays = staff.reduce(function (max, person) { return Math.max(max, (person.days || []).length); }, 0);
+      var header = '<tr><th class="dayCol"></th>' + staff.map(function (person, index) {
+        return '<th><button class="schedulePersonBtn" type="button" data-schedule-index="' + index + '">' + escapeHtml(person.name) + '</button></th>';
+      }).join('') + '</tr>';
+      var rows = '';
+      for (var dayIndex = 0; dayIndex < maxDays; dayIndex++) {
+        rows += '<tr><td class="dayCol">' + (dayIndex + 1) + '</td>';
+        staff.forEach(function (person) {
+          var day = (person.days || [])[dayIndex] || {};
+          var status = day.status || '';
+          var klass = status === '\u503c\u65e5\u751f' ? ' duty' : (status ? ' leave' : '');
+          rows += '<td><div class="scheduleStatusCell' + klass + '">' + escapeHtml(status) + '</div></td>';
+        });
+        rows += '</tr>';
+      }
+      byId('scheduleArea').innerHTML = '<div class="scheduleHero"><div class="headcountTotalLabel">' + escapeHtml(String(result.month || '').replace('-', '/')) + ' \u73ed\u8868\u7e3d\u8868</div><div class="scheduleHint">\u9ede\u4eba\u540d\u53ef\u770b\u500b\u4eba\u6bcf\u65e5\u6392\u5ba2\u72c0\u6cc1</div></div><div class="scheduleTableWrap"><table class="scheduleMonthTable">' + header + rows + '</table></div>';
       Array.prototype.forEach.call(document.querySelectorAll('[data-schedule-index]'), function (btn) {
         btn.onclick = function () { renderTechScheduleDetail(Number(btn.getAttribute('data-schedule-index'))); };
       });
@@ -2020,6 +2038,7 @@
   </script>
 </body>
 </html>
+
 
 
 
