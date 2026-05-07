@@ -1,0 +1,1899 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+  <base target="_top">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>&#x6587;&#x6210;&#x6703;&#x9928;&#x9810;&#x7D04;&#x7CFB;&#x7D71;</title>
+  <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+  <style>
+    :root {
+      --ink: #263329;
+      --muted: #6d7b70;
+      --line: rgba(70, 92, 74, .18);
+      --green: #2f8f61;
+      --green2: #78b66d;
+      --cream: #fffaf0;
+      --card: rgba(255, 255, 255, .92);
+      --red: #d92828;
+      --redBg: #fff0f0;
+      --shadow: 0 18px 46px rgba(47, 76, 54, .18);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 12% 12%, rgba(120,182,109,.18), transparent 26%),
+        radial-gradient(circle at 92% 18%, rgba(217,164,65,.16), transparent 28%),
+        linear-gradient(120deg, rgba(255,255,255,.94), rgba(249,244,229,.9)),
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1200' height='900' viewBox='0 0 1200 900'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' x2='1' y1='0' y2='1'%3E%3Cstop stop-color='%23d9ead3'/%3E%3Cstop offset='1' stop-color='%23f6e7c8'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='1200' height='900' fill='url(%23g)'/%3E%3Cg opacity='.14' fill='none' stroke='%235e8d68' stroke-width='26' stroke-linecap='round'%3E%3Cpath d='M975 116c-100 56-134 139-102 249 92-56 128-144 102-249z'/%3E%3Cpath d='M1055 270c-128 38-190 119-185 244 122-31 190-111 185-244z'/%3E%3Cpath d='M171 615c130-56 238-47 326 27-115 79-224 70-326-27z'/%3E%3Cpath d='M80 740c86-41 160-34 221 20-76 51-150 44-221-20z'/%3E%3C/g%3E%3Cg opacity='.20'%3E%3Cellipse cx='695' cy='669' rx='288' ry='52' fill='%23c7d8bd'/%3E%3Crect x='560' y='430' width='256' height='217' rx='38' fill='%23fff7e7' stroke='%23b88b59' stroke-width='8'/%3E%3Crect x='600' y='469' width='176' height='130' rx='28' fill='%23f0d8a8'/%3E%3Cpath d='M678 411c-21-52 29-63 10-111 58 50 32 81 58 111' fill='none' stroke='%23a97342' stroke-width='11' stroke-linecap='round'/%3E%3Ccircle cx='894' cy='574' r='66' fill='%239cc48a'/%3E%3Cpath d='M852 589c43-12 76-40 101-84' fill='none' stroke='%23598054' stroke-width='10' stroke-linecap='round'/%3E%3C/g%3E%3C/svg%3E");
+      background-size: cover;
+      background-attachment: fixed;
+    }
+    .page { max-width: 1120px; margin: 0 auto; padding: 26px 16px 40px; }
+    .hero {
+      position: relative;
+      min-height: 180px;
+      display: grid;
+      grid-template-columns: 1fr;
+      align-items: end;
+      padding: 32px 26px;
+      border-radius: 26px;
+      background: linear-gradient(135deg, rgba(255,255,255,.92), rgba(255,250,238,.72));
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(255,255,255,.72);
+      backdrop-filter: blur(8px);
+      overflow: hidden;
+    }
+    .hero::after {
+      content: "";
+      position: absolute;
+      right: 22px;
+      bottom: 14px;
+      width: min(28vw, 190px);
+      aspect-ratio: 1.2;
+      opacity: .26;
+      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='360' height='300' viewBox='0 0 360 300'%3E%3Cg fill='none' stroke='%232f8f61' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M70 203c68 48 154 48 220 0' stroke-width='18'/%3E%3Cpath d='M101 201h157c23 0 41-19 41-42 0-18-12-34-30-40-19-7-35-2-48 11-10-24-32-41-60-41-40 0-68 31-68 70 0 15 3 29 8 42z' fill='%23d9ead3' stroke-width='10'/%3E%3Cpath d='M201 68c-18-28 23-39 5-66 39 28 23 51 42 66' stroke-width='12'/%3E%3Cpath d='M74 92c46-28 88-25 126 9-44 27-86 24-126-9z' fill='%23fff7e7' stroke-width='9'/%3E%3C/g%3E%3C/svg%3E") center / contain no-repeat;
+      pointer-events: none;
+    }
+    .hero > * { position: relative; z-index: 1; }
+    h1 { margin: 0; font-size: clamp(34px, 6vw, 56px); line-height: 1.08; letter-spacing: 0; }
+    .sub { margin-top: 12px; font-size: clamp(20px, 3.4vw, 28px); color: var(--muted); font-weight: 700; }
+    .quickInfo { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin: 18px 0; }
+    .infoCard { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 18px; box-shadow: 0 10px 22px rgba(43, 70, 52, .08); }
+    .infoLabel { font-size: 18px; color: var(--muted); font-weight: 800; }
+    .infoValue { font-size: 28px; font-weight: 900; margin-top: 4px; }
+    .modeSwitcher { display: none; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin: 12px 0 14px; padding: 10px; border-radius: 18px; background: rgba(255,255,255,.9); border: 1px solid var(--line); box-shadow: 0 10px 24px rgba(43,70,52,.1); }
+    .modeSwitcher.active { display: grid; }
+    .modeBtn { border: 0; border-radius: 14px; min-height: 58px; padding: 8px 10px; font-size: clamp(18px, 4vw, 26px); font-weight: 950; color: var(--ink); background: #f4f1e7; }
+    .modeBtn.active { color: #fff; background: var(--green); box-shadow: 0 8px 18px rgba(47,143,97,.22); }
+    .topNowCard {
+      margin: 10px 0 12px;
+      padding: 12px 16px;
+      border-radius: 18px;
+      background: rgba(255,255,255,.9);
+      border: 1px solid var(--line);
+      box-shadow: 0 12px 28px rgba(43,70,52,.12);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+    }
+    .todayLabel { font-size: clamp(15px, 3vw, 22px); font-weight: 950; color: var(--muted); }
+    .todayValue { font-size: clamp(22px, 5vw, 36px); font-weight: 950; line-height: 1; color: var(--ink); }
+    .tabs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin: 16px 0 20px; }
+    .tab {
+      border: 0;
+      border-radius: 18px;
+      min-height: 108px;
+      padding: 18px 10px;
+      font-size: clamp(22px, 4.6vw, 34px);
+      line-height: 1.12;
+      font-weight: 950;
+      background: rgba(255,255,255,.85);
+      color: var(--ink);
+      box-shadow: 0 10px 24px rgba(43, 70, 52, .12);
+      white-space: normal;
+      word-break: keep-all;
+    }
+    .tab.active { background: linear-gradient(135deg, var(--green), var(--green2)); color: #fff; }
+    .homeTabs { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .homeTabs .tab { min-height: 118px; padding: 14px 6px; font-size: clamp(18px, 4.1vw, 30px); white-space: nowrap; letter-spacing: 0; }
+    .subTabs { display: none; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin: 14px 0 18px; }
+    .subTabs.active { display: grid; }
+    .subTabs .tab { min-height: 78px; padding: 12px 8px; font-size: clamp(20px, 4vw, 30px); white-space: nowrap; }
+    .reportIcon {
+      position: absolute;
+      top: 18px;
+      right: 18px;
+      width: 58px;
+      height: 58px;
+      border: 0;
+      border-radius: 18px;
+      background: #fffdf7;
+      box-shadow: 0 10px 22px rgba(43, 70, 52, .16);
+      display: grid;
+      grid-template-columns: repeat(3, 8px);
+      gap: 5px;
+      align-items: end;
+      justify-content: center;
+      padding: 12px;
+    }
+    .reportIcon span { display: block; width: 8px; border-radius: 5px 5px 2px 2px; background: #2f8f61; }
+    .reportIcon span:nth-child(1) { height: 18px; }
+    .reportIcon span:nth-child(2) { height: 28px; background: #2f6f9f; }
+    .reportIcon span:nth-child(3) { height: 38px; background: #d9a441; }
+    .panel { display: none; background: var(--card); border: 1px solid var(--line); border-radius: 22px; padding: 18px; box-shadow: var(--shadow); overflow: hidden; }
+    .panel.active { display: block; }
+    .sectionTitle { font-size: clamp(27px, 4.5vw, 38px); font-weight: 950; margin: 2px 0 8px; }
+    .sectionNote { color: var(--muted); font-size: clamp(16px, 3.2vw, 20px); font-weight: 800; margin-bottom: 14px; }
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    label { display: block; font-size: clamp(17px, 3.2vw, 22px); font-weight: 950; margin-bottom: 8px; }
+    input, select {
+      width: 100%;
+      max-width: 100%;
+      min-width: 0;
+      min-height: 58px;
+      border: 2px solid rgba(75, 100, 78, .26);
+      border-radius: 16px;
+      padding: 10px 14px;
+      font-size: clamp(19px, 3.5vw, 25px);
+      font-weight: 850;
+      color: var(--ink);
+      background: #fffdf8;
+      -webkit-appearance: none;
+      appearance: none;
+    }
+    input:focus, select:focus { outline: 4px solid rgba(69, 151, 100, .22); border-color: var(--green); }
+    .fieldError input, .fieldError select, input.fieldError, select.fieldError { border-color: var(--red) !important; background: var(--redBg) !important; box-shadow: 0 0 0 4px rgba(217,40,40,.18); }
+    .fieldError label, label.fieldError { color: var(--red); }
+    .serviceCheckGrid.fieldError { border: 3px solid var(--red); background: var(--redBg); border-radius: 18px; padding: 10px; box-shadow: 0 0 0 4px rgba(217,40,40,.14); }
+    .wide { grid-column: 1 / -1; }
+    .actions { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 22px; }
+    .btn {
+      border: 0;
+      border-radius: 18px;
+      min-height: 72px;
+      font-size: clamp(24px, 4.4vw, 34px);
+      font-weight: 950;
+      color: #fff;
+      background: var(--green);
+      box-shadow: 0 12px 24px rgba(47, 143, 97, .22);
+    }
+    .btn.secondary { background: #8b6f4f; }
+    .btn.reset { background: #60746a; }
+    .btn.refresh { background: #4c7f69; width: 100%; margin-bottom: 18px; }
+    .summaryControls { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; align-items: end; margin-bottom: 18px; }
+    .summaryControls > div, .grid > div { min-width: 0; }
+    .queryControls { grid-template-columns: 1fr; gap: 12px; }
+    #queryPanel input,
+    #queryPanel select { width: 100%; max-width: 100%; }
+    #queryPanel .btn.refresh { margin-top: 8px; margin-bottom: 12px; }
+    #roomSelect, #adminRoomSelect { font-size: clamp(17px, 3.9vw, 23px); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding-left: 12px; padding-right: 34px; }
+    .message { display: none; margin-top: 18px; border-radius: 18px; padding: 18px; font-size: 24px; font-weight: 950; line-height: 1.45; white-space: pre-line; }
+    .message.ok { display: block; color: #14653c; background: #edf8ef; border: 2px solid #79c58c; }
+    .message.err { display: block; color: var(--red); background: var(--redBg); border: 3px solid var(--red); }
+    .toastMessage {
+      position: fixed;
+      left: 50%;
+      bottom: max(18px, env(safe-area-inset-bottom));
+      transform: translateX(-50%);
+      z-index: 300;
+      width: min(92vw, 720px);
+      border-radius: 18px;
+      padding: 16px 18px;
+      font-size: clamp(20px, 4.5vw, 30px);
+      font-weight: 950;
+      line-height: 1.35;
+      text-align: center;
+      box-shadow: 0 18px 45px rgba(30, 50, 35, .28);
+      white-space: pre-line;
+    }
+    .toastMessage.ok { color: #fff; background: #2f8f61; }
+    .toastMessage.err { color: #fff; background: #d92828; }
+    .availableTitle { margin: 24px 0 12px; font-size: 28px; font-weight: 950; }
+    .slotBoxGrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(118px, 1fr)); gap: 12px; }
+    .slotBox {
+      border: 2px solid #74b282;
+      background: #f3fbf4;
+      color: #1d7043;
+      border-radius: 16px;
+      min-height: 74px;
+      font-size: 24px;
+      font-weight: 950;
+    }
+    .slotBox small { display: block; font-size: 16px; margin-top: 3px; color: #4d8060; }
+    .slotBox.empty { border-color: #d8c4ad; background: #fff7ed; color: #8d5b32; padding: 18px; text-align: center; }
+    .summaryRoom { margin: 18px 0 26px; }
+    .roomName { display: flex; align-items: baseline; gap: 8px; flex-wrap: nowrap; font-size: clamp(25px, 6vw, 34px); font-weight: 950; margin: 0 0 10px; line-height: 1.15; white-space: nowrap; }
+    .roomEquip { font-size: clamp(15px, 3.9vw, 22px); font-weight: 950; white-space: nowrap; }
+    .summaryGrid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; }
+    .summaryCell { border-radius: 10px; padding: 6px 4px; min-height: 82px; font-weight: 900; border: 2px solid transparent; overflow: hidden; cursor: pointer; text-align: left; width: 100%; font-family: inherit; }
+    .summaryCell.free { background: #eff9f0; color: #21713f; border-color: #94ca93; }
+    .summaryCell.free:active, .summaryCell.busy:active, .summaryCell.experience:active { transform: scale(.98); filter: brightness(.97); }
+    .summaryCell.past { opacity: .62; cursor: default; filter: grayscale(.18); }
+    .summaryCell.busy { background: #fff0f0; color: #b32020; border-color: #e07b7b; }
+    .summaryCell.experience { background: #eaf3ff; color: #1d5f9f; border-color: #76a9df; }
+    .reportPanel {
+      padding: 2px;
+      overflow: hidden;
+      background: #fffdf7;
+      border-radius: 0;
+      box-shadow: none;
+    }
+    .reportPanel .sectionTitle { font-size: clamp(14px, 3.6vw, 20px); margin: 0 0 1px; line-height: 1; }
+    .reportPanel .sectionNote { font-size: clamp(7px, 1.9vw, 10px); color: #263329; margin-bottom: 2px; line-height: 1; }
+    .reportPanel .summaryRoom { margin: 1px 0 3px; }
+    .reportPanel .roomName { font-size: clamp(9px, 2.6vw, 13px); margin: 0 0 1px; line-height: 1; gap: 2px; }
+    .reportPanel .roomEquip { font-size: clamp(6px, 1.7vw, 8px); }
+    .reportPanel .summaryGrid {
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      gap: 1px;
+    }
+    .reportPanel .summaryCell {
+      height: 20px;
+      min-height: 20px;
+      padding: 1px 0;
+      border-radius: 4px;
+      border-width: 1px;
+    }
+    .reportPanel .summaryTime { font-size: clamp(5px, 1.28vw, 6.5px); font-weight: 950; margin-bottom: 0; line-height: 1; white-space: nowrap; overflow: hidden; text-align: center; }
+    .reportPanel .summaryDetail { font-size: clamp(5px, 1.2vw, 6px); font-weight: 950; line-height: 1; text-align: center; overflow: hidden; }
+    .reportShotMode .hero,
+    .reportShotMode .quickInfo,
+    .reportShotMode .modeSwitcher,
+    .reportShotMode .tabs { display: none; }
+    .reportShotMode .page { max-width: none; padding: 0; }
+    .reportShotMode body,
+    body.reportShotMode { background: #fffdf7; }
+    @media (min-width: 560px) { .summaryGrid { grid-template-columns: repeat(5, minmax(0, 1fr)); } }
+    @media (max-width: 720px) {
+      .reportPanel .summaryGrid { grid-template-columns: repeat(12, minmax(0, 1fr)); }
+      .reportPanel .summaryCell { height: 20px; min-height: 20px; }
+    }
+    .summaryTime { font-size: clamp(7px, 1.95vw, 11px); margin-bottom: 4px; line-height: 1.05; font-weight: 950; white-space: nowrap; letter-spacing: 0; }
+    .summaryDetail { font-size: clamp(7px, 2vw, 10px); line-height: 1.14; font-weight: 950; word-break: break-word; overflow-wrap: anywhere; }
+    .summaryDetail.bookedDetail { text-align: left; }
+    .bookingList { display: grid; gap: 14px; margin-top: 18px; }
+    .headcountHero {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+      padding: 16px;
+      border-radius: 18px;
+      background: linear-gradient(135deg, #fff8ef, #eef7ef);
+      border: 1px solid #ead9c7;
+      margin-bottom: 16px;
+    }
+    .headcountTotal { font-size: clamp(36px, 10vw, 58px); font-weight: 950; color: var(--green); line-height: 1; }
+    .headcountTotalLabel { font-size: clamp(17px, 4vw, 24px); font-weight: 900; color: var(--muted); }
+    .headcountGrid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin-top: 16px; }
+    .headcountCard { cursor: pointer;
+      border: 2px solid #d9eadf;
+      background: rgba(255,255,255,.94);
+      border-radius: 18px;
+      padding: 16px 12px;
+      min-height: 116px;
+      box-shadow: 0 8px 20px rgba(53, 82, 61, .08);
+      display: grid;
+      align-content: center;
+      gap: 8px;
+    }
+    .headcountName { font-size: clamp(21px, 5vw, 30px); font-weight: 950; color: var(--ink); line-height: 1.05; word-break: keep-all; overflow-wrap: anywhere; }
+    .headcountCount { font-size: clamp(28px, 7vw, 42px); font-weight: 950; color: var(--green); line-height: 1; }
+    .headcountMeta { font-size: clamp(14px, 3.4vw, 18px); color: var(--muted); font-weight: 850; }
+    .headcountDetailList { display: grid; gap: 12px; margin-top: 16px; }
+    .headcountDetailTitle { font-size: clamp(24px, 6vw, 36px); font-weight: 950; color: var(--ink); margin-top: 18px; }
+    .headcountDetailItem { border: 2px solid #e4d8c9; border-radius: 16px; background: #fffdf8; padding: 14px; }
+    .headcountDetailMain { font-size: clamp(19px, 4.5vw, 27px); font-weight: 950; line-height: 1.25; }
+    .headcountDetailSub { margin-top: 6px; font-size: clamp(15px, 3.7vw, 21px); font-weight: 820; color: var(--muted); line-height: 1.4; }
+    .headcountBack { margin-bottom: 14px; background: #60746a; }
+    @media (min-width: 760px) { .headcountGrid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+    .bookingItem { background: #fffdf7; border: 2px solid rgba(75,100,78,.22); border-radius: 18px; padding: 16px; display: grid; grid-template-columns: 1fr; gap: 12px; align-items: stretch; overflow: hidden; cursor: pointer; }
+    .bookingMain { font-size: clamp(21px, 4.6vw, 28px); font-weight: 950; line-height: 1.28; word-break: keep-all; }
+    .bookingSub { margin-top: 6px; color: var(--muted); font-size: clamp(16px, 3.7vw, 21px); font-weight: 800; line-height: 1.35; word-break: break-word; }
+    .cancelOne { background: var(--red); min-height: 58px; padding: 0 16px; }
+    .serviceCheckGrid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+    .serviceCheck { display: flex; align-items: center; gap: 10px; min-height: 62px; padding: 10px 12px; border: 2px solid rgba(75,100,78,.26); border-radius: 16px; background: #fffdf8; font-size: clamp(20px, 4.4vw, 23px); font-weight: 950; white-space: nowrap; }
+    .serviceCheck span { white-space: nowrap; }
+    .serviceCheck input { width: 28px; height: 28px; min-height: 0; accent-color: #2f8f61; -webkit-appearance: auto; appearance: auto; }
+    .coupleWrap, .secondTechWrap, .techNameWrap, .queryNameWrap, .mainCustomerWrap { display: none; }
+    .coupleWrap.active, .secondTechWrap.active, .techNameWrap.active, .queryNameWrap.active, .mainCustomerWrap.active { display: block; }
+    .reportBack { margin-bottom: 8px; min-height: 58px; font-size: 24px; background: #60746a; }
+    .reportPanel .reportControls {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 96px;
+      gap: 8px;
+      align-items: end;
+      margin: 2px 0 4px;
+    }
+    .reportPanel .reportControls > * { align-self: end; }
+    .reportPanel .reportControls label { font-size: clamp(9px, 2.4vw, 13px); margin-bottom: 2px; line-height: 1; }
+    .reportPanel .reportControls input { height: 42px; min-height: 42px; line-height: 42px; font-size: clamp(14px, 3.5vw, 19px); padding: 0 8px; border-radius: 10px; box-sizing: border-box; }
+    .reportPanel .reportControls .btn { height: 42px; min-height: 42px; font-size: clamp(14px, 3.5vw, 20px); border-radius: 10px; padding: 0 8px; margin: 0; display: grid; place-items: center; line-height: 1; transform: translateY(0); }
+    .reportPanel .reportBack {
+      position: sticky;
+      top: 0;
+      z-index: 5;
+      display: inline-grid;
+      place-items: center;
+      min-height: 46px;
+      width: auto;
+      font-size: 15px;
+      border-radius: 10px;
+      margin: 0 0 3px;
+      padding: 0 12px;
+      background: #263329;
+      box-shadow: 0 4px 12px rgba(0,0,0,.14);
+    }
+    .constructionBox {
+      min-height: 46vh;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      padding: 34px 16px;
+    }
+    .constructionIcon {
+      width: 132px;
+      height: 132px;
+      border-radius: 32px;
+      display: grid;
+      place-items: center;
+      margin: 0 auto 20px;
+      background: linear-gradient(135deg, #fff1e8, #f7d5c9);
+      border: 4px solid #e9b8a7;
+      box-shadow: 0 14px 28px rgba(92, 64, 51, .14);
+      font-size: 64px;
+    }
+    .constructionTitle {
+      font-size: clamp(32px, 8vw, 48px);
+      font-weight: 950;
+      color: var(--ink);
+      margin-bottom: 12px;
+      line-height: 1.08;
+    }
+    .constructionText {
+      font-size: clamp(20px, 5vw, 30px);
+      font-weight: 850;
+      color: var(--muted);
+      line-height: 1.35;
+    }
+    .adminIcon {
+      position: absolute;
+      top: 18px;
+      right: 88px;
+      width: 58px;
+      height: 58px;
+      border: 0;
+      border-radius: 18px;
+      background: #fffdf7;
+      box-shadow: 0 10px 22px rgba(43, 70, 52, .16);
+      font-size: 30px;
+      font-weight: 950;
+      color: #60746a;
+    }
+    .myBookingIcon { background: #2f6f9f; width: 100%; margin: 4px 0 18px; }
+    .miniActions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 12px; }
+    .editOne { background: #2f6f9f; min-height: 58px; font-size: 22px; }
+    .adminLogItem { border-left: 8px solid #2f8f61; }
+    .adminLogItem.cancelled { border-left-color: #d92828; opacity: .85; }
+    .cancelConfirmOverlay { position: fixed; inset: 0; z-index: 100; background: rgba(28, 38, 31, .72); display: grid; place-items: center; padding: 18px; }
+    .cancelConfirmCard { width: min(94vw, 560px); background: #fffdf7; border-radius: 24px; padding: 24px; box-shadow: 0 24px 70px rgba(0,0,0,.3); border: 3px solid #d92828; }
+    .bookingReviewCard { border-color: #e4c96f; background: #fff8dd; }
+    .bookingReviewCard .cancelConfirmTitle { color: #8b6f1d; }
+    .bookingSuccessCard { border-color: #2f8f61; background: #eef9f0; text-align: center; }
+    .bookingSuccessCard .cancelConfirmTitle { color: #2f8f61; margin-bottom: 0; }
+    .cancelProgressCard { border: 6px solid #d92828; background: #fff1f1; text-align: center; }
+    .cancelProgressCard .cancelConfirmTitle { color: #c51f1f; margin-bottom: 0; }
+    .bookingDetailCard.activeStatus { border: 6px solid #2f8f61; }
+    .bookingDetailCard.cancelledStatus { border: 6px solid #d92828; }
+    .bookingDetailCard.activeStatus .cancelConfirmTitle { color: #2f8f61; }
+    .bookingDetailCard.cancelledStatus .cancelConfirmTitle { color: #b32020; }
+    .cancelConfirmTitle { font-size: clamp(26px, 5vw, 36px); font-weight: 950; color: #b32020; line-height: 1.25; margin-bottom: 16px; }
+    .cancelConfirmText { font-size: clamp(21px, 4vw, 28px); font-weight: 900; color: #263329; line-height: 1.5; white-space: pre-line; }
+    .cancelConfirmActions { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 20px; }
+    .cancelConfirmYes { background: #d92828; }
+    .cancelConfirmNo { background: #60746a; }
+    .lineLock {
+      position: fixed;
+      inset: 0;
+      z-index: 500;
+      display: grid;
+      place-items: center;
+      padding: max(14px, env(safe-area-inset-top)) 14px max(14px, env(safe-area-inset-bottom));
+      background: rgba(28, 38, 31, .64);
+      pointer-events: auto;
+      overflow: hidden;
+    }
+    .lineLockCard {
+      width: min(92vw, 620px);
+      max-width: 92vw;
+      max-height: min(72vh, 520px);
+      overflow: auto;
+      background: #fff8dd;
+      border: 5px solid #e4c96f;
+      border-radius: 28px;
+      padding: 30px 22px;
+      box-shadow: 0 24px 70px rgba(0,0,0,.34);
+      font-size: clamp(24px, 5.2vw, 38px);
+      font-weight: 950;
+      line-height: 1.42;
+      text-align: center;
+      white-space: pre-line;
+      overflow-wrap: anywhere;
+      color: var(--ink);
+    }
+    .lineLockCard.singleLine {
+      white-space: nowrap;
+      font-size: clamp(18px, 4.5vw, 30px);
+      padding: 24px 14px;
+      line-height: 1.2;
+    }
+    @media (max-width: 720px) {
+      .page { padding: 14px 10px 28px; }
+      .hero {
+      position: relative; padding: 26px 18px; border-radius: 22px; }
+      .quickInfo, .grid, .actions, .summaryControls, .bookingItem { grid-template-columns: 1fr; }
+      .tabs { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .topNowCard { flex-direction: column; align-items: flex-start; padding: 20px; }
+      .tabs { gap: 10px; }
+      .homeTabs { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .subTabs { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .panel { padding: 16px; }
+      input, select { font-size: 24px; min-height: 64px; }
+      .summaryGrid { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 4px; }
+      .summaryCell { min-height: 58px; padding: 4px 2px; border-radius: 8px; border-width: 1px; }
+      .summaryTime { font-size: clamp(5px, 1.75vw, 8px); }
+      .summaryDetail { font-size: clamp(5px, 1.75vw, 8px); line-height: 1.05; }
+      input[type="date"] { font-size: clamp(20px, 5vw, 30px); padding-left: 10px; padding-right: 10px; }
+    }
+  </style>
+</head>
+<body>
+  <div id="app"></div>
+      <script>
+    var SERVER_USER_NAME = '';
+    var SERVER_SESSION_TOKEN = '';
+    var API_URL = 'https://script.google.com/macros/s/AKfycbxghHGhV_eSmScnX4McBzd74dwt7axuenU9hEvlvIswTF6wEeNYTd1A2DgbJ6Im-d8Z/exec';
+    var LIFF_ID = '2009932163-Lf1Cs7Nd';
+    var LINE_PROFILE = { userId: '', displayName: '', role: 'STAFF', isAdmin: false };
+    var LINE_READY = false;
+    var LINE_ID_TOKEN = '';
+    var APP_MODE = 'READONLY';
+    var LIFF_TIMEOUT_ID = null;
+    var T = {
+      title: '\u6587\u6210\u6703\u9928\u9810\u7d04\u7cfb\u7d71',
+      subtitle: 'SPA \u623f\u9593\u9810\u7d04\uff0c\u8acb\u9078\u64c7\u9700\u8981\u7684\u529f\u80fd',
+      open: '\u71df\u696d\u6642\u9593', min: '\u6700\u5c0f\u9810\u7d04', unit: '\u6642\u9593\u55ae\u4f4d', oneHour: '1 \u5c0f\u6642', halfHour: '\u6bcf 30 \u5206\u9418',
+      book: '\u9810\u7d04', cancel: '\u53d6\u6d88', summary: '\u7a7a\u623f\u67e5\u8a62', query: '\u9810\u7d04\u67e5\u8a62',
+      bookTitle: '\u5efa\u7acb\u9810\u7d04', bookNote: '\u5df2\u88ab\u9810\u7d04\u7684\u6642\u6bb5\u6703\u81ea\u52d5\u9396\u4f4f\uff0c\u7d50\u675f\u6642\u9593\u53ea\u986f\u793a\u9023\u7e8c\u53ef\u7528\u9078\u9805',
+      cancelTitle: '\u53d6\u6d88\u9810\u7d04', cancelNote: '\u8acb\u9078\u64c7\u65e5\u671f\u8207\u623f\u9593\uff0c\u4e0b\u65b9\u6703\u5217\u51fa\u5df2\u9810\u7d04\u9805\u76ee\u4f9b\u53d6\u6d88',
+      queryTitle: '\u9810\u7d04\u67e5\u8a62', queryNote: '\u8acb\u9078\u64c7\u65e5\u671f\u8207\u6280\u5e2b\uff0c\u4e0b\u65b9\u6703\u986f\u793a\u8a72\u6280\u5e2b\u7576\u5929\u6240\u6709\u9810\u7d04',
+      date: '\u65e5\u671f', room: '\u623f\u9593', start: '\u958b\u59cb\u6642\u9593', end: '\u7d50\u675f\u6642\u9593', tech: '\u6280\u5e2b', customer: '\u9867\u5ba2\u59d3\u540d', service: '\u670d\u52d9\u9805\u76ee', user: '\u767b\u8a18\u4eba',
+      bookBtn: '\u9001\u51fa\u9810\u7d04', resetBtn: '\u91cd\u65b0\u6574\u7406', cancelOne: '\u53d6\u6d88\u9019\u7b46', searchCancel: '\u67e5\u8a62\u53ef\u53d6\u6d88\u9810\u7d04', search: '\u67e5\u8a62',
+      available: '\u7576\u5929\u8a72\u623f\u9593\u53ef\u9810\u7d04\u958b\u59cb\u6642\u9593', canStart: '\u53ef\u958b\u59cb', noSlots: '\u6b64\u623f\u9593\u76ee\u524d\u6c92\u6709\u53ef\u9810\u7d04\u6642\u6bb5',
+      pickDateRoom: '\u8acb\u5148\u9078\u64c7\u65e5\u671f\u8207\u623f\u9593', pickRoom: '\u8acb\u9078\u64c7\u623f\u9593', pickTech: '\u8acb\u9078\u64c7\u6280\u5e2b', pickQueryName: '\u8acb\u9078\u64c7\u59d3\u540d', noQueryName: '\u7576\u5929\u7121\u6b64\u985e\u9810\u7d04', pickService: '\u8acb\u9078\u64c7\u670d\u52d9\u9805\u76ee', pickTime: '\u8acb\u5148\u9078\u64c7\u65e5\u671f\u548c\u623f\u9593',
+      summaryDate: '\u67e5\u8a62\u65e5\u671f', loading: '\u8f09\u5165\u4e2d...', free: '\u7a7a\u623f', busy: '\u5df2\u9810\u7d04', noBookings: '\u67e5\u7121\u9810\u7d04\u8cc7\u6599',
+      conflict: '\u6b64\u6642\u6bb5\u5df2\u88ab\u9810\u7d04\uff0c\u8acb\u6539\u9078\u5176\u4ed6\u6642\u9593\u3002', minWarn: '\u6700\u5c0f\u9810\u7d04\u6642\u9593\u70ba 1 \u5c0f\u6642\u3002', backendFail: '\u7121\u6cd5\u9023\u7dda\u5230 Apps Script\uff0c\u8acb\u78ba\u8a8d\u5df2\u90e8\u7f72\u6700\u65b0 Web App\u3002', required: '\u8acb\u628a\u5fc5\u586b\u6b04\u4f4d\u586b\u5beb\u5b8c\u6574\u3002', autoName: '\u5df2\u81ea\u52d5\u5e36\u5165 LINE \u66b1\u7a31'
+    };
+    var DEFAULT_ROOMS = ['\u6587\u6210\u4e00\u6a13','\u6587\u6210\u4e8c\u6a13\u5de6','\u6587\u6210\u4e8c\u6a13\u53f3','\u6587\u6210\u4e09\u6a13\u524d','\u6587\u6210\u4e09\u6a13\u5f8c','\u6587\u6210\u56db\u6a13\u524d','\u6587\u6210\u56db\u6a13\u5de6\u5f8c','\u6587\u6210\u56db\u6a13\u53f3\u5f8c','\u6587\u6210\u4e94\u6a13'];
+    var TECHS = ['\u7f8e\u537f','\u96ef\u8431','\u7f8e\u73b2','\u839b\u7a4e','\u66fc\u7433','\u4f73\u59a4','\u7f8e\u5bb9\u5e2b','\u652f\u63f4\u6280\u5e2b'];
+    var SERVICE_TARGETS = ['\u4e3b\u9867\u5ba2', '\u9ad4\u9a57\u5ba2', '\u7b2c\u4e00\u6b21\u670d\u52d9'];
+        var NO_INSTRUMENT_SERVICE = '\u7121\u5100\u5668';
+        var STANDARD_SERVICES = ['\u6c34\u98db\u68ad', '\u947d\u77f3\u5fae\u96d5', '\u6ed1\u7f50', '\u5143\u6c23\u5100', 'G5', '\u7d93\u7d61\u5237', '\u7121\u5100\u5668'];
+        var BASIC_SERVICES = STANDARD_SERVICES.slice();
+        var SERVICES = ['\u5ca9\u76e4\u6d74', '\u592a\u7a7a\u8259', '\u85e5\u84b8'].concat(STANDARD_SERVICES);
+        var ROOM_SERVICE_RULES = {
+      '\u4e00\u6a13': ['\u592a\u7a7a\u8259','\u85e5\u84b8'].concat(STANDARD_SERVICES),
+      '\u4e8c\u6a13\u5de6': BASIC_SERVICES,
+      '\u4e8c\u6a13\u53f3': BASIC_SERVICES,
+      '\u4e09\u6a13\u524d': ['\u592a\u7a7a\u8259'].concat(STANDARD_SERVICES),
+      '\u4e09\u6a13\u5de6': ['\u592a\u7a7a\u8259'].concat(STANDARD_SERVICES),
+      '\u4e09\u6a13\u5f8c': ['\u592a\u7a7a\u8259','\u85e5\u84b8'].concat(STANDARD_SERVICES),
+      '\u4e09\u6a13\u53f3': ['\u592a\u7a7a\u8259','\u85e5\u84b8'].concat(STANDARD_SERVICES),
+      '\u56db\u6a13\u524d': ['\u5ca9\u76e4\u6d74'].concat(STANDARD_SERVICES),
+      '\u56db\u6a13\u5de6\u5f8c': BASIC_SERVICES,
+      '\u56db\u6a13\u5f8c\u5de6': BASIC_SERVICES,
+      '\u56db\u6a13\u53f3\u5f8c': BASIC_SERVICES,
+      '\u56db\u6a13\u5f8c\u53f3': BASIC_SERVICES,
+      '\u4e94\u6a13': BASIC_SERVICES
+    };
+    var ROOM_EQUIPMENT_LABELS = {
+      '\u4e00\u6a13': '\u592a\u7a7a\u8259\u3001\u85e5\u84b8',
+      '\u4e09\u6a13\u524d': '\u592a\u7a7a\u8259',
+      '\u4e09\u6a13\u5de6': '\u592a\u7a7a\u8259',
+      '\u4e09\u6a13\u5f8c': '\u592a\u7a7a\u8259\u3001\u85e5\u84b8',
+      '\u4e09\u6a13\u53f3': '\u592a\u7a7a\u8259\u3001\u85e5\u84b8',
+      '\u56db\u6a13\u524d': '\u5ca9\u76e4\u6d74'
+    };
+    var CONFIG = { rooms: DEFAULT_ROOMS.slice(), openHour: 9, closeHour: 21 };
+    var AVAILABLE_SLOTS = [];
+    var CANCEL_BOOKINGS = {};
+    var BOOKING_DETAILS = {};
+    var EDIT_ROW_NUMBER = null;
+    var PENDING_SUMMARY_START = '';
+
+    window.onload = function () {
+      buildUI();
+      startClock();
+      fillAllSelects();
+      resetBookingForm(false);
+      setToday('summaryDateInput');
+      showHome();
+      showScheduleHome();
+      setTimeout(function () {
+        lockUntilLineReady();
+        initLiffLogin();
+      }, 50);
+    };
+
+
+    function initLiffLogin() {
+      LIFF_TIMEOUT_ID = setTimeout(function () {
+        if (!LINE_READY) {
+          showLineLock('LINE 身份確認逾時。\n\n請改用 LINE 裡的固定網址重新開啟：\nhttps://liff.line.me/2009932163-Lf1Cs7Nd\n\n若仍失敗，請確認 LIFF Endpoint URL 是 GitHub Pages 的 index.html。');
+        }
+      }, 18000);
+
+      waitForLiffSdk(0);
+    }
+
+    function waitForLiffSdk(count) {
+      if (window.liff) {
+        startLiffInit();
+        return;
+      }
+      if (count >= 30) {
+        clearTimeout(LIFF_TIMEOUT_ID);
+        showLineLock('無法載入 LINE 登入元件。\n\n請關閉此頁，回 LINE 重新點固定網址；若仍失敗，請確認手機網路可正常連線。');
+        return;
+      }
+      setTimeout(function () { waitForLiffSdk(count + 1); }, 200);
+    }
+
+    function startLiffInit() {
+      Promise.race([
+        liff.init({ liffId: LIFF_ID, withLoginOnExternalBrowser: true }),
+        new Promise(function (_, reject) { setTimeout(function () { reject(new Error('LIFF 初始化等候逾時')); }, 12000); })
+      ]).then(function () {
+        if (!liff.isInClient()) {
+          clearTimeout(LIFF_TIMEOUT_ID);
+          showLineLock('請從 LINE 群組公告中的固定連結開啟預約系統。\n\n一般瀏覽器無法操作，因為系統需要確認 LINE 身份。');
+          return;
+        }
+        if (!liff.isLoggedIn()) {
+          clearTimeout(LIFF_TIMEOUT_ID);
+          showLineLock('LINE 尚未完成登入。\n\n請關閉此頁，回 LINE 重新點固定網址。');
+          return;
+        }
+        return liff.getProfile().then(registerLineProfile);
+      }).catch(function (err) {
+        clearTimeout(LIFF_TIMEOUT_ID);
+        showLineLock('LINE LIFF 啟動失敗：' + getErrorText(err) + '\n\n請確認你點的是 LIFF 固定網址，而不是直接點 Apps Script /exec 網址。');
+      });
+    }
+
+    function registerLineProfile(profile) { LINE_PROFILE.userId = profile.userId || ''; LINE_PROFILE.displayName = profile.displayName || ''; LINE_ID_TOKEN = liff.getIDToken() || ''; setLineUserName(LINE_PROFILE.displayName); if (!hasBackend()) { clearTimeout(LIFF_TIMEOUT_ID); showLineLock('尚未設定 Apps Script API 網址，請先修改 index.html 的 API_URL。'); return; } apiCall('register', {}, function (user) { clearTimeout(LIFF_TIMEOUT_ID); LINE_PROFILE.role = user && user.role ? user.role : 'STAFF'; LINE_PROFILE.isAdmin = !!(user && user.isAdmin); APP_MODE = LINE_PROFILE.isAdmin ? 'MANAGE' : 'READONLY'; applyPermissionUi(); LINE_READY = true; hideLineLock(); handleInitialPageRoute(); showMessage(T.autoName, false); loadSummary(); connectBackend(); }, function (err) { clearTimeout(LIFF_TIMEOUT_ID); showLineLock(err); }); }
+
+    function lockUntilLineReady() {
+      showLineLock('\u6b63\u5728\u78ba\u8a8d LINE \u8eab\u4efd\uff0c\u8acb\u7a0d\u5019...');
+    }
+
+    function showLineLock(text) {
+      var old = document.getElementById('lineLock');
+      if (old) old.remove();
+      var wrap = document.createElement('div');
+      wrap.className = 'lineLock';
+      wrap.id = 'lineLock';
+      var message = String(text || '');
+      var singleLine = message.indexOf('\n') === -1;
+      wrap.innerHTML = '<div class="lineLockCard' + (singleLine ? ' singleLine' : '') + '">' + escapeHtml(message) + '</div>';
+      document.body.appendChild(wrap);
+    }
+
+    function hideLineLock() {
+      var old = document.getElementById('lineLock');
+      if (old) old.remove();
+    }
+
+    function canManageBookings() { return !!(LINE_PROFILE && (LINE_PROFILE.isAdmin || LINE_PROFILE.role === 'ADMIN') && APP_MODE === 'MANAGE'); }
+    function applyPermissionUi() {
+      if (!LINE_PROFILE.isAdmin && LINE_PROFILE.role !== 'ADMIN') APP_MODE = 'READONLY';
+      var can = canManageBookings();
+      var switcher = byId('modeSwitcher');
+      if (switcher) switcher.classList.toggle('active', !!(LINE_PROFILE.isAdmin || LINE_PROFILE.role === 'ADMIN'));
+      var manageBtn = byId('modeManageBtn');
+      var readBtn = byId('modeReadBtn');
+      if (manageBtn) manageBtn.classList.toggle('active', APP_MODE === 'MANAGE');
+      if (readBtn) readBtn.classList.toggle('active', APP_MODE === 'READONLY');
+      ['tabBook','tabCancel','adminArchiveBtn','adminBtn','reportBtn'].forEach(function (id) { var el = byId(id); if (el) el.style.display = can ? '' : 'none'; });
+      if (!can) {
+        var bookPanel = byId('bookPanel');
+        var cancelPanel = byId('cancelPanel');
+        if ((bookPanel && bookPanel.classList.contains('active')) || (cancelPanel && cancelPanel.classList.contains('active'))) showTab('summary');
+      }
+      refreshVisibleLists();
+    }
+    function setAppMode(mode) { APP_MODE = mode === 'MANAGE' ? 'MANAGE' : 'READONLY'; applyPermissionUi(); showToast(APP_MODE === 'MANAGE' ? '\u5df2\u5207\u63db\u70ba\u7ba1\u7406\u8005\u6a21\u5f0f' : '\u5df2\u5207\u63db\u70ba\u552f\u8b80\u6a21\u5f0f', false); }
+    function denyManageAction(targetId) { var msg = '\u4f60\u76ee\u524d\u53ea\u6709\u67e5\u8a62\u6b0a\u9650\uff0c\u4e0d\u80fd\u9810\u7d04\u6216\u53d6\u6d88\u3002'; showToast(msg, true); if (targetId) showPanelMessage(targetId, msg, true); else showMessage(msg, true); }
+
+
+    function requireLineReady(messageId) {
+      if (LINE_READY) return true;
+      var msg = '\u8acb\u5f9e LINE \u958b\u555f\u9810\u7d04\u7cfb\u7d71\uff0c\u7cfb\u7d71\u78ba\u8a8d\u8eab\u4efd\u5f8c\u624d\u80fd\u64cd\u4f5c\u3002';
+      if (messageId) showPanelMessage(messageId, msg, true); else showMessage(msg, true);
+      return false;
+    }
+
+    function buildUI() {
+      var app = document.getElementById('app');
+      app.innerHTML = [
+        '<main class="page">',
+          '<section class="hero"><button class="adminIcon" id="adminBtn" type="button" title="admin">⚙</button><button class="reportIcon" id="reportBtn" type="button" title="report"><span></span><span></span><span></span></button><div><h1>', T.title, '</h1><div class="sub" id="statusText">', T.subtitle, '</div></div></section>',
+          '<section class="topNowCard"><div><div class="todayLabel">\u4eca\u5929\u65e5\u671f</div><div class="todayValue" id="todayDateText"></div></div><div><div class="todayLabel">\u73fe\u5728\u6642\u9593</div><div class="todayValue" id="todayTimeText"></div></div></section>',
+          '<section class="modeSwitcher" id="modeSwitcher"><button class="modeBtn" id="modeManageBtn" type="button">\u7ba1\u7406\u8005\u6a21\u5f0f</button><button class="modeBtn" id="modeReadBtn" type="button">\u552f\u8b80\u6a21\u5f0f</button></section>',
+          '<nav class="tabs homeTabs" id="homeTabs"><button class="tab" id="tabSchedule" type="button">\u6392\u623f\u8868\u67e5\u8a62</button><button class="tab" id="tabPeople" type="button">\u4f9d\u4eba\u54e1\u67e5\u8a62</button></nav>',
+          '<nav class="tabs subTabs" id="scheduleTabs"><button class="tab active" id="tabSummary" type="button">', T.summary, '</button><button class="tab" id="tabBook" type="button">', T.book, '</button><button class="tab" id="tabCancel" type="button">', T.cancel, '</button></nav>',
+          '<section class="panel" id="bookPanel"><div class="sectionTitle">', T.bookTitle, '</div><div class="sectionNote">', T.bookNote, '</div><div class="grid"><div><label for="dateInput">', T.date, '</label><input id="dateInput" type="date"></div><div><label for="roomSelect">', T.room, '</label><select id="roomSelect"></select></div><div><label for="startSelect">', T.start, '</label><select id="startSelect"></select></div><div><label for="endSelect">', T.end, '</label><select id="endSelect"></select></div><div><label for="technicianInput">', T.tech, '</label><select id="technicianInput"></select></div><div class="wide"><label for="serviceTargetInput">服務對象</label><div id="serviceTargetInput" class="serviceCheckGrid serviceTargetGrid"></div></div><div id="techNameWrap" class="techNameWrap"><label for="techNameInput">美容師 / 支援技師姓名</label><input id="techNameInput" type="text" autocomplete="off"></div><div id="coupleWrap" class="coupleWrap"><label for="coupleSelect">\u5169\u4eba\u540c\u623f</label><select id="coupleSelect"></select></div><div id="secondTechWrap" class="secondTechWrap"><label for="technicianInput2">\u7b2c\u4e8c\u4f4d\u6280\u5e2b</label><select id="technicianInput2"></select></div><div id="techNameWrap2" class="techNameWrap"><label for="techNameInput2">第二位姓名</label><input id="techNameInput2" type="text" autocomplete="off"></div><div class="wide"><label>', T.service, '</label><div id="serviceInput" class="serviceCheckGrid"></div></div><div id="mainCustomerWrap" class="mainCustomerWrap"><label for="mainCustomerSelect">服務項目標記</label><select id="mainCustomerSelect"><option value="">請選擇</option><option value="B">B</option><option value="F">F</option><option value="BF">BF</option></select></div><div><label for="customerInput">', T.customer, '</label><input id="customerInput" type="text" autocomplete="off"></div><div><label for="userNameInput">', T.user, '</label><input id="userNameInput" type="text" autocomplete="off" readonly></div></div><div class="actions"><button class="btn" id="bookBtn" type="button">', T.bookBtn, '</button><button class="btn reset" id="resetBtn" type="button">', T.resetBtn, '</button></div><div id="message" class="message"></div><div class="availableTitle">', T.available, '</div><div id="availableSlots" class="slotBoxGrid"></div></section>',
+          '<section class="panel" id="cancelPanel"><div class="sectionTitle">', T.cancelTitle, '</div><div class="sectionNote">', T.cancelNote, '</div><div class="summaryControls"><div><label for="cancelDateInput">', T.date, '</label><input id="cancelDateInput" type="date"></div><button class="btn refresh" id="cancelSearchBtn" type="button">', T.searchCancel, '</button></div><div id="cancelMessage" class="message"></div><div id="cancelList" class="bookingList"></div></section>',
+          '<section class="panel" id="summaryPanel"><div class="sectionTitle">', T.summary, '</div><div class="summaryControls"><div><label for="summaryDateInput">', T.summaryDate, '</label><input id="summaryDateInput" type="date"></div><button class="btn refresh" id="refreshBtn" type="button">', T.search, '</button></div><div id="summaryArea"></div></section>',
+          '<section class="panel" id="queryPanel"><div class="sectionTitle">', T.queryTitle, '</div><div class="sectionNote">', T.queryNote, '</div><div class="summaryControls queryControls"><div><label for="queryDateInput">', T.date, '</label><input id="queryDateInput" type="date"></div><div><label for="queryTechSelect">', T.tech, '</label><select id="queryTechSelect"></select></div><div id="queryNameWrap" class="queryNameWrap"><label for="queryNameSelect">姓名</label><select id="queryNameSelect"></select></div></div><button class="btn refresh" id="queryBtn" type="button">', T.search, '</button><div id="queryMessage" class="message"></div><div id="queryList" class="bookingList"></div></section>',
+          '<section class="panel" id="adminPanel"><div class="sectionTitle">\u7ba1\u7406\u54e1\u6a21\u5f0f</div><div class="sectionNote">\u4f9d\u65e5\u671f\u8207\u623f\u9593\u67e5\u8a62\u7576\u65e5\u6b77\u53f2\u64cd\u4f5c\u7d00\u9304</div><div class="summaryControls queryControls adminSearchControls"><div><label for="adminDateInput">\u65e5\u671f</label><input id="adminDateInput" type="date"></div><div><label for="adminRoomSelect">\u623f\u9593</label><select id="adminRoomSelect"></select></div></div><div class="adminActionGrid"><button class="btn refresh" id="adminRefreshBtn" type="button">\u641c\u5c0b log</button><button class="btn refresh" id="adminHistoryBtn" type="button">\u6b77\u53f2\u67e5\u8a62</button><button class="btn reset" id="adminArchiveBtn" type="button">\u5c01\u5b58 60 \u5929\u524d\u8cc7\u6599</button></div><div id="adminMessage" class="message"></div><div id="adminLogList" class="bookingList"></div></section>',
+          '<section class="panel reportPanel" id="reportPanel"><button class="btn reportBack" id="reportBackBtn" type="button">\u8fd4\u56de\u9996\u9801</button><div class="sectionTitle">\u623f\u9593\u5831\u8868</div><div class="reportControls"><div><label for="reportDateInput">\u5831\u8868\u65e5\u671f</label><input id="reportDateInput" type="date"></div><button class="btn refresh" id="reportSearchBtn" type="button">\u67e5\u8a62</button></div><div class="sectionNote" id="reportDateText">\u8f09\u5165\u4e2d...</div><div id="reportArea"></div></section>',
+          '<section class="panel" id="techHeadcountPanel"><button class="btn headcountBack" id="headcountHomeBtn" type="button">返回首頁</button><div class="sectionTitle">美技人頭計算</div><div class="sectionNote">只顯示美卿、雯萱、莛穎、佳妤、美玲、曼玲；依服務日期統計當月有效預約。</div><div class="summaryControls"><div><label for="headcountMonthInput">查詢月份</label><input id="headcountMonthInput" type="month"></div><button class="btn refresh" id="headcountSearchBtn" type="button">查詢</button></div><div id="headcountMessage" class="message"></div><div id="headcountArea"></div><div id="headcountDetailArea"></div></section>',
+          '<section class="panel" id="constructionPanel"><div class="constructionBox"><div><div class="constructionIcon">...</div><div class="constructionTitle" id="constructionTitle">功能建置中</div><div class="constructionText" id="constructionText">此功能正在施工中，完成後會開放使用。</div></div></div></section>',
+        '</main>'
+      ].join('');
+
+      byId('tabSchedule').onclick = showScheduleHome;
+      byId('tabPeople').onclick = showPeopleHome;
+      byId('tabBook').onclick = function () { showTab('book'); };
+      byId('reportBtn').onclick = showTomorrowReport;
+      byId('adminBtn').onclick = showAdminPanel;
+      byId('reportBackBtn').onclick = showHome;
+      byId('reportSearchBtn').onclick = loadReportByDate;
+      byId('reportDateInput').onchange = loadReportByDate;
+      byId('tabCancel').onclick = function () { showTab('cancel'); setToday('cancelDateInput'); loadCancelBookings(); };
+      byId('tabSummary').onclick = function () { showTab('summary'); };
+      byId('dateInput').onchange = function () { clearFieldError('dateInput'); updateAvailableSlots(); };
+      byId('roomSelect').onchange = function () { clearFieldError('roomSelect'); clearFieldError('serviceInput'); clearFieldError('serviceTargetInput'); clearFieldError('coupleSelect'); if (byId('coupleSelect')) byId('coupleSelect').value = ''; renderServiceTargetOptions(); renderServiceChecks(); syncTechnicianFields(); updateAvailableSlots(); };
+      byId('coupleSelect').onchange = function () { clearFieldError('coupleSelect'); clearFieldError('technicianInput2'); syncTechnicianFields(); };
+      byId('technicianInput').onchange = function () { clearFieldError('technicianInput'); clearFieldError('techNameInput'); syncCustomTechFields(); };
+      byId('technicianInput2').onchange = function () { clearFieldError('technicianInput2'); clearFieldError('techNameInput2'); syncCustomTechFields(); };
+      byId('startSelect').onchange = function () { clearFieldError('startSelect'); clearFieldError('endSelect'); syncEndTime(); };
+      byId('bookBtn').onclick = submitBooking;
+      byId('endSelect').onchange = function () { clearFieldError('endSelect'); };
+      byId('customerInput').oninput = function () { clearFieldError('customerInput'); };
+      byId('mainCustomerSelect').onchange = function () { clearFieldError('mainCustomerSelect'); };
+      byId('techNameInput').oninput = function () { clearFieldError('techNameInput'); };
+      byId('techNameInput2').oninput = function () { clearFieldError('techNameInput2'); };
+      byId('resetBtn').onclick = function () { resetBookingForm(true); };
+      byId('cancelSearchBtn').onclick = loadCancelBookings;
+      byId('cancelDateInput').onchange = loadCancelBookings;
+      byId('refreshBtn').onclick = loadSummary;
+      byId('summaryDateInput').onchange = loadSummary;
+      byId('queryBtn').onclick = loadTechnicianBookings;
+      byId('modeManageBtn').onclick = function () { setAppMode('MANAGE'); };
+      byId('modeReadBtn').onclick = function () { setAppMode('READONLY'); };
+      byId('adminRefreshBtn').onclick = loadAdminLogs;
+      byId('adminHistoryBtn').onclick = loadHistoryLogs;
+      byId('adminArchiveBtn').onclick = archiveOldBookings;
+      byId('adminDateInput').onchange = loadAdminLogs;
+      byId('adminRoomSelect').onchange = loadAdminLogs;
+      byId('queryDateInput').onchange = handleQueryControlsChange;
+      byId('queryTechSelect').onchange = handleQueryTechChange;
+      byId('queryNameSelect').onchange = loadTechnicianBookings;
+      byId('headcountSearchBtn').onclick = loadTechHeadcount;
+      byId('headcountMonthInput').onchange = loadTechHeadcount;
+      byId('headcountHomeBtn').onclick = goRichMenuHome;
+    }
+
+
+    function startClock() {
+      updateClock();
+      setInterval(updateClock, 1000);
+    }
+
+    function updateClock() {
+      var now = new Date();
+      var week = ['\u65e5','\u4e00','\u4e8c','\u4e09','\u56db','\u4e94','\u516d'][now.getDay()];
+      byId('todayDateText').textContent = now.getFullYear() + '/' + pad2(now.getMonth() + 1) + '/' + pad2(now.getDate()) + ' \u661f\u671f' + week;
+      byId('todayTimeText').textContent = pad2(now.getHours()) + ':' + pad2(now.getMinutes());
+    }
+    function fillAllSelects() {
+      fillRoomSelect('roomSelect', CONFIG.rooms, '', T.pickRoom);
+      fillSelect('technicianInput', TECHS, '', T.pickTech);
+      fillSelect('technicianInput2', TECHS, '', T.pickTech);
+      fillSelect('coupleSelect', ['\u5426','\u662f'], '', '\u8acb\u9078\u64c7');
+      fillSelect('queryTechSelect', TECHS, '', T.pickTech);
+      fillSelect('queryNameSelect', [], '', T.pickQueryName);
+      fillRoomSelect('adminRoomSelect', CONFIG.rooms, '', T.pickRoom);
+      renderServiceTargetOptions();
+      renderServiceChecks();
+      syncTechnicianFields();
+    }
+
+    function connectBackend() { if (!hasBackend() || !LINE_READY) return; apiCall('getConfig', {}, function (cfg) { if (cfg) { CONFIG.rooms = cfg.rooms && cfg.rooms.length ? cfg.rooms : CONFIG.rooms; CONFIG.openHour = Number(cfg.openHour || CONFIG.openHour); CONFIG.closeHour = Number(cfg.closeHour || CONFIG.closeHour); fillAllSelects(); renderServiceTargetOptions(); renderServiceChecks(); updateAvailableSlots(); loadSummary(); } }, function (err) { showMessage(err || T.backendFail, true); }); }
+
+    function showHome() {
+      document.body.classList.remove('reportShotMode');
+      byId('reportPanel').classList.remove('active');
+      byId('adminPanel').classList.remove('active');
+      if (byId('constructionPanel')) byId('constructionPanel').classList.remove('active');
+      if (byId('techHeadcountPanel')) byId('techHeadcountPanel').classList.remove('active');
+      if (byId('techHeadcountPanel')) byId('techHeadcountPanel').classList.remove('active');
+      byId('scheduleTabs').classList.remove('active');
+      byId('tabSchedule').classList.remove('active');
+      byId('tabPeople').classList.remove('active');
+      ['book','cancel','summary','query'].forEach(function (tab) {
+        var tabBtn = byId('tab' + cap(tab));
+        var panel = byId(tab + 'Panel');
+        if (tabBtn) tabBtn.classList.remove('active');
+        if (panel) panel.classList.remove('active');
+      });
+    }
+
+    function handleInitialPageRoute() {
+      var page = getUrlPageParam();
+      if (!page || page === 'booking') { showScheduleHome(); return; }
+      if (page === 'roomStatus') { showTab('summary'); return; }
+      if (page === 'peopleQuery') { showPeopleHome(); return; }
+      if (page === 'report') { showTomorrowReport(); return; }
+      if (page === 'admin') { showAdminPanel(); return; }
+      if (page === 'techHeadcount') { showTechHeadcountPanel(); return; }
+      if (page === 'techSchedule') { showConstructionPage('美技班表', '此功能正在施工中，完成後會顯示美技班表。'); return; }
+      if (page === 'bonusCalc') { showConstructionPage('工獎試算', '此功能正在施工中，完成後可試算工獎。'); return; }
+      if (page === 'myMonthlySales') { showConstructionPage('個人當月業績', '此功能正在施工中，完成後可查詢個人當月業績。'); return; }
+      if (page === 'myMonthlyServices') { showConstructionPage('個人當月服務一覽', '此功能正在施工中，完成後可查看個人當月服務明細。'); return; }
+      showScheduleHome();
+    }
+
+    function getUrlPageParam() {
+      return 'techHeadcount';
+    }
+
+    function showConstructionPage(title, text) {
+      document.body.classList.remove("reportShotMode");
+      ["book","cancel","summary","query"].forEach(function (tab) {
+        var tabBtn = byId("tab" + cap(tab));
+        var panel = byId(tab + "Panel");
+        if (tabBtn) tabBtn.classList.remove("active");
+        if (panel) panel.classList.remove("active");
+      });
+      byId("scheduleTabs").classList.remove("active");
+      byId("tabSchedule").classList.remove("active");
+      byId("tabPeople").classList.remove("active");
+      byId("reportPanel").classList.remove("active");
+      byId("adminPanel").classList.remove("active");
+      byId("constructionTitle").textContent = title || "功能建置中";
+      byId("constructionText").textContent = text || "此功能正在施工中，完成後會開放使用。";
+      byId("constructionPanel").classList.add("active");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function showScheduleHome() {
+      byId('tabSchedule').classList.add('active');
+      byId('tabPeople').classList.remove('active');
+      byId('scheduleTabs').classList.add('active');
+      showTab('summary');
+    }
+
+    function showPeopleHome() {
+      byId('tabSchedule').classList.remove('active');
+      byId('tabPeople').classList.add('active');
+      byId('scheduleTabs').classList.remove('active');
+      showTab('query');
+      setToday('queryDateInput');
+    }
+
+    function showTab(name) {
+      if ((name === 'book' || name === 'cancel') && !canManageBookings()) { denyManageAction(name === 'cancel' ? 'cancelMessage' : 'message'); name = 'summary'; }
+      document.body.classList.remove('reportShotMode');
+      byId('reportPanel').classList.remove('active');
+      byId('adminPanel').classList.remove('active');
+      if (byId('constructionPanel')) byId('constructionPanel').classList.remove('active');
+      ['book','cancel','summary','query'].forEach(function (tab) {
+        var tabBtn = byId('tab' + cap(tab));
+        var panel = byId(tab + 'Panel');
+        if (tabBtn) tabBtn.classList.toggle('active', name === tab);
+        if (panel) panel.classList.toggle('active', name === tab);
+      });
+      if (name === 'query') {
+        byId('tabSchedule').classList.remove('active');
+        byId('tabPeople').classList.add('active');
+        byId('scheduleTabs').classList.remove('active');
+      }
+      if (name === 'book' || name === 'cancel' || name === 'summary') {
+        byId('tabSchedule').classList.add('active');
+        byId('tabPeople').classList.remove('active');
+        byId('scheduleTabs').classList.add('active');
+      }
+      if (name === 'summary') loadSummary();
+    }
+
+    function updateAvailableSlots() { var date = byId('dateInput').value; var room = byId('roomSelect').value; clearBox('message'); if (!date || !room) { AVAILABLE_SLOTS = []; fillStartOptions([], T.pickTime); renderSlotBoxes([], T.pickDateRoom); return; } if (!hasBackend() || !LINE_READY) { var fallback = buildFallbackSlots(); AVAILABLE_SLOTS = fallback; fillStartOptions(fallback); renderSlotBoxes(fallback); applyPendingSummaryStart(); return; } renderSlotBoxes([], T.loading); apiCall('getAvailableSlots', { date: date, room: room }, function (result) { AVAILABLE_SLOTS = result && result.slots ? result.slots : []; fillStartOptions(AVAILABLE_SLOTS, '\u7121\u53ef\u9078\u64c7\u6642\u6bb5'); renderSlotBoxes(AVAILABLE_SLOTS); if (!AVAILABLE_SLOTS.length) { showMessage('\u6b64\u65e5\u671f\u8207\u623f\u9593\u5df2\u6c92\u6709\u53ef\u9810\u7d04\u6642\u6bb5\uff0c\u8acb\u6539\u9078\u5176\u4ed6\u65e5\u671f\u6216\u623f\u9593\u3002', true); showToast('\u6b64\u65e5\u671f\u8207\u623f\u9593\u5df2\u6c92\u6709\u53ef\u9810\u7d04\u6642\u6bb5\uff0c\u8acb\u6539\u9078\u5176\u4ed6\u65e5\u671f\u6216\u623f\u9593\u3002', true); } applyPendingSummaryStart(); }, function (err) { showMessage(err, true); AVAILABLE_SLOTS = []; fillStartOptions([], '\u7121\u53ef\u9078\u64c7\u6642\u6bb5'); renderSlotBoxes([], T.noSlots); }); }
+
+    function loadCancelBookings() { if (!canManageBookings()) { byId('cancelList').innerHTML = ''; denyManageAction('cancelMessage'); return; } var date = byId('cancelDateInput').value; clearBox('cancelMessage'); byId('cancelList').innerHTML = ''; if (!date) { showPanelMessage('cancelMessage', T.required, true); return; } if (!hasBackend() || !LINE_READY) { byId('cancelList').innerHTML = '<div class="slotBox empty">' + T.backendFail + '</div>'; return; } apiCall('getBookedByDate', { date: date }, function (result) { renderBookingList('cancelList', filterFutureBookings(result.bookings || [], date), true); }, function (err) { showPanelMessage('cancelMessage', err, true); }); }
+
+    function loadMyBookings() { if (!requireLineReady('queryMessage')) return; clearBox('queryMessage'); byId('queryTechSelect').value = ''; byId('queryList').innerHTML = '<div class="slotBox empty">' + T.loading + '</div>'; apiCall('getMyBookings', { myOnly: true }, function (result) { result = result || {}; result.myOnly = true; renderMyBookingList(result.bookings || [], result); }, function (err) { showPanelMessage('queryMessage', err, true); }); }
+
+    function filterFutureBookings(bookings, selectedDate) {
+      var now = new Date();
+      return (bookings || []).filter(function (b) {
+        var rawDate = String(b.date || selectedDate || '').replace(/\//g, '-');
+        var rawEnd = String(b.end || b.start || '00:00');
+        var d = rawDate.split('-');
+        var t = rawEnd.split(':');
+        if (d.length < 3 || t.length < 2) return true;
+        var endTime = new Date(Number(d[0]), Number(d[1]) - 1, Number(d[2]), Number(t[0]), Number(t[1]));
+        return endTime.getTime() >= now.getTime();
+      });
+    }
+
+    function renderMyBookingList(bookings, meta) {
+      var target = byId('queryList');
+      if (!bookings.length) { target.innerHTML = '<div class="slotBox empty">' + (meta && meta.myOnly ? buildMyBookingEmptyText(meta) : T.noBookings) + '</div>'; return; }
+      CANCEL_BOOKINGS = {};
+      BOOKING_DETAILS = {};
+      target.innerHTML = bookings.map(function (b) {
+        CANCEL_BOOKINGS[String(b.rowNumber)] = b;
+        BOOKING_DETAILS[String(b.rowNumber)] = b;
+        var main = escapeHtml(b.date + ' ' + b.start + '-' + b.end + '  ' + b.room);
+        var sub = escapeHtml((b.technician || '') + ' / ' + (b.customer || '') + ' / ' + (b.service || ''));
+        var actionHtml = (!canManageBookings() || isPastBooking(b)) ? '' : '<div class="miniActions"><button class="btn editOne" type="button" data-edit="' + b.rowNumber + '">\u7de8\u8f2f</button><button class="btn cancelOne" type="button" data-row="' + b.rowNumber + '">\u53d6\u6d88</button></div>';
+        return '<div class="bookingItem" data-detail="' + b.rowNumber + '"><div><div class="bookingMain">' + main + '</div><div class="bookingSub">' + sub + '</div>' + actionHtml + '</div></div>';
+      }).join('');
+      Array.prototype.forEach.call(target.querySelectorAll('[data-detail]'), function (item) { item.onclick = function () { openBookingDetail(item.getAttribute('data-detail')); }; });
+      Array.prototype.forEach.call(target.querySelectorAll('button[data-row]'), function (btn) { btn.onclick = function (event) { event.stopPropagation(); openCancelConfirm(btn.getAttribute('data-row')); }; });
+      Array.prototype.forEach.call(target.querySelectorAll('button[data-edit]'), function (btn) { btn.onclick = function (event) { event.stopPropagation(); editBooking(btn.getAttribute('data-edit')); }; });
+    }
+
+    function buildMyBookingEmptyText(meta) {
+      meta = meta || {};
+      var name = LINE_PROFILE.displayName || meta.userName || '';
+      var userId = LINE_PROFILE.userId || meta.userId || '';
+      var shortId = userId ? userId.slice(0, 6) + '...' + userId.slice(-4) : '\u672a\u53d6\u5f97';
+      var lines = [
+        '\u67e5\u7121\u9810\u7d04\u8cc7\u6599',
+        '\u767b\u5165\u66b1\u7a31\uff1a' + escapeHtml(name || '\u672a\u53d6\u5f97'),
+        'LINE ID\uff1a' + escapeHtml(shortId)
+      ];
+      if (meta.diagnostics && meta.diagnostics.length) {
+        lines.push('');
+        lines.push('\u5f8c\u53f0\u6700\u8fd1\u8b80\u5230\u7684\u9810\u7d04\uff1a');
+        meta.diagnostics.slice(0, 5).forEach(function (d) {
+          lines.push(escapeHtml((d.date || '') + ' ' + (d.room || '') + ' / ' + (d.technician || '') + ' / \u9810\u7d04\u4eba:' + (d.userName || '') + ' / ID\u5c3e:' + (d.userIdTail || '\u7a7a')));
+        });
+      }
+      lines.push('');
+      lines.push('\u82e5\u65b0\u9810\u7d04\u4e5f\u4e0d\u5728\u9019\u88e1\uff0c\u8acb\u622a\u9019\u500b\u756b\u9762\u7d66\u6211\uff0c\u6211\u5c31\u80fd\u5224\u65b7\u662f\u54ea\u500b\u6b04\u4f4d\u5c0d\u4e0d\u4e0a\u3002');
+      return lines.join('\n');
+    }
+    function editBooking(rowNumber) {
+      if (!canManageBookings()) { denyManageAction('queryMessage'); return; }
+      var b = CANCEL_BOOKINGS[String(rowNumber)] || BOOKING_DETAILS[String(rowNumber)];
+      if (!b) return;
+      if (isPastBooking(b)) { openBookingDetail(rowNumber); return; }
+      EDIT_ROW_NUMBER = Number(rowNumber);
+      showTab('book');
+      byId('dateInput').value = String(b.date || '').replace(/\//g, '-');
+      byId('roomSelect').value = b.room || '';
+      renderServiceTargetOptions();
+      renderServiceChecks();
+      var techParts = splitTechnicianNames(b.technician || '');
+      if (byId('coupleSelect')) byId('coupleSelect').value = techParts[1] ? '\u662f' : '\u5426';
+      setTechnicianField('technicianInput', 'techNameInput', techParts[0] || '');
+      syncTechnicianFields();
+      setTechnicianField('technicianInput2', 'techNameInput2', techParts[1] || '');
+      var editCustomerName = b.customer === '\u672a\u6307\u5b9a' ? '' : (b.customer || ''); byId('customerInput').value = stripMainCustomerMark(editCustomerName); if (byId('mainCustomerSelect')) byId('mainCustomerSelect').value = getCustomerMarkerFromName(editCustomerName);
+      setCheckedServices(b.service || '');
+      AVAILABLE_SLOTS = [{ start: b.start, ends: [b.end] }];
+      fillStartOptions(AVAILABLE_SLOTS);
+      byId('startSelect').value = b.start;
+      syncEndTime();
+      byId('endSelect').value = b.end;
+      byId('bookBtn').textContent = '\u66f4\u65b0\u9810\u7d04';
+      showMessage('\u5df2\u8f09\u5165\u8981\u7de8\u8f2f\u7684\u9810\u7d04', false);
+    }
+
+    function showAdminPanel() {
+      if (!canManageBookings()) { denyManageAction('adminMessage'); return; }
+      if (!requireLineReady('adminMessage')) return;
+      document.body.classList.remove('reportShotMode');
+      ['book','cancel','summary','query'].forEach(function (tab) {
+        var tabBtn = byId('tab' + cap(tab));
+        var panel = byId(tab + 'Panel');
+        if (tabBtn) tabBtn.classList.remove('active');
+        if (panel) panel.classList.remove('active');
+      });
+      byId('scheduleTabs').classList.remove('active');
+      byId('tabSchedule').classList.remove('active');
+      byId('tabPeople').classList.remove('active');
+      byId('reportPanel').classList.remove('active');
+      byId('adminPanel').classList.add('active');
+      setToday('adminDateInput');
+      byId('adminLogList').innerHTML = '';
+      showPanelMessage('adminMessage', '\u8acb\u9078\u64c7\u65e5\u671f\u8207\u623f\u9593\uff0c\u518d\u6309\u641c\u5c0b log\u3002', false);
+    }
+
+    function loadAdminLogs() {
+      loadAdminLogLike('getAdminLogs', '\u5df2\u5217\u51fa ', false);
+    }
+
+    function loadHistoryLogs() {
+      loadAdminLogLike('getHistoryLogs', '\u6b77\u53f2\u67e5\u8a62\u5b8c\u6210 ', true);
+    }
+
+    function loadAdminLogLike(action, prefix, includeArchiveLabel) {
+      clearBox('adminMessage');
+      var date = byId('adminDateInput').value;
+      var room = byId('adminRoomSelect').value;
+      byId('adminLogList').innerHTML = '';
+      if (!date || !room) {
+        showPanelMessage('adminMessage', '\u8acb\u5148\u9078\u64c7\u65e5\u671f\u8207\u623f\u9593', true);
+        return;
+      }
+      byId('adminLogList').innerHTML = '<div class="slotBox empty">' + T.loading + '</div>';
+      apiCall(action, { date: date, room: room }, function (result) {
+        var logs = filterAdminLogs(result && result.logs ? result.logs : [], date, room);
+        renderAdminLogs(logs, includeArchiveLabel);
+        showPanelMessage('adminMessage', prefix + room + ' / ' + date.replace(/-/g, '/') + ' \u7684\u7d00\u9304\uff1a' + logs.length + ' \u7b46', false);
+      }, function (err) {
+        showPanelMessage('adminMessage', err, true);
+        byId('adminLogList').innerHTML = '';
+      });
+    }
+
+    function archiveOldBookings() {
+      if (!confirm('\u78ba\u5b9a\u8981\u5c01\u5b58 60 \u5929\u4ee5\u524d\u7684\u9810\u7d04\u7d00\u9304\u55ce\uff1f\u8cc7\u6599\u6703\u642c\u5230 Archive_\u5e74\u6708 \u5de5\u4f5c\u8868\uff0c\u4e0d\u6703\u522a\u9664\u3002')) return;
+      clearBox('adminMessage');
+      byId('adminLogList').innerHTML = '<div class="slotBox empty">' + T.loading + '</div>';
+      apiCall('archiveOldBookings', {}, function (result) {
+        byId('adminLogList').innerHTML = '';
+        showPanelMessage('adminMessage', result && result.message ? result.message : '\u5c01\u5b58\u5b8c\u6210', false);
+      }, function (err) {
+        byId('adminLogList').innerHTML = '';
+        showPanelMessage('adminMessage', err, true);
+      });
+    }
+
+    function filterAdminLogs(logs, date, room) {
+      var targetDate = normalizeAdminDate(date);
+      var targetRoom = normalizeRoomKey(room);
+      return (logs || []).filter(function (b) {
+        return normalizeAdminDate(b.date) === targetDate && normalizeRoomKey(b.room) === targetRoom;
+      });
+    }
+
+    function normalizeAdminDate(value) {
+      return String(value || '').replace(/-/g, '/').trim();
+    }
+
+    function renderAdminLogs(logs, includeArchiveLabel) {
+      var target = byId('adminLogList');
+      if (!logs.length) { target.innerHTML = '<div class="slotBox empty">' + T.noBookings + '</div>'; return; }
+      BOOKING_DETAILS = {};
+      target.innerHTML = logs.map(function (b) {
+        BOOKING_DETAILS[String(b.rowNumber)] = b;
+        var cancelled = b.status !== '\u6709\u6548';
+        var main = escapeHtml((b.status || '') + ' / ' + b.date + ' ' + b.start + '-' + b.end + '  ' + b.room);
+        var sourceText = includeArchiveLabel && b.archived ? ' / ???' + (b.sourceSheet || '') : '';
+        var sub = escapeHtml((b.technician || '') + ' / ' + (b.customer || '') + ' / ' + (b.service || '') + ' / ' + (b.userName || '') + sourceText);
+        return '<div class="bookingItem adminLogItem ' + (cancelled ? 'cancelled' : '') + '" data-detail="' + b.rowNumber + '"><div><div class="bookingMain">' + main + '</div><div class="bookingSub">' + sub + '<br>\u64cd\u4f5c\u6642\u9593\uff1a' + escapeHtml(formatActionTime(b)) + '</div></div></div>';
+      }).join('');
+      Array.prototype.forEach.call(target.querySelectorAll('[data-detail]'), function (item) { item.onclick = function () { openBookingDetail(item.getAttribute('data-detail')); }; });
+    }
+
+    function handleQueryTechChange() {
+      byId('queryList').innerHTML = '';
+      fillSelect('queryNameSelect', [], '', T.pickQueryName);
+      updateQueryNameOptions(true);
+    }
+
+    function handleQueryControlsChange() {
+      byId('queryList').innerHTML = '';
+      updateQueryNameOptions(true);
+    }
+
+    function updateQueryNameOptions(runQueryAfterLoad) {
+      clearBox('queryMessage');
+      var date = byId('queryDateInput').value;
+      var tech = byId('queryTechSelect').value;
+      var wrap = byId('queryNameWrap');
+      var nameSelect = byId('queryNameSelect');
+      if (!wrap || !nameSelect) return;
+      var needsName = isCustomTechChoice(tech);
+      wrap.classList.toggle('active', needsName);
+      if (!needsName) {
+        fillSelect('queryNameSelect', [], '', T.pickQueryName);
+        if (runQueryAfterLoad) loadTechnicianBookings();
+        return;
+      }
+      byId('queryList').innerHTML = '';
+      if (!date || !tech) {
+        fillSelect('queryNameSelect', [], '', T.pickQueryName);
+        return;
+      }
+      if (!hasBackend() || !LINE_READY) {
+        fillSelect('queryNameSelect', [], '', T.pickQueryName);
+        byId('queryList').innerHTML = '<div class="slotBox empty">' + T.backendFail + '</div>';
+        return;
+      }
+      nameSelect.innerHTML = '';
+      nameSelect.appendChild(new Option(T.loading, ''));
+      apiCall('getTechnicianNameOptions', { date: date, technician: tech }, function (result) {
+        var options = result && result.options ? result.options : [];
+        nameSelect.innerHTML = '';
+        if (!options.length) {
+          nameSelect.appendChild(new Option(T.noQueryName, ''));
+          byId('queryList').innerHTML = '<div class="slotBox empty">' + T.noQueryName + '</div>';
+          return;
+        }
+        nameSelect.appendChild(new Option(T.pickQueryName, ''));
+        options.forEach(function (item) {
+          nameSelect.appendChild(new Option(item.label || item.name || item.value, item.value || item.name || item.label));
+        });
+      }, function (err) {
+        fillSelect('queryNameSelect', [], '', T.pickQueryName);
+        showPanelMessage('queryMessage', err, true);
+      });
+    }
+
+    function getQueryTechnicianValue() {
+      var tech = byId('queryTechSelect').value;
+      if (isCustomTechChoice(tech)) return byId('queryNameSelect').value || '';
+      return tech;
+    }
+
+    function loadTechnicianBookings() {
+      clearBox('queryMessage');
+      var date = byId('queryDateInput').value;
+      var tech = byId('queryTechSelect').value;
+      var queryTech = getQueryTechnicianValue();
+      byId('queryList').innerHTML = '';
+      if (!date || !tech) return;
+      if (isCustomTechChoice(tech) && !queryTech) {
+        byId('queryList').innerHTML = '<div class="slotBox empty">' + T.pickQueryName + '</div>';
+        return;
+      }
+      byId('queryList').innerHTML = '<div class="slotBox empty">' + T.loading + '</div>';
+      if (!hasBackend() || !LINE_READY) { byId('queryList').innerHTML = '<div class="slotBox empty">' + T.backendFail + '</div>'; return; }
+      apiCall('getTechnicianBookings', { date: date, technician: queryTech }, function (result) { renderMyBookingList(result.bookings || [], { technicianQuery: true }); }, function (err) { showPanelMessage('queryMessage', err, true); showToast(err, true); });
+    }
+
+    function renderBookingList(targetId, bookings, allowCancel) {
+      allowCancel = !!allowCancel && canManageBookings();
+      var target = byId(targetId);
+      if (!bookings.length) { target.innerHTML = '<div class="slotBox empty">' + T.noBookings + '</div>'; return; }
+      if (allowCancel) CANCEL_BOOKINGS = {};
+      BOOKING_DETAILS = {};
+      target.innerHTML = bookings.map(function (b) {
+        if (allowCancel) CANCEL_BOOKINGS[String(b.rowNumber)] = b;
+        BOOKING_DETAILS[String(b.rowNumber)] = b;
+        var main = escapeHtml(b.start + '-' + b.end + '  ' + b.room);
+        var sub = escapeHtml((b.technician || '') + ' / ' + (b.customer || '') + ' / ' + (b.service || '') + ' / ' + (b.userName || ''));
+        var btn = allowCancel && !isPastBooking(b) ? '<div class="miniActions"><button class="btn editOne" type="button" data-edit="' + b.rowNumber + '">\u7de8\u8f2f\u9019\u7b46</button><button class="btn cancelOne" type="button" data-row="' + b.rowNumber + '">' + T.cancelOne + '</button></div>' : '';
+        return '<div class="bookingItem" data-detail="' + b.rowNumber + '"><div><div class="bookingMain">' + main + '</div><div class="bookingSub">' + sub + '</div></div>' + btn + '</div>';
+      }).join('');
+      Array.prototype.forEach.call(target.querySelectorAll('[data-detail]'), function (item) { item.onclick = function () { openBookingDetail(item.getAttribute('data-detail')); }; });
+      if (allowCancel) Array.prototype.forEach.call(target.querySelectorAll('button[data-edit]'), function (btn) { btn.onclick = function (event) { event.stopPropagation(); editBooking(btn.getAttribute('data-edit')); }; });
+      if (allowCancel) Array.prototype.forEach.call(target.querySelectorAll('button[data-row]'), function (btn) { btn.onclick = function (event) { event.stopPropagation(); openCancelConfirm(btn.getAttribute('data-row')); }; });
+    }
+
+    function openBookingDetail(rowNumber) {
+      var booking = BOOKING_DETAILS[String(rowNumber)] || CANCEL_BOOKINGS[String(rowNumber)];
+      if (!booking) return;
+      closeBookingDetail();
+      var wrap = document.createElement('div');
+      var isCancelled = isCancelledStatus(booking.status);
+      var cardClass = 'cancelConfirmCard bookingDetailCard ' + (isCancelled ? 'cancelledStatus' : 'activeStatus');
+      var actions = '<button class="btn cancelConfirmNo" id="detailCloseBtn" type="button">\u95dc\u9589</button>';
+      var actionRow = booking.rowNumber || booking.row || (/^\d+$/.test(String(rowNumber)) ? rowNumber : '');
+      var isPast = isPastBooking(booking);
+      if (canManageBookings() && !isCancelled && !isPast && actionRow) {
+        actions = '<button class="btn editOne" id="detailEditBtn" type="button">\u7de8\u8f2f\u9019\u7b46</button><button class="btn cancelOne" id="detailCancelBtn" type="button">\u53d6\u6d88\u9019\u7b46</button>' + actions;
+      }
+      wrap.id = 'bookingDetailOverlay';
+      wrap.className = 'cancelConfirmOverlay';
+      wrap.innerHTML = '<div class="' + cardClass + '"><div class="cancelConfirmTitle">\u9810\u7d04\u660e\u7d30</div><div class="cancelConfirmText">' + buildBookingDetailText(booking) + '</div><div class="cancelConfirmActions">' + actions + '</div></div>';
+      document.body.appendChild(wrap);
+      byId('detailCloseBtn').onclick = closeBookingDetail;
+      if (byId('detailEditBtn')) byId('detailEditBtn').onclick = function () { closeBookingDetail(); editBooking(actionRow); };
+      if (byId('detailCancelBtn')) byId('detailCancelBtn').onclick = function () { closeBookingDetail(); openCancelConfirm(actionRow); };
+      wrap.onclick = function (event) { if (event.target === wrap) closeBookingDetail(); };
+    }
+
+    function closeBookingDetail() {
+      var old = document.getElementById('bookingDetailOverlay');
+      if (old) old.remove();
+    }
+
+    function buildBookingDetailText(b) {
+      return [
+        '\u6642\u9593\uff1a' + escapeHtml(formatCancelDate(b.date) + b.start + '\uff5e' + b.end),
+        '\u623f\u9593\uff1a' + escapeHtml(b.room || ''),
+        '\u6280\u5e2b\uff1a' + escapeHtml(b.technician || ''),
+        '\u9867\u5ba2\uff1a' + escapeHtml(b.customer || ''),
+        '\u9805\u76ee\uff1a' + escapeHtml(b.service || ''),
+        '\u9810\u7d04\u4eba\uff1a' + escapeHtml(b.userName || ''),
+        '\u64cd\u4f5c\u6642\u9593\uff1a' + escapeHtml(formatActionTime(b)),
+        '\u72c0\u614b\uff1a' + escapeHtml(b.status || '')
+      ].join('\n');
+    }
+
+    function isCancelledStatus(status) {
+      var text = String(status || '').replace(/\s+/g, '');
+      if (text.indexOf('\u53d6\u6d88') !== -1) return true;
+      if (text.indexOf('\u6709\u6548') !== -1) return false;
+      return !!text && text !== '\u6709\u6548';
+    }
+
+    function isPastBooking(b) {
+      if (!b) return false;
+      return isPastDateTime(b.date, b.end || b.start);
+    }
+
+    function isPastDateTime(dateValue, timeValue) {
+      var d = parseLocalDate(dateValue);
+      if (!d || !timeValue) return false;
+      var parts = String(timeValue || '').match(/(\d{1,2}):(\d{2})/);
+      if (!parts) return false;
+      d.setHours(Number(parts[1]), Number(parts[2]), 0, 0);
+      return d.getTime() <= Date.now();
+    }
+
+    function parseLocalDate(value) {
+      var text = String(value || '').replace(/\//g, '-').trim();
+      var match = text.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);
+      if (!match) return null;
+      return new Date(Number(match[1]), Number(match[2]) - 1, Number(match[3]));
+    }
+
+    function scrollToField(id) {
+      var el = byId(id);
+      if (!el) return;
+      var target = getFieldWrapper(el);
+      if (target && target.scrollIntoView) target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      setTimeout(function () { if (el.focus) el.focus(); }, 260);
+    }
+
+    function formatActionTime(b) {
+      var value = (isCancelledStatus(b.status) && b.canceledAt) ? b.canceledAt : (b.createdAt || b.canceledAt || '');
+      return formatDateTimeValue(value);
+    }
+
+    function formatDateTimeValue(value) {
+      if (!value) return '\u672a\u8a18\u9304';
+      var d = new Date(value);
+      if (!isNaN(d.getTime())) return d.getFullYear() + '/' + pad2(d.getMonth() + 1) + '/' + pad2(d.getDate()) + ' ' + pad2(d.getHours()) + ':' + pad2(d.getMinutes());
+      return String(value);
+    }
+
+    function openCancelConfirm(rowNumber) {
+      if (!canManageBookings()) { denyManageAction('cancelMessage'); return; }
+      var booking = CANCEL_BOOKINGS[String(rowNumber)] || BOOKING_DETAILS[String(rowNumber)];
+      if (!booking) return;
+      if (isPastBooking(booking)) { openBookingDetail(rowNumber); return; }
+      closeCancelConfirm();
+      var wrap = document.createElement('div');
+      wrap.id = 'cancelConfirmOverlay';
+      wrap.className = 'cancelConfirmOverlay';
+      wrap.innerHTML = '<div class="cancelConfirmCard"><div class="cancelConfirmTitle">❗️❗️<br>👉⚠️ 你確定要取消這筆預約嗎？</div><div class="cancelConfirmText">👉時間：' + escapeHtml(formatCancelDate(booking.date) + booking.start + '～' + booking.end) + '\n👉房間：' + escapeHtml(booking.room) + '\n👉預約人：' + escapeHtml(booking.userName || '') + '</div><div class="cancelConfirmActions"><button class="btn cancelConfirmYes" id="confirmCancelYes" type="button">確認取消</button><button class="btn cancelConfirmNo" id="confirmCancelNo" type="button">返回</button></div></div>';
+      document.body.appendChild(wrap);
+      byId('confirmCancelYes').onclick = function () { closeCancelConfirm(); cancelByRow(rowNumber); };
+      byId('confirmCancelNo').onclick = closeCancelConfirm;
+      wrap.onclick = function (event) { if (event.target === wrap) closeCancelConfirm(); };
+    }
+
+    function closeCancelConfirm() {
+      var old = document.getElementById('cancelConfirmOverlay');
+      if (old) old.remove();
+    }
+
+    function formatCancelDate(dateText) {
+      var parts = String(dateText || '').replace(/-/g, '/').split('/');
+      var y = Number(parts[0]);
+      var m = Number(parts[1]);
+      var d = Number(parts[2]);
+      var dt = new Date(y, m - 1, d);
+      var week = ['日','一','二','三','四','五','六'][dt.getDay()];
+      return y + '年' + pad2(m) + '月' + pad2(d) + '日（週' + week + '）';
+    }
+
+    function cancelByRow(rowNumber) {
+      if (!canManageBookings()) { denyManageAction('cancelMessage'); return; }
+      var messageId = getActiveMessageId();
+      var booking = CANCEL_BOOKINGS[String(rowNumber)] || BOOKING_DETAILS[String(rowNumber)];
+      if (booking && isPastBooking(booking)) { openBookingDetail(rowNumber); return; }
+      if (!requireLineReady(messageId)) return;
+      showBookingProgress('\u53d6\u6d88\u4e2d...', true);
+      apiCall('cancelReservationByRow', { rowNumber: rowNumber }, function () {
+        showBookingProgress('\u274c \u53d6\u6d88\u6210\u529f', true);
+        setTimeout(function () {
+          closeBookingProgress();
+          clearBox(messageId);
+          refreshVisibleLists();
+          loadSummary();
+          updateAvailableSlots();
+        }, 1500);
+      }, function (err) {
+        closeBookingProgress();
+        showPanelMessage(messageId, err, true);
+        showToast(err, true);
+      });
+    }
+
+    function fillStartOptions(slots, emptyLabel) { var select = byId('startSelect'); select.innerHTML = ''; if (!slots.length) { var emptyOption = new Option(emptyLabel || T.pickTime, ''); emptyOption.disabled = true; emptyOption.selected = true; select.appendChild(emptyOption); byId('endSelect').innerHTML = ''; var endEmptyOption = new Option(emptyLabel || T.pickTime, ''); endEmptyOption.disabled = true; endEmptyOption.selected = true; byId('endSelect').appendChild(endEmptyOption); return; } select.appendChild(new Option(T.start, '')); slots.forEach(function (slot) { select.appendChild(new Option(slot.start, slot.start)); }); byId('endSelect').innerHTML = ''; byId('endSelect').appendChild(new Option(T.pickTime, '')); }
+    function syncEndTime() { var start = byId('startSelect').value; var endSelect = byId('endSelect'); endSelect.innerHTML = ''; var slot = AVAILABLE_SLOTS.find(function (item) { return item.start === start; }); var ends = slot && slot.ends ? slot.ends : []; if (!ends.length && start) ends = buildFallbackEnds(start); if (!ends.length) { endSelect.appendChild(new Option(T.pickTime, '')); return; } endSelect.appendChild(new Option(T.end, '')); ends.forEach(function (end) { endSelect.appendChild(new Option(end, end)); }); }
+    function renderSlotBoxes(slots, emptyText) { var box = byId('availableSlots'); if (!slots || !slots.length) { box.innerHTML = '<div class="slotBox empty">' + escapeHtml(emptyText || T.noSlots) + '</div>'; return; } box.innerHTML = slots.map(function (slot) { return '<button class="slotBox" type="button" data-start="' + escapeHtml(slot.start) + '">' + escapeHtml(slot.start) + '<small>' + T.canStart + '</small></button>'; }).join(''); Array.prototype.forEach.call(box.querySelectorAll('button'), function (btn) { btn.onclick = function () { byId('startSelect').value = btn.getAttribute('data-start'); syncEndTime(); }; }); }
+    function filterFutureStartSlots(slots, dateValue) { if (!isTodayDate(dateValue)) return slots || []; var now = new Date(); var currentMin = now.getHours() * 60 + now.getMinutes(); return (slots || []).filter(function (slot) { return timeToMin(slot.start) > currentMin; }); }
+    function isTodayDate(dateValue) { var d = parseLocalDate(dateValue); if (!d) return false; var today = new Date(); return d.getFullYear() === today.getFullYear() && d.getMonth() === today.getMonth() && d.getDate() === today.getDate(); }
+    function showTomorrowReport() {
+      if (!canManageBookings()) { denyManageAction('message'); return; }
+      document.body.classList.add('reportShotMode');
+      ['book','cancel','summary','query'].forEach(function (tab) {
+        var tabBtn = byId('tab' + cap(tab));
+        var panel = byId(tab + 'Panel');
+        if (tabBtn) tabBtn.classList.remove('active');
+        if (panel) panel.classList.remove('active');
+      });
+      byId('scheduleTabs').classList.remove('active');
+      byId('tabSchedule').classList.remove('active');
+      byId('tabPeople').classList.remove('active');
+      byId('adminPanel').classList.remove('active');
+      byId('reportPanel').classList.add('active');
+      byId('reportDateInput').value = dateOffsetString(1);
+      loadReportByDate();
+    }
+
+    function loadReportByDate() {
+      var date = byId('reportDateInput').value || dateOffsetString(1);
+      byId('reportDateInput').value = date;
+      byId('reportDateText').textContent = T.loading;
+      byId('reportArea').innerHTML = '<div class="slotBox empty">' + T.loading + '</div>';
+      if (!hasBackend() || !LINE_READY) {
+        byId('reportArea').innerHTML = '<div class="slotBox empty">' + T.backendFail + '</div>';
+        return;
+      }
+      apiCall('getDay', { date: date }, function (data) { renderTomorrowReport(data || {}); }, function (err) {
+        byId('reportArea').innerHTML = '<div class="message err">' + escapeHtml(err) + '</div>';
+      });
+    }
+
+    function renderTomorrowReport(data) {
+      byId('reportDateText').textContent = (data.date || String(byId('reportDateInput').value || '').replace(/-/g, '/')) + '   \u7da0\u8272=\u7a7a\u623f   \u7d05\u8272=\u5df2\u9810\u7d04   \u85cd\u8272=\u9ad4\u9a57\u5ba2';
+      var rooms = data.rooms || [];
+      if (!rooms.length) { byId('reportArea').innerHTML = '<div class="slotBox empty">' + T.noBookings + '</div>'; return; }
+      byId('reportArea').innerHTML = rooms.map(function (room) {
+        var cells = (room.slots || []).map(function (slot) {
+          var isExperience = !slot.available && slot.booking && slot.booking.service === '\u9ad4\u9a57\u5ba2';
+          var klass = slot.available ? 'free' : (isExperience ? 'experience' : 'busy');
+          var detail = slot.available ? '\u7a7a' : formatReportSlotDetail(slot.booking);
+          return '<div class="summaryCell ' + klass + '"><div class="summaryTime">' + escapeHtml(formatReportTimeLabel(slot.start)) + '</div><div class="summaryDetail">' + detail + '</div></div>';
+        }).join('');
+        return '<div class="summaryRoom"><div class="roomName">' + getRoomTitleHtml(room.room) + '</div><div class="summaryGrid">' + cells + '</div></div>';
+      }).join('');
+      fitReportToScreen();
+      window.scrollTo({ top: byId('reportPanel').offsetTop, behavior: 'smooth' });
+    }
+
+
+    function fitReportToScreen() {
+      var panel = byId('reportPanel');
+      if (!panel) return;
+      var vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
+      var grids = panel.querySelectorAll('.summaryGrid');
+      var targetCols = vw < 760 ? 12 : 12;
+      Array.prototype.forEach.call(grids, function (grid) {
+        grid.style.gridTemplateColumns = 'repeat(' + targetCols + ', minmax(0, 1fr))';
+      });
+    }
+    function submitBooking() {
+      if (!canManageBookings()) { denyManageAction('message'); return; }
+      if (!requireLineReady('message')) return;
+      clearAllFieldErrors();
+      var data = collectForm();
+      var invalid = findFirstInvalidBookingField(data, true);
+      if (invalid) { showFieldError(invalid.id, invalid.message); return; }
+      if (!hasBackend()) { showMessage(T.backendFail, true); return; }
+      openBookingReview(data);
+    }
+
+    function openBookingReview(data) {
+      closeBookingReview();
+      var wrap = document.createElement('div');
+      wrap.id = 'bookingReviewOverlay';
+      wrap.className = 'cancelConfirmOverlay';
+      wrap.innerHTML = '<div class="cancelConfirmCard bookingReviewCard"><div class="cancelConfirmTitle">\u8acb\u78ba\u8a8d\u9810\u7d04\u8cc7\u8a0a\u662f\u5426\u6b63\u78ba</div><div class="cancelConfirmText">' + buildBookingReviewText(data) + '</div><div class="cancelConfirmActions"><button class="btn" id="bookingReviewYes" type="button">\u78ba\u8a8d</button><button class="btn cancelConfirmNo" id="bookingReviewNo" type="button">\u8fd4\u56de\u4fee\u6539</button></div></div>';
+      document.body.appendChild(wrap);
+      byId('bookingReviewYes').onclick = function () { closeBookingReview(); performBookingSubmit(data); };
+      byId('bookingReviewNo').onclick = closeBookingReview;
+      wrap.onclick = function (event) { if (event.target === wrap) closeBookingReview(); };
+    }
+
+    function closeBookingReview() {
+      var old = document.getElementById('bookingReviewOverlay');
+      if (old) old.remove();
+    }
+
+    function buildBookingReviewText(data) {
+      return [
+        '\u623f\u9593\uff1a' + escapeHtml(data.room),
+        '\u65e5\u671f\uff1a' + escapeHtml(String(data.date || '').replace(/-/g, '/')),
+        '\u6642\u6bb5\uff1a' + escapeHtml(data.start + '-' + data.end),
+        '\u6280\u5e2b\uff1a' + escapeHtml(data.technician),
+        '\u9867\u5ba2\uff1a' + escapeHtml(data.customer),
+        '\u670d\u52d9\uff1a' + escapeHtml(data.service),
+        '\u9810\u7d04\u4eba\uff1a' + escapeHtml(data.userName || data.displayName || '')
+      ].join('\n');
+    }
+
+    function performBookingSubmit(data) {
+      showBookingProgress('\u9810\u7d04\u4e2d...');
+      if (EDIT_ROW_NUMBER) {
+        data.rowNumber = EDIT_ROW_NUMBER;
+        apiCall('updateReservation', data, function () { showBookingSuccessAndReset(); }, function (err) { closeBookingProgress(); showMessage(err, true); showToast(err, true); });
+      } else {
+        apiCall('createReservation', data, function () { showBookingSuccessAndReset(); }, function (err) { var msg = String(err).indexOf('??') >= 0 ? T.conflict : err; closeBookingProgress(); showMessage(msg, true); showToast(msg, true); updateAvailableSlots(); loadSummary(); });
+      }
+    }
+
+    function showBookingProgress(text, isCancel) {
+      var old = document.getElementById('bookingProgressOverlay');
+      if (!old) {
+        old = document.createElement('div');
+        old.id = 'bookingProgressOverlay';
+        old.className = 'cancelConfirmOverlay';
+        document.body.appendChild(old);
+      }
+      old.innerHTML = '<div class="cancelConfirmCard ' + (isCancel ? 'cancelProgressCard' : 'bookingSuccessCard') + '"><div class="cancelConfirmTitle">' + escapeHtml(text) + '</div></div>';
+    }
+
+    function closeBookingProgress() {
+      var old = document.getElementById('bookingProgressOverlay');
+      if (old) old.remove();
+    }
+
+    function showBookingSuccessAndReset() {
+      showBookingProgress('\ud83d\udc4c \u9810\u7d04\u6210\u529f');
+      setTimeout(function () {
+        closeBookingProgress();
+        EDIT_ROW_NUMBER = null;
+        byId('bookBtn').textContent = T.bookBtn;
+        resetBookingForm(false);
+        loadSummary();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }, 1500);
+    }
+
+    function loadSummary() { var area = byId('summaryArea'); if (!area) return; area.innerHTML = '<div class="sectionNote">' + T.loading + '</div>'; if (!hasBackend() || !LINE_READY) { renderFallbackSummary(); return; } apiCall('getDay', { date: byId('summaryDateInput').value }, renderSummary, function (err) { area.innerHTML = '<div class="message err">' + escapeHtml(err) + '</div>'; }); }
+
+    function renderSummary(data) {
+      var area = byId('summaryArea');
+      if (!data || !data.rooms) { renderFallbackSummary(); return; }
+      BOOKING_DETAILS = {};
+      var summaryDate = String(data.date || byId('summaryDateInput').value || '').replace(/\//g, '-');
+      area.innerHTML = data.rooms.map(function (room) {
+        var cells = room.slots.map(function (slot) {
+          var isExperience = !slot.available && slot.booking && slot.booking.service === '\u9ad4\u9a57\u5ba2';
+          var klass = slot.available ? 'free' : (isExperience ? 'experience' : 'busy');
+          var detail = slot.available ? T.free : formatBookedSummaryDetail(slot.booking);
+          var row = '';
+          var isPastSlot = isPastDateTime(summaryDate, slot.end || slot.start);
+          if (!slot.available && slot.booking) {
+            var enriched = enrichSummaryBooking(slot.booking, summaryDate, room.room, slot);
+            row = String(enriched.rowNumber || enriched.row || enriched.id || makeSummaryBookingKey(summaryDate, room.room, slot));
+            BOOKING_DETAILS[row] = enriched;
+            CANCEL_BOOKINGS[row] = enriched;
+          }
+          return '<button class="summaryCell ' + klass + (isPastSlot ? ' past' : '') + '" type="button" data-past="' + (isPastSlot ? '1' : '') + '" data-date="' + escapeHtml(summaryDate) + '" data-room="' + escapeHtml(room.room) + '" data-start="' + escapeHtml(slot.start) + '" data-end="' + escapeHtml(slot.end) + '" data-row="' + escapeHtml(row) + '"><div class="summaryTime">' + escapeHtml(formatSlotRange(slot.start, slot.end)) + '</div><div class="summaryDetail' + (slot.available ? '' : ' bookedDetail') + '">' + detail + '</div></button>';
+        }).join('');
+        return '<div class="summaryRoom"><div class="roomName">' + getRoomTitleHtml(room.room) + '</div><div class="summaryGrid">' + cells + '</div></div>';
+      }).join('');
+      bindSummaryCellActions();
+    }
+
+    function bindSummaryCellActions() {
+      Array.prototype.forEach.call(document.querySelectorAll('#summaryArea .summaryCell'), function (cell) {
+        cell.onclick = function () {
+          var row = cell.getAttribute('data-row');
+          if (row) openBookingDetail(row);
+          else if (cell.getAttribute('data-past') !== '1') startBookingFromSummary(cell.getAttribute('data-date'), cell.getAttribute('data-room'), cell.getAttribute('data-start'));
+        };
+      });
+    }
+
+    function startBookingFromSummary(date, room, start) {
+      if (!canManageBookings()) { denyManageAction('message'); return; }
+      if (!date || !room || !start) return;
+      EDIT_ROW_NUMBER = null;
+      clearAllFieldErrors();
+      showTab('book');
+      byId('bookBtn').textContent = T.bookBtn;
+      byId('dateInput').value = String(date).replace(/\//g, '-');
+      byId('roomSelect').value = room;
+      if (byId('coupleSelect')) byId('coupleSelect').value = '';
+      if (byId('technicianInput')) byId('technicianInput').value = '';
+      if (byId('technicianInput2')) byId('technicianInput2').value = '';
+      if (byId('techNameInput')) byId('techNameInput').value = '';
+      if (byId('techNameInput2')) byId('techNameInput2').value = '';
+      renderServiceTargetOptions();
+      renderServiceChecks();
+      clearCheckedServiceTarget();
+      clearCheckedServices();
+      syncTechnicianFields();
+      PENDING_SUMMARY_START = start;
+      updateAvailableSlots();
+      setTimeout(function () { scrollToField('endSelect'); }, 650);
+    }
+
+    function applyPendingSummaryStart() {
+      if (!PENDING_SUMMARY_START) return;
+      var start = PENDING_SUMMARY_START;
+      PENDING_SUMMARY_START = '';
+      byId('startSelect').value = start;
+      syncEndTime();
+      byId('endSelect').value = '';
+      clearFieldError('startSelect');
+      clearFieldError('endSelect');
+      setTimeout(function () { scrollToField('endSelect'); }, 120);
+    }
+
+    function enrichSummaryBooking(booking, date, room, slot) {
+      var b = Object.assign({}, booking || {});
+      b.date = b.date || date;
+      b.room = b.room || room;
+      b.start = b.start || b.startTime || b.bookingStart || slot.start;
+      b.end = b.end || b.endTime || b.bookingEnd || slot.end;
+      b.status = b.status || '\u6709\u6548';
+      return b;
+    }
+
+    function makeSummaryBookingKey(date, room, slot) {
+      return ['summary', date, room, slot.start, slot.end].join('|');
+    }
+
+    function renderFallbackSummary() { renderSummary({ date: byId('summaryDateInput').value, rooms: CONFIG.rooms.map(function (room) { var slots = []; for (var m = CONFIG.openHour * 60; m < CONFIG.closeHour * 60; m += 30) slots.push({ start: minToTime(m), end: minToTime(m + 30), available: true, booking: null }); return { room: room, slots: slots }; }) }); }
+    function collectForm() { var service = getCheckedServices(); return Object.assign({ date: byId('dateInput').value, room: byId('roomSelect').value, start: byId('startSelect').value, end: byId('endSelect').value, technician: getTechnicianValue(), customer: buildCustomerNameForSubmit(service), service: service }, getLinePayload()); }
+    function validateFormData(data, needsDetail) { if (!data.date || !data.room || !data.start || !data.end) return T.required; if (timeToMin(data.end) - timeToMin(data.start) < 60) return T.minWarn; if (needsDetail && (!data.technician || !data.customer || !data.service)) return T.required; if (needsDetail && needsCustomTechName('technicianInput') && !byId('techNameInput').value.trim()) return '\u8acb\u586b\u5beb\u7f8e\u5bb9\u5e2b / \u652f\u63f4\u6280\u5e2b\u59d3\u540d\u3002'; if (needsDetail && isCoupleRequiredMissing()) return '\u8acb\u9078\u64c7\u5169\u4eba\u540c\u623f\u662f\u6216\u5426\u3002'; if (needsDetail && isCoupleEnabled() && !getSecondTechnicianValue()) return '\u5169\u4eba\u540c\u623f\u8acb\u9078\u64c7\u7b2c\u4e8c\u4f4d\u6280\u5e2b\u3002'; if (needsDetail && isCoupleEnabled() && needsCustomTechName('technicianInput2') && !byId('techNameInput2').value.trim()) return '\u8acb\u586b\u5beb\u7b2c\u4e8c\u4f4d\u7f8e\u5bb9\u5e2b / \u652f\u63f4\u6280\u5e2b\u59d3\u540d\u3002'; return ''; }
+
+    function findFirstInvalidBookingField(data, needsDetail) {
+      if (!data.date) return { id: 'dateInput', message: '請選擇日期。' };
+      if (!data.room) return { id: 'roomSelect', message: '請選擇房間。' };
+      if (!data.start) return { id: 'startSelect', message: '請選擇開始時間。' };
+      if (!data.end) return { id: 'endSelect', message: '請選擇結束時間。' };
+      if (timeToMin(data.end) - timeToMin(data.start) < 60) return { id: 'endSelect', message: T.minWarn };
+      if (!needsDetail) return null;
+      if (!byId('technicianInput').value) return { id: 'technicianInput', message: '請選擇技師。' };
+      if (needsCustomTechName('technicianInput') && !byId('techNameInput').value.trim()) return { id: 'techNameInput', message: '請填寫美容師 / 支援技師姓名。' };
+      if (isCoupleRequiredMissing()) return { id: 'coupleSelect', message: '\u8acb\u9078\u64c7\u5169\u4eba\u540c\u623f\u662f\u6216\u5426\u3002' };
+      if (isCoupleEnabled() && !byId('technicianInput2').value) return { id: 'technicianInput2', message: '\u5169\u4eba\u540c\u623f\u8acb\u9078\u64c7\u7b2c\u4e8c\u4f4d\u6280\u5e2b\u3002' };
+      if (isCoupleEnabled() && needsCustomTechName('technicianInput2') && !byId('techNameInput2').value.trim()) return { id: 'techNameInput2', message: '請填寫第二位美容師 / 支援技師姓名。' };
+      if (!getCheckedServiceTarget()) return { id: 'serviceTargetInput', message: '請選擇服務對象。' }; if (!getCheckedServiceItems()) return { id: 'serviceInput', message: '請選擇服務項目。' };
+      if (!data.customer) return { id: 'customerInput', message: '請填寫顧客姓名。' };
+      if (getCheckedServiceTarget() && !byId('mainCustomerSelect').value) return { id: 'mainCustomerSelect', message: '請選擇服務項目標記 B / F / BF。' };
+      return null;
+    }
+
+    function showFieldError(id, message) {
+      markFieldError(id);
+      showMessage(message || T.required, true);
+      var el = byId(id);
+      var target = (id === 'serviceInput' || id === 'serviceTargetInput') ? el : getFieldWrapper(el);
+      if (target && target.scrollIntoView) target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      setTimeout(function () { if (el && el.focus && (id !== 'serviceInput' && id !== 'serviceTargetInput')) el.focus(); }, 350);
+    }
+
+    function markFieldError(id) {
+      var el = byId(id);
+      if (!el) return;
+      if ((id === 'serviceInput' || id === 'serviceTargetInput')) { el.classList.add('fieldError'); return; }
+      var wrap = getFieldWrapper(el);
+      if (wrap) wrap.classList.add('fieldError');
+      el.classList.add('fieldError');
+    }
+
+    function clearFieldError(id) {
+      var el = byId(id);
+      if (!el) return;
+      el.classList.remove('fieldError');
+      var wrap = getFieldWrapper(el);
+      if (wrap) wrap.classList.remove('fieldError');
+      if ((id === 'serviceInput' || id === 'serviceTargetInput')) el.classList.remove('fieldError');
+    }
+
+    function clearAllFieldErrors() {
+      Array.prototype.forEach.call(document.querySelectorAll('.fieldError'), function (el) { el.classList.remove('fieldError'); });
+    }
+
+    function getFieldWrapper(el) {
+      return el && el.parentElement ? el.parentElement : el;
+    }
+    function resetBookingForm(showNotice) { clearAllFieldErrors(); EDIT_ROW_NUMBER = null; byId('bookBtn').textContent = T.bookBtn; byId('dateInput').value = ''; byId('roomSelect').value = ''; byId('technicianInput').value = ''; if (byId('techNameInput')) byId('techNameInput').value = ''; if (byId('coupleSelect')) byId('coupleSelect').value = ''; if (byId('technicianInput2')) byId('technicianInput2').value = ''; if (byId('techNameInput2')) byId('techNameInput2').value = ''; if (byId('mainCustomerSelect')) byId('mainCustomerSelect').value = ''; syncTechnicianFields(); renderServiceTargetOptions(); renderServiceChecks(); clearCheckedServiceTarget(); clearCheckedServices(); syncMainCustomerField(); byId('customerInput').value = ''; AVAILABLE_SLOTS = []; fillStartOptions([]); renderSlotBoxes([], T.pickDateRoom); var box = byId('message'); box.textContent = ''; box.className = 'message'; if (showNotice && byId('userNameInput').value) showMessage(T.autoName, false); }
+    function applyLineUserName() { setLineUserName(LINE_PROFILE.displayName || SERVER_USER_NAME || ''); }
+    function setLineUserName(name) { byId('userNameInput').value = String(name || '').trim(); byId('userNameInput').readOnly = true; }
+    function getLinePayload() { return { userId: LINE_PROFILE.userId, displayName: LINE_PROFILE.displayName, userName: LINE_PROFILE.displayName, readOnlyMode: !canManageBookings() }; }
+    function setToday(id) { var d = new Date(); byId(id).value = formatDateInput(d); }
+    function dateOffsetString(days) { var d = new Date(); d.setDate(d.getDate() + days); return formatDateInput(d); }
+    function dateOffsetDisplay(days) { return dateOffsetString(days).replace(/-/g, '/'); }
+    function formatDateInput(d) { return d.getFullYear() + '-' + pad2(d.getMonth() + 1) + '-' + pad2(d.getDate()); }
+    function buildFallbackSlots() { var slots = []; for (var m = CONFIG.openHour * 60; m <= CONFIG.closeHour * 60 - 60; m += 30) slots.push({ start: minToTime(m), end: minToTime(m + 60), ends: buildFallbackEnds(minToTime(m)) }); return slots; }
+    function buildFallbackEnds(start) { var ends = []; for (var m = timeToMin(start) + 60; m <= CONFIG.closeHour * 60; m += 30) ends.push(minToTime(m)); return ends; }
+
+    function renderServiceTargetOptions() {
+          var box = byId('serviceTargetInput');
+          if (!box) return;
+          var current = getCheckedServiceTarget();
+          box.innerHTML = SERVICE_TARGETS.map(function (item, index) {
+            var id = 'serviceTarget' + index;
+            return '<label class="serviceCheck" for="' + id + '"><input id="' + id + '" type="radio" name="serviceTarget" value="' + escapeHtml(item) + '"><span>' + escapeHtml(item) + '</span></label>';
+          }).join('');
+          Array.prototype.forEach.call(box.querySelectorAll('input'), function (item) {
+            item.checked = item.value === current;
+            item.onchange = function () { clearFieldError('serviceTargetInput'); syncMainCustomerField(); };
+          });
+          syncMainCustomerField();
+        }
+    
+        function renderServiceChecks() {
+          var box = byId('serviceInput');
+          if (!box) return;
+          var list = getServicesForRoom(byId('roomSelect') ? byId('roomSelect').value : '');
+          var selected = getCheckedServiceItems().split('、').filter(Boolean);
+          box.innerHTML = list.map(function (service, index) {
+            var id = 'serviceCheck' + index;
+            return '<label class="serviceCheck" for="' + id + '"><input id="' + id + '" type="checkbox" value="' + escapeHtml(service) + '"><span>' + escapeHtml(service) + '</span></label>';
+          }).join('');
+          Array.prototype.forEach.call(box.querySelectorAll('input'), function (item) {
+            item.checked = selected.indexOf(item.value) !== -1;
+            item.onchange = function () { clearFieldError('serviceInput'); enforceNoInstrumentOnly(item); };
+          });
+        }
+    
+        function enforceNoInstrumentOnly(changedItem) {
+          if (!changedItem || !changedItem.checked) return;
+          Array.prototype.forEach.call(byId('serviceInput').querySelectorAll('input'), function (item) {
+            if (changedItem.value === NO_INSTRUMENT_SERVICE && item !== changedItem) item.checked = false;
+            if (changedItem.value !== NO_INSTRUMENT_SERVICE && item.value === NO_INSTRUMENT_SERVICE) item.checked = false;
+          });
+        }
+
+    function isCoupleRoom(roomName) {
+      var key = normalizeRoomKey(roomName);
+      return key === '\u4e09\u6a13\u5f8c' || key === '\u4e09\u6a13\u53f3';
+    }
+
+    function isCoupleEnabled() {
+      return isCoupleRoom(byId('roomSelect') ? byId('roomSelect').value : '') && byId('coupleSelect') && byId('coupleSelect').value === '\u662f';
+    }
+
+    function isCoupleRequiredMissing() {
+      return isCoupleRoom(byId('roomSelect') ? byId('roomSelect').value : '') && byId('coupleSelect') && !byId('coupleSelect').value;
+    }
+
+    function isCustomTechChoice(value) {
+      return value === '\u7f8e\u5bb9\u5e2b' || value === '\u652f\u63f4\u6280\u5e2b';
+    }
+
+    function needsCustomTechName(selectId) {
+      return byId(selectId) && isCustomTechChoice(byId(selectId).value);
+    }
+
+    function formatTechnicianChoice(selectId, nameId) {
+      var base = byId(selectId) ? byId(selectId).value : '';
+      var name = byId(nameId) ? byId(nameId).value.trim() : '';
+      return isCustomTechChoice(base) && name ? base + '\uff08' + name + '\uff09' : base;
+    }
+
+    function setTechnicianField(selectId, nameId, value) {
+      var select = byId(selectId);
+      var nameInput = byId(nameId);
+      if (!select || !nameInput) return;
+      var parsed = parseTechnicianChoice(value);
+      select.value = parsed.base;
+      nameInput.value = parsed.name;
+      syncCustomTechFields();
+    }
+
+    function parseTechnicianChoice(value) {
+      var text = String(value || '').trim();
+      var match = text.match(/^(\u7f8e\u5bb9\u5e2b|\u652f\u63f4\u6280\u5e2b)[\uff08(](.+?)[\uff09)]$/);
+      if (match) return { base: match[1], name: match[2] };
+      if (text.indexOf('\u7f8e\u5bb9\u5e2b') === 0 && text !== '\u7f8e\u5bb9\u5e2b') return { base: '\u7f8e\u5bb9\u5e2b', name: text.replace(/^\u7f8e\u5bb9\u5e2b/, '').replace(/^[\uff1a:\-\s]+/, '') };
+      if (text.indexOf('\u652f\u63f4\u6280\u5e2b') === 0 && text !== '\u652f\u63f4\u6280\u5e2b') return { base: '\u652f\u63f4\u6280\u5e2b', name: text.replace(/^\u652f\u63f4\u6280\u5e2b/, '').replace(/^[\uff1a:\-\s]+/, '') };
+      return { base: text, name: '' };
+    }
+
+    function syncCustomTechFields() {
+      var firstWrap = byId('techNameWrap');
+      var secondNameWrap = byId('techNameWrap2');
+      if (firstWrap) firstWrap.classList.toggle('active', needsCustomTechName('technicianInput'));
+      if (byId('techNameInput') && !needsCustomTechName('technicianInput')) byId('techNameInput').value = '';
+      var showSecondName = isCoupleEnabled() && needsCustomTechName('technicianInput2');
+      if (secondNameWrap) secondNameWrap.classList.toggle('active', showSecondName);
+      if (byId('techNameInput2') && !showSecondName) byId('techNameInput2').value = '';
+    }
+
+    function getSecondTechnicianValue() {
+      var first = formatTechnicianChoice('technicianInput', 'techNameInput');
+      var second = formatTechnicianChoice('technicianInput2', 'techNameInput2');
+      return second && second !== first ? second : '';
+    }
+
+    function syncTechnicianFields() {
+      var coupleWrap = byId('coupleWrap');
+      var secondWrap = byId('secondTechWrap');
+      var second = byId('technicianInput2');
+      if (!coupleWrap || !secondWrap || !second) return;
+      var canCouple = isCoupleRoom(byId('roomSelect') ? byId('roomSelect').value : '');
+      coupleWrap.classList.toggle('active', canCouple);
+      if (!canCouple && byId('coupleSelect')) byId('coupleSelect').value = '';
+      var active = canCouple && byId('coupleSelect') && byId('coupleSelect').value === '\u662f';
+      secondWrap.classList.toggle('active', active);
+      if (!active) second.value = '';
+      syncCustomTechFields();
+    }
+
+    function getTechnicianValue() {
+      var first = formatTechnicianChoice('technicianInput', 'techNameInput');
+      var second = getSecondTechnicianValue();
+      if (isCoupleEnabled() && second) {
+        return [first, second].filter(Boolean).join('\u3001');
+      }
+      return first;
+    }
+
+    function splitTechnicianNames(value) {
+      return String(value || '').split(/[\u3001,，\/]+/).map(function (name) {
+        name = name.trim();
+        return name === '\u6587\u8431' ? '\u96ef\u8431' : name;
+      }).filter(Boolean);
+    }
+
+    function formatBookedSummaryDetail(booking) {
+      booking = booking || {};
+      return [
+        '\u9810\u7d04\u4eba\uff1a' + (booking.userName || '\u672a\u6307\u5b9a'),
+        '\u6280\u5e2b\uff1a' + (booking.technician || '\u672a\u6307\u5b9a'),
+        '\u9867\u5ba2\uff1a' + (booking.customer || '\u672a\u6307\u5b9a'),
+        '\u9805\u76ee\uff1a' + (booking.service || '\u672a\u6307\u5b9a')
+      ].map(escapeHtml).join('<br>');
+    }
+
+    function formatSlotRange(start, end) {
+      return String(start || '') + '~' + String(end || '');
+    }
+
+    function formatSlotRangeHtml(start, end) {
+      return escapeHtml(String(start || '')) + '<br>~' + escapeHtml(String(end || ''));
+    }
+
+    function formatReportTimeLabel(start) {
+      return String(start || '');
+    }
+
+    function shortReportTime(timeText) {
+      var text = String(timeText || '');
+      if (!text) return '';
+      return text + '~' + minToTime(timeToMin(text) + 30);
+    }
+
+    function formatReportSlotDetail(booking) {
+      booking = booking || {};
+      var service = String(booking.service || '');
+      if (service === '\u9ad4\u9a57\u5ba2') return '\u9ad4';
+      var technician = String(booking.technician || '\u9810');
+      return escapeHtml(technician.slice(0, 2));
+    }
+
+    function getRoomTitleHtml(roomName) {
+      var label = ROOM_EQUIPMENT_LABELS[normalizeRoomKey(roomName)];
+      var name = escapeHtml(roomName || '');
+      return label ? '<span class="roomMain">' + name + '</span><span class="roomEquip">（' + escapeHtml(label) + '）</span>' : '<span class="roomMain">' + name + '</span>';
+    }
+
+    function getRoomDisplayName(roomName) {
+      var label = ROOM_EQUIPMENT_LABELS[normalizeRoomKey(roomName)];
+      return label ? String(roomName || '') + '\uff08' + label + '\uff09' : String(roomName || '');
+    }
+
+    function getServicesForRoom(roomName) {
+      var key = normalizeRoomKey(roomName);
+      return ROOM_SERVICE_RULES[key] || SERVICES;
+    }
+
+    function normalizeRoomKey(roomName) {
+      var text = String(roomName || '').replace(/\s+/g, '').replace(/^\u6587\u6210/, '').replace(/^\u6587\u6210\u6703\u9928/, '');
+      var map = {
+        '1\u6a13': '\u4e00\u6a13',
+        '2\u6a13\u5de6': '\u4e8c\u6a13\u5de6',
+        '2\u6a13\u53f3': '\u4e8c\u6a13\u53f3',
+        '3\u6a13\u524d': '\u4e09\u6a13\u524d',
+        '3\u6a13\u5f8c': '\u4e09\u6a13\u5f8c',
+        '3\u6a13\u5de6': '\u4e09\u6a13\u5de6',
+        '3\u6a13\u53f3': '\u4e09\u6a13\u53f3',
+        '4\u6a13\u524d': '\u56db\u6a13\u524d',
+        '4\u6a13\u5f8c\u5de6': '\u56db\u6a13\u5de6\u5f8c',
+        '4\u6a13\u5de6\u5f8c': '\u56db\u6a13\u5de6\u5f8c',
+        '\u56db\u6a13\u5f8c\u5de6': '\u56db\u6a13\u5de6\u5f8c',
+        '\u56db\u6a13\u5de6\u5f8c': '\u56db\u6a13\u5de6\u5f8c',
+        '4\u6a13\u5f8c\u53f3': '\u56db\u6a13\u53f3\u5f8c',
+        '4\u6a13\u53f3\u5f8c': '\u56db\u6a13\u53f3\u5f8c',
+        '\u56db\u6a13\u5f8c\u53f3': '\u56db\u6a13\u53f3\u5f8c',
+        '\u56db\u6a13\u53f3\u5f8c': '\u56db\u6a13\u53f3\u5f8c',
+        '5\u6a13': '\u4e94\u6a13',
+        '5F': '\u4e94\u6a13',
+        '\u4e94\u6a13': '\u4e94\u6a13',
+        '\u9e7d\u76e4\u6d74': '\u5ca9\u76e4\u6d74'
+      };
+      return map[text] || text;
+    }
+
+    function enforceExclusiveCustomerFlags(changedItem) { return; }
+
+    function getCheckedServiceTarget() {
+          var checked = byId('serviceTargetInput') ? byId('serviceTargetInput').querySelector('input:checked') : null;
+          return checked ? checked.value : '';
+        }
+    
+        function clearCheckedServiceTarget() {
+          if (!byId('serviceTargetInput')) return;
+          Array.prototype.forEach.call(byId('serviceTargetInput').querySelectorAll('input'), function (item) { item.checked = false; });
+          syncMainCustomerField();
+        }
+    
+        function isServiceMarkerSelected() {
+          return !!getCheckedServiceTarget();
+        }
+    
+        function isMainCustomerSelected() {
+          return isServiceMarkerSelected();
+        }
+    
+        function syncMainCustomerField() {
+          var wrap = byId('mainCustomerWrap');
+          if (!wrap) return;
+          var active = isServiceMarkerSelected();
+          wrap.classList.toggle('active', active);
+          if (!active && byId('mainCustomerSelect')) byId('mainCustomerSelect').value = '';
+        }
+    
+        function stripMainCustomerMark(name) {
+          return String(name || '').trim().replace(/\s+(B|F)$/i, '').replace(/BF$/i, '').trim();
+        }
+    
+        function getCustomerMarkerFromName(name) {
+          var text = String(name || '').trim();
+          if (/BF$/i.test(text)) return 'BF';
+          var match = text.match(/\s+(B|F)$/i);
+          return match ? match[1].toUpperCase() : '';
+        }
+    
+        function buildCustomerNameForSubmit(service) {
+          var name = stripMainCustomerMark(byId('customerInput').value);
+          var parts = String(service || '').split('、');
+          var needsMark = SERVICE_TARGETS.some(function (flag) { return parts.indexOf(flag) !== -1; });
+          if (!needsMark) return name;
+          var mark = byId('mainCustomerSelect') ? byId('mainCustomerSelect').value : '';
+          if (!mark) return name;
+          return mark === 'BF' ? name + 'BF' : name + ' ' + mark;
+        }
+
+    function setCheckedServices(serviceText) {
+          var parts = String(serviceText || '').split('、').filter(Boolean);
+          var target = parts.filter(function (item) { return SERVICE_TARGETS.indexOf(item) !== -1; })[0] || '';
+          if (byId('serviceTargetInput')) {
+            Array.prototype.forEach.call(byId('serviceTargetInput').querySelectorAll('input'), function (item) { item.checked = item.value === target; });
+          }
+          Array.prototype.forEach.call(byId('serviceInput').querySelectorAll('input'), function (item) {
+            item.checked = parts.indexOf(item.value) !== -1;
+          });
+          syncMainCustomerField();
+        }
+    
+        function getCheckedServiceItems() {
+          var checked = byId('serviceInput').querySelectorAll('input:checked');
+          return Array.prototype.map.call(checked, function (item) { return item.value; }).join('、');
+        }
+    
+        function getCheckedServices() {
+          var parts = [];
+          var target = getCheckedServiceTarget();
+          var items = getCheckedServiceItems();
+          if (target) parts.push(target);
+          if (items) parts = parts.concat(items.split('、'));
+          return parts.join('、');
+        }
+    
+        function clearCheckedServices() {
+          Array.prototype.forEach.call(byId('serviceInput').querySelectorAll('input'), function (item) { item.checked = false; });
+          syncMainCustomerField();
+        }
+    function fillSelect(id, list, keep, placeholder) { var select = byId(id); if (!select) return; var old = keep || select.value; select.innerHTML = ''; if (placeholder) select.appendChild(new Option(placeholder, '')); list.forEach(function (item) { select.appendChild(new Option(item, item)); }); if (old && list.indexOf(old) >= 0) select.value = old; else select.value = ''; }
+    function fillRoomSelect(id, list, keep, placeholder) { var select = byId(id); if (!select) return; var old = keep || select.value; select.innerHTML = ''; if (placeholder) select.appendChild(new Option(placeholder, '')); list.forEach(function (item) { select.appendChild(new Option(getRoomOptionLabel(item), item)); }); if (old && list.indexOf(old) >= 0) select.value = old; else select.value = ''; }
+    function getRoomOptionLabel(roomName) { var label = ROOM_EQUIPMENT_LABELS[normalizeRoomKey(roomName)]; return label ? String(roomName || '') + '\uff08' + label + '\uff09' : String(roomName || ''); }
+
+    function apiCall(action, payload, onSuccess, onError) {
+      if (!hasBackend()) { if (onError) onError('???? Apps Script API ??'); return; }
+      payload = payload || {}; payload.idToken = LINE_ID_TOKEN || ''; payload.readOnlyMode = !canManageBookings();
+      var callbackName = '__wcApi_' + Date.now() + '_' + Math.floor(Math.random() * 100000);
+      var done = false; var script = document.createElement('script');
+      var timer = setTimeout(function () { if (done) return; done = true; cleanup(); if (onError) onError('????????????'); }, 15000);
+      window[callbackName] = function (res) { if (done) return; done = true; clearTimeout(timer); cleanup(); if (res && res.ok) { if (onSuccess) onSuccess(res.data); } else { if (onError) onError(res && res.error ? res.error : '??????'); } };
+      function cleanup() { try { delete window[callbackName]; } catch (err) { window[callbackName] = null; } if (script && script.parentNode) script.parentNode.removeChild(script); }
+      var params = 'api=' + encodeURIComponent(action) + '&callback=' + encodeURIComponent(callbackName) + '&payload=' + encodeURIComponent(JSON.stringify(payload));
+      script.onerror = function () { if (done) return; done = true; clearTimeout(timer); cleanup(); if (onError) onError('????? Apps Script API'); };
+      script.src = API_URL + (API_URL.indexOf('?') >= 0 ? '&' : '?') + params;
+      document.body.appendChild(script);
+    }
+
+    function showToast(text, isError) {
+      var old = document.getElementById('toastMessage');
+      if (old) old.remove();
+      var box = document.createElement('div');
+      box.id = 'toastMessage';
+      box.className = 'toastMessage ' + (isError ? 'err' : 'ok');
+      box.textContent = String(text || '');
+      document.body.appendChild(box);
+      setTimeout(function () { if (box && box.parentNode) box.parentNode.removeChild(box); }, isError ? 4200 : 3000);
+    }
+    function getActiveMessageId() {
+      if (byId('queryPanel') && byId('queryPanel').classList.contains('active')) return 'queryMessage';
+      if (byId('cancelPanel') && byId('cancelPanel').classList.contains('active')) return 'cancelMessage';
+      return 'message';
+    }
+    function refreshVisibleLists() {
+      if (byId('queryPanel') && byId('queryPanel').classList.contains('active')) {
+        if (byId('queryDateInput').value && byId('queryTechSelect').value) updateQueryNameOptions(true);
+        return;
+      }
+      if (byId('cancelPanel') && byId('cancelPanel').classList.contains('active')) loadCancelBookings();
+    }
+    function scrollToMessage(id) {
+      var box = byId(id);
+      if (box) box.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+    function showMessage(text, isError) { showPanelMessage('message', text, isError); }
+    function showPanelMessage(id, text, isError) { var box = byId(id); if (!box) { showToast(text, isError); return; } box.textContent = text || ''; box.className = 'message ' + (isError ? 'err' : 'ok'); }
+    function clearBox(id) { var box = byId(id); if (!box) return; box.textContent = ''; box.className = 'message'; }
+    function cap(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
+    function hasBackend() { return API_URL && API_URL.indexOf('script.google.com/macros/s/') !== -1; }
+    function byId(id) { return document.getElementById(id); }
+    function pad2(n) { return String(n).padStart(2, '0'); }
+    function minToTime(m) { return pad2(Math.floor(m / 60)) + ':' + pad2(m % 60); }
+    function timeToMin(t) { var p = String(t || '0:0').split(':'); return Number(p[0]) * 60 + Number(p[1]); }
+    function escapeHtml(s) { return String(s == null ? '' : s).replace(/[&<>\"]/g, function (c) { return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]; }); }
+    function getErrorText(err) { return err && err.message ? err.message : String(err || '\u767c\u751f\u932f\u8aa4'); }
+  </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
