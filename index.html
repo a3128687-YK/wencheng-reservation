@@ -211,6 +211,11 @@
     body.headcountOnly .hero { margin-bottom: 12px; }
     body.headcountOnly .topNowCard { display: none; }
     body.headcountOnly #techHeadcountPanel { display: block; margin-top: 12px; }
+    body.salesOnly .modeSwitcher,
+    body.salesOnly .homeTabs,
+    body.salesOnly .subTabs { display: none !important; }
+    body.salesOnly .hero { margin-bottom: 12px; }
+    body.salesOnly #myMonthlySalesPanel { display: block; margin-top: 12px; }
     .homeTabs .tab { min-height: 118px; padding: 14px 6px; font-size: clamp(18px, 4.1vw, 30px); white-space: nowrap; letter-spacing: 0; }
     .subTabs { display: none; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin: 14px 0 18px; }
     .subTabs.active { display: grid; }
@@ -384,6 +389,15 @@
     .headcountDetailMain { font-size: clamp(19px, 4.5vw, 27px); font-weight: 950; line-height: 1.25; }
     .headcountDetailSub { margin-top: 6px; font-size: clamp(15px, 3.7vw, 21px); font-weight: 820; color: var(--muted); line-height: 1.45; }
     .headcountBack { margin-bottom: 14px; background: #60746a; }
+    .salesStats { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin: 14px 0; }
+    .salesStat { border-radius: 18px; padding: 14px; background: rgba(255,255,255,.95); border: 2px solid rgba(70,126,88,.18); box-shadow: 0 8px 20px rgba(53,82,61,.08); }
+    .salesStatLabel { font-size: clamp(14px, 3.2vw, 19px); font-weight: 900; color: var(--muted); }
+    .salesStatValue { margin-top: 4px; font-size: clamp(24px, 6vw, 38px); line-height: 1; font-weight: 950; color: var(--green); overflow-wrap: anywhere; }
+    .salesFormBox { margin-top: 16px; padding: 14px; border-radius: 20px; background: #fffaf1; border: 2px solid rgba(187,139,76,.22); }
+    .salesDetailList { display: grid; gap: 10px; margin-top: 14px; }
+    .salesDetailItem { border-radius: 16px; padding: 12px; background: #fffdf7; border: 2px solid rgba(70,126,88,.16); box-shadow: 0 6px 16px rgba(53,82,61,.07); }
+    .salesDetailMain { font-size: clamp(18px, 4vw, 24px); font-weight: 950; color: var(--ink); }
+    .salesDetailSub { margin-top: 6px; font-size: clamp(15px, 3.3vw, 20px); font-weight: 800; color: var(--muted); line-height: 1.45; }
     body.scheduleOnly .modeSwitcher,
     body.scheduleOnly .homeTabs,
     body.scheduleOnly .subTabs { display: none !important; }
@@ -760,6 +774,7 @@
           '<section class="panel reportPanel" id="reportPanel"><button class="btn reportBack" id="reportBackBtn" type="button">\u8fd4\u56de\u9996\u9801</button><div class="sectionTitle">\u623f\u9593\u5831\u8868</div><div class="reportControls"><div><label for="reportDateInput">\u5831\u8868\u65e5\u671f</label><input id="reportDateInput" type="date"></div><button class="btn refresh" id="reportSearchBtn" type="button">\u67e5\u8a62</button></div><div class="sectionNote" id="reportDateText">\u8f09\u5165\u4e2d...</div><div id="reportArea"></div></section>',
           '<section class="panel" id="techHeadcountPanel"><button class="btn headcountBack" id="headcountHomeBtn" type="button">\u8fd4\u56de\u9996\u9801</button><div class="sectionTitle">\u7f8e\u6280\u4eba\u982d\u8a08\u7b97</div><div class="sectionNote">\u53ea\u986f\u793a\u7f8e\u537f\u3001\u96ef\u8431\u3001\u839b\u7a4e\u3001\u4f73\u59a4\u3001\u7f8e\u73b2\u3001\u66fc\u7433\uff1b\u4f9d\u670d\u52d9\u65e5\u671f\u7d71\u8a08\u7576\u6708\u6709\u6548\u9810\u7d04\u3002</div><div class="summaryControls"><div><label for="headcountMonthInput">\u67e5\u8a62\u6708\u4efd</label><input id="headcountMonthInput" type="month"></div><button class="btn refresh" id="headcountSearchBtn" type="button">\u67e5\u8a62</button></div><div id="headcountMessage" class="message"></div><div id="headcountArea"></div><div id="headcountDetailArea"></div></section>',
           '<section class="panel" id="techSchedulePanel"><button class="btn headcountBack" id="scheduleHomeBtn" type="button">\u8fd4\u56de\u9996\u9801</button><div class="sectionTitle">\u7f8e\u6280\u73ed\u8868</div><div class="sectionNote">\u6ac3\u9577\u54c1\u85df\u8207\u516d\u4f4d\u6280\u5e2b\u7576\u6708\u73ed\u8868\uff1b\u7a7a\u767d\u4ee3\u8868\u6b63\u5e38\u4e0a\u73ed\uff0c\u7e3d\u8868\u53ea\u986f\u793a\u7c21\u5beb\uff1a\u4f8b\u3001\u7279\u3001\u4e8b\u3001\u98b1\u3001\u66e0\u3001\u503c\u3002</div><div class="summaryControls"><div><label for="scheduleMonthInput">\u67e5\u8a62\u6708\u4efd</label><input id="scheduleMonthInput" type="month"></div><button class="btn refresh" id="scheduleSearchBtn" type="button">\u67e5\u8a62</button></div><button class="btn scheduleEditToggle" id="scheduleEditToggleBtn" type="button">\u2699\ufe0f \u8a2d\u5b9a\u73ed\u8868</button><div id="scheduleMessage" class="message"></div><div id="scheduleArea"></div><div id="scheduleDetailArea"></div><div id="scheduleEditBox" class="scheduleEditBox"><div class="sectionNote">\u54c1\u85df\u8207\u7ba1\u7406\u54e1\u53ef\u8a2d\u5b9a\u73ed\u8868</div><div class="grid"><div><label for="scheduleEditStaff">\u4eba\u54e1</label><select id="scheduleEditStaff"></select></div><div class="wide"><label>\u65e5\u671f\uff08\u53ef\u8907\u9078\uff09</label><div id="scheduleCalendar" class="scheduleCalendar"></div><input id="scheduleEditDates" type="hidden"></div><div><label for="scheduleEditStatus">\u72c0\u614b</label><select id="scheduleEditStatus"></select></div><div><label for="scheduleEditNote">\u5099\u8a3b</label><input id="scheduleEditNote" type="text"></div></div><button class="btn refresh" id="scheduleSaveBtn" type="button">\u5132\u5b58\u73ed\u8868</button></div></section>',
+          '<section class="panel" id="myMonthlySalesPanel"><button class="btn headcountBack" id="salesHomeBtn" type="button">\u8fd4\u56de\u9996\u9801</button><div class="sectionTitle">\u500b\u4eba\u7576\u6708\u696d\u7e3e</div><div class="sectionNote">\u4f9d\u4f60\u539f\u672c Excel \u300c\u696d\u7e3e\u7d2f\u8a08\u300d\u908f\u8f2f\u8a08\u7b97\uff1a\u696d\u7e3e\u52a0\u7e3d\u3001\u6263\u5e95\u3001\u7d1a\u8ddd\u734e\u91d1\u6bd4\u4f8b\u8207\u9810\u4f30\u5be6\u9818\u3002</div><div class="summaryControls"><div><label for="salesMonthInput">\u67e5\u8a62\u6708\u4efd</label><input id="salesMonthInput" type="month"></div><div><label for="salesStaffSelect">\u7f8e\u6280</label><select id="salesStaffSelect"></select></div><button class="btn refresh" id="salesSearchBtn" type="button">\u67e5\u8a62</button></div><div id="salesMessage" class="message"></div><div id="salesArea"></div><div class="salesFormBox"><div class="sectionTitle">\u65b0\u589e\u696d\u7e3e</div><div class="grid"><div><label for="salesDateInput">\u65e5\u671f</label><input id="salesDateInput" type="date"></div><div><label for="salesAmountInput">\u696d\u7e3e\u91d1\u984d</label><input id="salesAmountInput" type="number" min="0" step="1" inputmode="numeric"></div><div><label for="salesVenueInput">\u6703\u9928 / \u73fe\u5834</label><select id="salesVenueInput"></select></div><div><label for="salesCounterInput">\u6ac3</label><input id="salesCounterInput" type="text"></div><div><label for="salesCustomerInput">\u9867\u5ba2\u540d\u7a31</label><input id="salesCustomerInput" type="text"></div><div><label for="salesBaInput">BA</label><input id="salesBaInput" type="text"></div><div><label for="salesTechInput">\u7f8e\u6280</label><select id="salesTechInput"></select></div><div><label for="salesCompanyInput">\u5206\u671f\u516c\u53f8</label><select id="salesCompanyInput"></select></div></div><button class="btn refresh" id="salesCreateBtn" type="button">\u5132\u5b58\u696d\u7e3e</button></div></section>',
         '</main><button class="topFloatBtn" id="topFloatBtn" type="button">TOP</button>'
       ].join('');
 
@@ -770,7 +785,7 @@
       byId('portalHeadcountBtn').onclick = showTechHeadcountPanel;
       byId('portalScheduleBtn').onclick = showTechSchedulePanel;
       byId('portalBonusBtn').onclick = function () { showConstructionPage('\u5de5\u734e\u8a08\u7b97', '\u9019\u500b\u529f\u80fd\u6b63\u5728\u65bd\u5de5\u4e2d\uff0c\u5b8c\u6210\u5f8c\u53ef\u4ee5\u8a08\u7b97\u5de5\u734e\u3002'); };
-      byId('portalSalesBtn').onclick = function () { showConstructionPage('\u500b\u4eba\u7576\u6708\u696d\u7e3e', '\u9019\u500b\u529f\u80fd\u6b63\u5728\u65bd\u5de5\u4e2d\uff0c\u5b8c\u6210\u5f8c\u53ef\u67e5\u8a62\u500b\u4eba\u7576\u6708\u696d\u7e3e\u3002'); };
+      byId('portalSalesBtn').onclick = showMyMonthlySalesPanel;
       byId('portalServicesBtn').onclick = function () { showConstructionPage('\u500b\u4eba\u7576\u6708\u670d\u52d9\u4e00\u89bd', '\u9019\u500b\u529f\u80fd\u6b63\u5728\u65bd\u5de5\u4e2d\uff0c\u5b8c\u6210\u5f8c\u53ef\u67e5\u8a62\u500b\u4eba\u7576\u6708\u670d\u52d9\u660e\u7d30\u3002'); };
       byId('constructionHomeBtn').onclick = showHome;
       byId('tabBook').onclick = function () { showTab('book'); };
@@ -812,6 +827,11 @@
       byId('headcountSearchBtn').onclick = loadTechHeadcount;
       byId('headcountMonthInput').onchange = loadTechHeadcount;
       byId('headcountHomeBtn').onclick = showHome;
+      byId('salesHomeBtn').onclick = showHome;
+      byId('salesSearchBtn').onclick = loadMyMonthlySales;
+      byId('salesMonthInput').onchange = loadMyMonthlySales;
+      byId('salesStaffSelect').onchange = loadMyMonthlySales;
+      byId('salesCreateBtn').onclick = createMyMonthlySale;
       byId('scheduleHomeBtn').onclick = showHome;
       byId('scheduleSearchBtn').onclick = loadTechSchedule;
       byId('scheduleMonthInput').onchange = function () { SCHEDULE_SELECTED_DATES = {}; renderScheduleEditCalendar(); loadTechSchedule(); };
@@ -892,7 +912,7 @@
         return;
       }
       if (page === 'myMonthlySales') {
-        showConstructionPage('\u500b\u4eba\u7576\u6708\u696d\u7e3e', '\u9019\u500b\u529f\u80fd\u6b63\u5728\u65bd\u5de5\u4e2d\uff0c\u5b8c\u6210\u5f8c\u53ef\u67e5\u8a62\u500b\u4eba\u7576\u6708\u696d\u7e3e\u3002');
+        showMyMonthlySalesPanel();
         return;
       }
       if (page === 'myMonthlyServices') {
@@ -906,6 +926,7 @@
       document.body.classList.remove('reportShotMode');
       document.body.classList.add('headcountOnly');
       document.body.classList.remove('scheduleOnly');
+      document.body.classList.remove('salesOnly');
       if (byId('portalConstructionPanel')) byId('portalConstructionPanel').classList.remove('active');
       byId('reportPanel').classList.remove('active');
       byId('adminPanel').classList.remove('active');
@@ -918,6 +939,7 @@
         if (tabBtn) tabBtn.classList.remove('active');
         if (panel) panel.classList.remove('active');
       });
+      if (byId('myMonthlySalesPanel')) byId('myMonthlySalesPanel').classList.remove('active');
       byId('techHeadcountPanel').classList.add('active');
       if (!byId('headcountMonthInput').value) byId('headcountMonthInput').value = currentMonthValue();
       loadTechHeadcount();
@@ -978,10 +1000,13 @@
       byId('headcountDetailArea').innerHTML = html;
       byId('headcountDetailArea').scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
-    function showTechSchedulePanel() {
+
+    function showMyMonthlySalesPanel() {
       document.body.classList.remove('reportShotMode');
       document.body.classList.remove('headcountOnly');
-      document.body.classList.add('scheduleOnly');
+      document.body.classList.remove('scheduleOnly');
+      document.body.classList.remove('salesOnly');
+      document.body.classList.add('salesOnly');
       if (byId('portalConstructionPanel')) byId('portalConstructionPanel').classList.remove('active');
       byId('reportPanel').classList.remove('active');
       byId('adminPanel').classList.remove('active');
@@ -995,6 +1020,122 @@
         if (panel) panel.classList.remove('active');
       });
       if (byId('techHeadcountPanel')) byId('techHeadcountPanel').classList.remove('active');
+      if (byId('techSchedulePanel')) byId('techSchedulePanel').classList.remove('active');
+      byId('myMonthlySalesPanel').classList.add('active');
+      fillSalesDefaults();
+      if (!byId('salesMonthInput').value) byId('salesMonthInput').value = currentMonthValue();
+      if (!byId('salesDateInput').value) setToday('salesDateInput');
+      loadMyMonthlySales();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function fillSalesDefaults(result) {
+      var techs = result && result.staffOptions ? result.staffOptions : ['\u7f8e\u537f','\u96ef\u8431','\u839b\u7a4e','\u4f73\u59a4','\u7f8e\u73b2','\u66fc\u7433'];
+      var venues = result && result.venueOptions ? result.venueOptions : ['\u6587\u6210\u6703\u9928'];
+      var companies = result && result.companyOptions ? result.companyOptions : ['', '\u4ef2\u4fe1', '\u88d5\u5bcc', '\u9060\u4fe1'];
+      var keepStaff = byId('salesStaffSelect').value;
+      var keepTech = byId('salesTechInput').value;
+      fillSelect('salesStaffSelect', techs, keepStaff || techs[0], '\u8acb\u9078\u64c7');
+      fillSelect('salesTechInput', techs, keepTech || byId('salesStaffSelect').value || techs[0], '\u8acb\u9078\u64c7');
+      fillSelect('salesVenueInput', venues, byId('salesVenueInput').value || venues[0], '\u8acb\u9078\u64c7');
+      fillSelect('salesCompanyInput', companies, byId('salesCompanyInput').value || '', '\u7121');
+    }
+
+    function loadMyMonthlySales() {
+      var month = byId('salesMonthInput').value || currentMonthValue();
+      var staff = byId('salesStaffSelect').value;
+      byId('salesMonthInput').value = month;
+      clearBox('salesMessage');
+      byId('salesArea').innerHTML = '<div class="slotBox empty">' + T.loading + '</div>';
+      if (!hasBackend() || !LINE_READY) {
+        byId('salesArea').innerHTML = '<div class="slotBox empty">' + T.backendFail + '</div>';
+        return;
+      }
+      apiCall('getMyMonthlySales', { month: month, staff: staff }, renderMyMonthlySales, function (err) {
+        showPanelMessage('salesMessage', err, true);
+        byId('salesArea').innerHTML = '';
+      });
+    }
+
+    function renderMyMonthlySales(result) {
+      result = result || {};
+      fillSalesDefaults(result);
+      if (result.staff) {
+        byId('salesStaffSelect').value = result.staff;
+        byId('salesTechInput').value = result.staff;
+      }
+      var monthText = String(result.month || byId('salesMonthInput').value || '').replace('-', '/');
+      var stats = [
+        ['\u672c\u6708\u696d\u7e3e', '$' + formatMoney(result.total || 0)],
+        ['\u696d\u7e3e\u7b46\u6578', formatMoney(result.count || 0) + ' \u7b46'],
+        ['\u6263\u5e95\u5f8c\u91d1\u984d', '$' + formatMoney(result.bonusBase || 0)],
+        ['\u734e\u91d1\u6bd4\u4f8b', Math.round(Number(result.rate || 0) * 100) + '%'],
+        ['\u5be6\u969b\u734e\u91d1', '$' + formatMoney(result.bonus || 0)],
+        ['\u9810\u4f30\u5be6\u9818', '$' + formatMoney(result.estimatedPay || 0)]
+      ].map(function (item) {
+        return '<div class="salesStat"><div class="salesStatLabel">' + escapeHtml(item[0]) + '</div><div class="salesStatValue">' + escapeHtml(item[1]) + '</div></div>';
+      }).join('');
+      var details = result.details || [];
+      var detailHtml = details.length ? '<div class="salesDetailList">' + details.map(function (row) {
+        return '<div class="salesDetailItem"><div class="salesDetailMain">' + escapeHtml(String(row.date || '').replace(/-/g, '/') + '　$' + formatMoney(row.amount || 0)) + '</div><div class="salesDetailSub">\u9867\u5ba2\uff1a' + escapeHtml(row.customer || '') + '<br>\u6703\u9928/\u73fe\u5834\uff1a' + escapeHtml(row.venue || '') + '<br>BA\uff1a' + escapeHtml(row.ba || '') + '<br>\u5206\u671f\uff1a' + escapeHtml(row.company || '\u7121') + '<br>\u767b\u8a18\uff1a' + escapeHtml(row.createdBy || '') + '</div></div>';
+      }).join('') + '</div>' : '<div class="slotBox empty">\u672c\u6708\u5c1a\u7121\u696d\u7e3e\u8cc7\u6599</div>';
+      byId('salesArea').innerHTML = '<div class="headcountHero"><div class="headcountTotal">' + escapeHtml(result.staff || '') + '</div><div class="headcountTotalLabel">' + escapeHtml(monthText) + ' \u696d\u7e3e\u7d71\u8a08</div></div><div class="salesStats">' + stats + '</div><div class="headcountDetailTitle">\u696d\u7e3e\u660e\u7d30</div>' + detailHtml;
+    }
+
+    function createMyMonthlySale() {
+      clearBox('salesMessage');
+      var data = {
+        date: byId('salesDateInput').value,
+        amount: byId('salesAmountInput').value,
+        venue: byId('salesVenueInput').value,
+        counter: byId('salesCounterInput').value,
+        customer: byId('salesCustomerInput').value,
+        ba: byId('salesBaInput').value,
+        technician: byId('salesTechInput').value,
+        company: byId('salesCompanyInput').value
+      };
+      if (!data.date || !data.amount || !data.customer || !data.technician) {
+        showPanelMessage('salesMessage', '\u8acb\u586b\u5beb\u65e5\u671f\u3001\u696d\u7e3e\u91d1\u984d\u3001\u9867\u5ba2\u540d\u7a31\u8207\u7f8e\u6280', true);
+        return;
+      }
+      showPanelMessage('salesMessage', '\u5132\u5b58\u4e2d...', false);
+      apiCall('createMyMonthlySale', data, function (result) {
+        byId('salesStaffSelect').value = data.technician;
+        byId('salesTechInput').value = data.technician;
+        byId('salesAmountInput').value = '';
+        byId('salesCustomerInput').value = '';
+        byId('salesBaInput').value = '';
+        byId('salesCounterInput').value = '';
+        showPanelMessage('salesMessage', '\u2705 \u696d\u7e3e\u5df2\u5132\u5b58', false);
+        renderMyMonthlySales(result);
+      }, function (err) {
+        showPanelMessage('salesMessage', err, true);
+      });
+    }
+
+    function formatMoney(value) {
+      var n = Number(value || 0);
+      return Math.round(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    }
+    function showTechSchedulePanel() {
+      document.body.classList.remove('reportShotMode');
+      document.body.classList.remove('headcountOnly');
+      document.body.classList.add('scheduleOnly');
+      document.body.classList.remove('salesOnly');
+      if (byId('portalConstructionPanel')) byId('portalConstructionPanel').classList.remove('active');
+      byId('reportPanel').classList.remove('active');
+      byId('adminPanel').classList.remove('active');
+      byId('scheduleTabs').classList.remove('active');
+      byId('tabSchedule').classList.remove('active');
+      byId('tabPeople').classList.remove('active');
+      ['book','cancel','summary','query'].forEach(function (tab) {
+        var tabBtn = byId('tab' + cap(tab));
+        var panel = byId(tab + 'Panel');
+        if (tabBtn) tabBtn.classList.remove('active');
+        if (panel) panel.classList.remove('active');
+      });
+      if (byId('techHeadcountPanel')) byId('techHeadcountPanel').classList.remove('active');
+      if (byId('myMonthlySalesPanel')) byId('myMonthlySalesPanel').classList.remove('active');
       byId('techSchedulePanel').classList.add('active');
       if (!byId('scheduleMonthInput').value) byId('scheduleMonthInput').value = currentMonthValue();
       fillScheduleEditControls();
@@ -1237,6 +1378,7 @@
       if (byId('portalConstructionPanel')) byId('portalConstructionPanel').classList.remove('active');
       if (byId('techHeadcountPanel')) byId('techHeadcountPanel').classList.remove('active');
       if (byId('techSchedulePanel')) byId('techSchedulePanel').classList.remove('active');
+      if (byId('myMonthlySalesPanel')) byId('myMonthlySalesPanel').classList.remove('active');
       byId('scheduleTabs').classList.remove('active');
       byId('tabSchedule').classList.remove('active');
       byId('tabPeople').classList.remove('active');
@@ -1252,10 +1394,12 @@
       document.body.classList.remove('reportShotMode');
       document.body.classList.remove('headcountOnly');
       document.body.classList.remove('scheduleOnly');
+      document.body.classList.remove('salesOnly');
       byId('reportPanel').classList.remove('active');
       byId('adminPanel').classList.remove('active');
       if (byId('techHeadcountPanel')) byId('techHeadcountPanel').classList.remove('active');
       if (byId('techSchedulePanel')) byId('techSchedulePanel').classList.remove('active');
+      if (byId('myMonthlySalesPanel')) byId('myMonthlySalesPanel').classList.remove('active');
       byId('scheduleTabs').classList.remove('active');
       byId('tabSchedule').classList.remove('active');
       byId('tabPeople').classList.remove('active');
@@ -1289,6 +1433,7 @@
     function showTab(name) {
       document.body.classList.remove('headcountOnly');
       document.body.classList.remove('scheduleOnly');
+      document.body.classList.remove('salesOnly');
       if ((name === 'book' || name === 'cancel') && !canManageBookings()) { denyManageAction(name === 'cancel' ? 'cancelMessage' : 'message'); name = 'summary'; }
       document.body.classList.remove('reportShotMode');
       byId('reportPanel').classList.remove('active');
@@ -1296,6 +1441,7 @@
       if (byId('portalConstructionPanel')) byId('portalConstructionPanel').classList.remove('active');
       if (byId('techHeadcountPanel')) byId('techHeadcountPanel').classList.remove('active');
       if (byId('techSchedulePanel')) byId('techSchedulePanel').classList.remove('active');
+      if (byId('myMonthlySalesPanel')) byId('myMonthlySalesPanel').classList.remove('active');
       ['book','cancel','summary','query'].forEach(function (tab) {
         var tabBtn = byId('tab' + cap(tab));
         var panel = byId(tab + 'Panel');
@@ -1403,6 +1549,7 @@
     function showAdminPanel() {
       document.body.classList.remove('headcountOnly');
       document.body.classList.remove('scheduleOnly');
+      document.body.classList.remove('salesOnly');
       if (!canManageBookings()) { denyManageAction('adminMessage'); return; }
       if (!requireLineReady('adminMessage')) return;
       document.body.classList.remove('reportShotMode');
@@ -1419,6 +1566,7 @@
       if (byId('portalConstructionPanel')) byId('portalConstructionPanel').classList.remove('active');
       if (byId('techHeadcountPanel')) byId('techHeadcountPanel').classList.remove('active');
       if (byId('techSchedulePanel')) byId('techSchedulePanel').classList.remove('active');
+      if (byId('myMonthlySalesPanel')) byId('myMonthlySalesPanel').classList.remove('active');
       byId('adminPanel').classList.add('active');
       setToday('adminDateInput');
       byId('adminLogList').innerHTML = '';
@@ -1740,6 +1888,7 @@
     function showTomorrowReport() {
       document.body.classList.remove('headcountOnly');
       document.body.classList.remove('scheduleOnly');
+      document.body.classList.remove('salesOnly');
       if (!canManageBookings()) { denyManageAction('message'); return; }
       document.body.classList.add('reportShotMode');
       ['book','cancel','summary','query'].forEach(function (tab) {
@@ -1755,6 +1904,7 @@
       if (byId('portalConstructionPanel')) byId('portalConstructionPanel').classList.remove('active');
       if (byId('techHeadcountPanel')) byId('techHeadcountPanel').classList.remove('active');
       if (byId('techSchedulePanel')) byId('techSchedulePanel').classList.remove('active');
+      if (byId('myMonthlySalesPanel')) byId('myMonthlySalesPanel').classList.remove('active');
       byId('reportPanel').classList.add('active');
       byId('reportDateInput').value = dateOffsetString(1);
       loadReportByDate();
