@@ -104,7 +104,7 @@
     .homeTabs.portalTabs { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin-top: 12px; }
     .homeTabs.portalTabs .tab {
       position: relative;
-      min-height: clamp(128px, 28vw, 190px);
+      min-height: clamp(142px, 31vw, 206px);
       display: grid;
       grid-template-rows: 1fr auto;
       align-items: stretch;
@@ -136,7 +136,7 @@
     .portalIcon {
       width: 100%;
       height: 100%;
-      min-height: 72px;
+      min-height: 88px;
       display: grid;
       place-items: center;
       border-radius: 16px 16px 8px 8px;
@@ -165,7 +165,7 @@
     .topFloatBtn {
       position: fixed;
       right: max(8px, env(safe-area-inset-right));
-      top: 50%;
+      top: calc(50% - 5cm);
       transform: translateY(-50%);
       z-index: 900;
       width: 54px;
@@ -719,7 +719,7 @@
           '<section class="hero"><button class="adminIcon" id="adminBtn" type="button" title="admin">⚙</button><button class="reportIcon" id="reportBtn" type="button" title="report"><span></span><span></span><span></span></button><div><h1>', T.title, '</h1><div class="sub" id="statusText">', T.subtitle, '</div></div></section>',
           '<section class="topNowCard"><div><div class="todayLabel">\u4eca\u5929\u65e5\u671f</div><div class="todayValue" id="todayDateText"></div></div><div><div class="todayLabel">\u73fe\u5728\u6642\u9593</div><div class="todayValue" id="todayTimeText"></div></div></section>',
           '<section class="modeSwitcher" id="modeSwitcher"><button class="modeBtn" id="modeManageBtn" type="button">\u7ba1\u7406\u8005\u6a21\u5f0f</button><button class="modeBtn" id="modeReadBtn" type="button">\u552f\u8b80\u6a21\u5f0f</button></section>',
-          '<nav class="tabs homeTabs portalTabs" id="homeTabs"><button class="tab" id="portalBookingBtn" type="button"><span class="portalIcon">📅</span><span class="portalText">1 排房預約系統</span></button><button class="tab" id="portalHeadcountBtn" type="button"><span class="portalIcon">👥</span><span class="portalText">2 美技人頭計算</span></button><button class="tab" id="portalScheduleBtn" type="button"><span class="portalIcon">🗓️</span><span class="portalText">3 美技班表</span></button><button class="tab" id="portalBonusBtn" type="button"><span class="portalIcon">💰</span><span class="portalText">4 工資試算</span></button><button class="tab" id="portalSalesBtn" type="button"><span class="portalIcon">📋</span><span class="portalText">5 個人當月業績</span></button><button class="tab" id="portalServicesBtn" type="button"><span class="portalIcon">✅</span><span class="portalText">6 個人當月服務一覽</span></button><button class="tab" id="tabSchedule" type="button" style="display:none"></button><button class="tab" id="tabPeople" type="button" style="display:none"></button></nav>',
+          '<nav class="tabs homeTabs portalTabs" id="homeTabs"><button class="tab" id="portalBookingBtn" type="button"><span class="portalIcon">📅</span><span class="portalText">排房預約系統</span></button><button class="tab" id="portalHeadcountBtn" type="button"><span class="portalIcon">👥</span><span class="portalText">美技人頭計算</span></button><button class="tab" id="portalScheduleBtn" type="button"><span class="portalIcon">🗓️</span><span class="portalText">美技班表</span></button><button class="tab" id="portalBonusBtn" type="button"><span class="portalIcon">💰</span><span class="portalText">工獎計算</span></button><button class="tab" id="portalSalesBtn" type="button"><span class="portalIcon">📋</span><span class="portalText">個人當月業績</span></button><button class="tab" id="portalServicesBtn" type="button"><span class="portalIcon">✅</span><span class="portalText">個人當月服務一覽</span></button><button class="tab" id="tabSchedule" type="button" style="display:none"></button><button class="tab" id="tabPeople" type="button" style="display:none"></button></nav>',
           '<nav class="tabs subTabs" id="scheduleTabs"><button class="tab active" id="tabSummary" type="button">', T.summary, '</button><button class="tab" id="tabBook" type="button">', T.book, '</button><button class="tab" id="tabCancel" type="button">', T.cancel, '</button></nav>',
           '<section class="panel" id="bookPanel"><div class="sectionTitle">', T.bookTitle, '</div><div class="sectionNote">', T.bookNote, '</div><div class="grid"><div><label for="dateInput">', T.date, '</label><input id="dateInput" type="date"></div><div><label for="roomSelect">', T.room, '</label><select id="roomSelect"></select></div><div><label for="startSelect">', T.start, '</label><select id="startSelect"></select></div><div><label for="endSelect">', T.end, '</label><select id="endSelect"></select></div><div><label for="technicianInput">', T.tech, '</label><select id="technicianInput"></select></div><div class="wide"><label for="serviceTargetInput">服務對象</label><div id="serviceTargetInput" class="serviceCheckGrid serviceTargetGrid"></div></div><div id="techNameWrap" class="techNameWrap"><label for="techNameInput">美容師 / 支援技師姓名</label><input id="techNameInput" type="text" autocomplete="off"></div><div id="coupleWrap" class="coupleWrap"><label for="coupleSelect">\u5169\u4eba\u540c\u623f</label><select id="coupleSelect"></select></div><div id="secondTechWrap" class="secondTechWrap"><label for="technicianInput2">\u7b2c\u4e8c\u4f4d\u6280\u5e2b</label><select id="technicianInput2"></select></div><div id="techNameWrap2" class="techNameWrap"><label for="techNameInput2">第二位姓名</label><input id="techNameInput2" type="text" autocomplete="off"></div><div class="wide"><label>', T.service, '</label><div id="serviceInput" class="serviceCheckGrid"></div></div><div id="mainCustomerWrap" class="mainCustomerWrap"><label for="mainCustomerSelect">服務項目標記</label><select id="mainCustomerSelect"><option value="">請選擇</option><option value="B">B</option><option value="F">F</option><option value="BF">BF</option></select></div><div><label for="customerInput">', T.customer, '</label><input id="customerInput" type="text" autocomplete="off"></div><div><label for="userNameInput">', T.user, '</label><input id="userNameInput" type="text" autocomplete="off" readonly></div></div><div class="actions"><button class="btn" id="bookBtn" type="button">', T.bookBtn, '</button><button class="btn reset" id="resetBtn" type="button">', T.resetBtn, '</button></div><div id="message" class="message"></div><div class="availableTitle">', T.available, '</div><div id="availableSlots" class="slotBoxGrid"></div></section>',
           '<section class="panel" id="cancelPanel"><div class="sectionTitle">', T.cancelTitle, '</div><div class="sectionNote">', T.cancelNote, '</div><div class="summaryControls"><div><label for="cancelDateInput">', T.date, '</label><input id="cancelDateInput" type="date"></div><button class="btn refresh" id="cancelSearchBtn" type="button">', T.searchCancel, '</button></div><div id="cancelMessage" class="message"></div><div id="cancelList" class="bookingList"></div></section>',
@@ -738,7 +738,7 @@
       byId('topFloatBtn').onclick = function () { window.scrollTo({ top: 0, behavior: 'smooth' }); };
       byId('portalHeadcountBtn').onclick = showTechHeadcountPanel;
       byId('portalScheduleBtn').onclick = showTechSchedulePanel;
-      byId('portalBonusBtn').onclick = function () { showConstructionPage('\u5de5\u8cc7\u8a66\u7b97', '\u9019\u500b\u529f\u80fd\u6b63\u5728\u65bd\u5de5\u4e2d\uff0c\u5b8c\u6210\u5f8c\u53ef\u4ee5\u8a66\u7b97\u5de5\u8cc7\u3002'); };
+      byId('portalBonusBtn').onclick = function () { showConstructionPage('\u5de5\u734e\u8a08\u7b97', '\u9019\u500b\u529f\u80fd\u6b63\u5728\u65bd\u5de5\u4e2d\uff0c\u5b8c\u6210\u5f8c\u53ef\u4ee5\u8a08\u7b97\u5de5\u734e\u3002'); };
       byId('portalSalesBtn').onclick = function () { showConstructionPage('\u500b\u4eba\u7576\u6708\u696d\u7e3e', '\u9019\u500b\u529f\u80fd\u6b63\u5728\u65bd\u5de5\u4e2d\uff0c\u5b8c\u6210\u5f8c\u53ef\u67e5\u8a62\u500b\u4eba\u7576\u6708\u696d\u7e3e\u3002'); };
       byId('portalServicesBtn').onclick = function () { showConstructionPage('\u500b\u4eba\u7576\u6708\u670d\u52d9\u4e00\u89bd', '\u9019\u500b\u529f\u80fd\u6b63\u5728\u65bd\u5de5\u4e2d\uff0c\u5b8c\u6210\u5f8c\u53ef\u67e5\u8a62\u500b\u4eba\u7576\u6708\u670d\u52d9\u660e\u7d30\u3002'); };
       byId('constructionHomeBtn').onclick = showHome;
@@ -842,7 +842,7 @@
         return;
       }
       if (page === 'bonusCalc') {
-        showConstructionPage('\u5de5\u8cc7\u8a66\u7b97', '\u9019\u500b\u529f\u80fd\u6b63\u5728\u65bd\u5de5\u4e2d\uff0c\u5b8c\u6210\u5f8c\u53ef\u4ee5\u8a66\u7b97\u5de5\u8cc7\u3002');
+        showConstructionPage('\u5de5\u734e\u8a08\u7b97', '\u9019\u500b\u529f\u80fd\u6b63\u5728\u65bd\u5de5\u4e2d\uff0c\u5b8c\u6210\u5f8c\u53ef\u4ee5\u8a08\u7b97\u5de5\u734e\u3002');
         return;
       }
       if (page === 'myMonthlySales') {
@@ -2343,6 +2343,7 @@
   </script>
 </body>
 </html>
+
 
 
 
