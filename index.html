@@ -101,6 +101,12 @@
     }
     .tab.active { background: linear-gradient(135deg, var(--green), var(--green2)); color: #fff; }
     .homeTabs { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    body.headcountOnly .modeSwitcher,
+    body.headcountOnly .homeTabs,
+    body.headcountOnly .subTabs { display: none !important; }
+    body.headcountOnly .hero { margin-bottom: 12px; }
+    body.headcountOnly .topNowCard { display: none; }
+    body.headcountOnly #techHeadcountPanel { display: block; margin-top: 12px; }
     .homeTabs .tab { min-height: 118px; padding: 14px 6px; font-size: clamp(18px, 4.1vw, 30px); white-space: nowrap; letter-spacing: 0; }
     .subTabs { display: none; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin: 14px 0 18px; }
     .subTabs.active { display: grid; }
@@ -391,6 +397,12 @@
       .topNowCard { flex-direction: column; align-items: flex-start; padding: 20px; }
       .tabs { gap: 10px; }
       .homeTabs { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    body.headcountOnly .modeSwitcher,
+    body.headcountOnly .homeTabs,
+    body.headcountOnly .subTabs { display: none !important; }
+    body.headcountOnly .hero { margin-bottom: 12px; }
+    body.headcountOnly .topNowCard { display: none; }
+    body.headcountOnly #techHeadcountPanel { display: block; margin-top: 12px; }
       .subTabs { grid-template-columns: repeat(3, minmax(0, 1fr)); }
       .panel { padding: 16px; }
       input, select { font-size: 24px; min-height: 64px; }
@@ -685,6 +697,7 @@
 
     function showTechHeadcountPanel() {
       document.body.classList.remove('reportShotMode');
+      document.body.classList.add('headcountOnly');
       byId('reportPanel').classList.remove('active');
       byId('adminPanel').classList.remove('active');
       byId('scheduleTabs').classList.remove('active');
@@ -758,6 +771,7 @@
     }
     function showHome() {
       document.body.classList.remove('reportShotMode');
+      document.body.classList.remove('headcountOnly');
       byId('reportPanel').classList.remove('active');
       byId('adminPanel').classList.remove('active');
       if (byId('techHeadcountPanel')) byId('techHeadcountPanel').classList.remove('active');
@@ -788,6 +802,7 @@
     }
 
     function showTab(name) {
+      document.body.classList.remove('headcountOnly');
       if ((name === 'book' || name === 'cancel') && !canManageBookings()) { denyManageAction(name === 'cancel' ? 'cancelMessage' : 'message'); name = 'summary'; }
       document.body.classList.remove('reportShotMode');
       byId('reportPanel').classList.remove('active');
@@ -898,6 +913,7 @@
     }
 
     function showAdminPanel() {
+      document.body.classList.remove('headcountOnly');
       if (!canManageBookings()) { denyManageAction('adminMessage'); return; }
       if (!requireLineReady('adminMessage')) return;
       document.body.classList.remove('reportShotMode');
@@ -1231,6 +1247,7 @@
     function filterFutureStartSlots(slots, dateValue) { if (!isTodayDate(dateValue)) return slots || []; var now = new Date(); var currentMin = now.getHours() * 60 + now.getMinutes(); return (slots || []).filter(function (slot) { return timeToMin(slot.start) > currentMin; }); }
     function isTodayDate(dateValue) { var d = parseLocalDate(dateValue); if (!d) return false; var today = new Date(); return d.getFullYear() === today.getFullYear() && d.getMonth() === today.getMonth() && d.getDate() === today.getDate(); }
     function showTomorrowReport() {
+      document.body.classList.remove('headcountOnly');
       if (!canManageBookings()) { denyManageAction('message'); return; }
       document.body.classList.add('reportShotMode');
       ['book','cancel','summary','query'].forEach(function (tab) {
@@ -1870,6 +1887,7 @@
   </script>
 </body>
 </html>
+
 
 
 
