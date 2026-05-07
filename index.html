@@ -101,6 +101,8 @@
     }
     .tab.active { background: linear-gradient(135deg, var(--green), var(--green2)); color: #fff; }
     .homeTabs { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .homeTabs.portalTabs { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+    .homeTabs.portalTabs .tab { min-height: 104px; font-size: clamp(18px, 4vw, 28px); line-height: 1.15; white-space: normal; }
     body.headcountOnly .modeSwitcher,
     body.headcountOnly .homeTabs,
     body.headcountOnly .subTabs { display: none !important; }
@@ -634,7 +636,7 @@
           '<section class="hero"><button class="adminIcon" id="adminBtn" type="button" title="admin">⚙</button><button class="reportIcon" id="reportBtn" type="button" title="report"><span></span><span></span><span></span></button><div><h1>', T.title, '</h1><div class="sub" id="statusText">', T.subtitle, '</div></div></section>',
           '<section class="topNowCard"><div><div class="todayLabel">\u4eca\u5929\u65e5\u671f</div><div class="todayValue" id="todayDateText"></div></div><div><div class="todayLabel">\u73fe\u5728\u6642\u9593</div><div class="todayValue" id="todayTimeText"></div></div></section>',
           '<section class="modeSwitcher" id="modeSwitcher"><button class="modeBtn" id="modeManageBtn" type="button">\u7ba1\u7406\u8005\u6a21\u5f0f</button><button class="modeBtn" id="modeReadBtn" type="button">\u552f\u8b80\u6a21\u5f0f</button></section>',
-          '<nav class="tabs homeTabs" id="homeTabs"><button class="tab" id="tabSchedule" type="button">\u6392\u623f\u8868\u67e5\u8a62</button><button class="tab" id="tabPeople" type="button">\u4f9d\u4eba\u54e1\u67e5\u8a62</button></nav>',
+          '<nav class="tabs homeTabs portalTabs" id="homeTabs"><button class="tab" id="portalBookingBtn" type="button">1 \u6392\u623f\u9810\u7d04\u7cfb\u7d71</button><button class="tab" id="portalHeadcountBtn" type="button">2 \u7f8e\u6280\u4eba\u982d\u8a08\u7b97</button><button class="tab" id="portalScheduleBtn" type="button">3 \u7f8e\u6280\u73ed\u8868</button><button class="tab" id="portalBonusBtn" type="button">4 \u5de5\u8cc7\u8a66\u7b97</button><button class="tab" id="portalSalesBtn" type="button">5 \u500b\u4eba\u7576\u6708\u696d\u7e3e</button><button class="tab" id="portalServicesBtn" type="button">6 \u500b\u4eba\u7576\u6708\u670d\u52d9\u4e00\u89bd</button><button class="tab" id="tabSchedule" type="button" style="display:none"></button><button class="tab" id="tabPeople" type="button" style="display:none"></button></nav>',
           '<nav class="tabs subTabs" id="scheduleTabs"><button class="tab active" id="tabSummary" type="button">', T.summary, '</button><button class="tab" id="tabBook" type="button">', T.book, '</button><button class="tab" id="tabCancel" type="button">', T.cancel, '</button></nav>',
           '<section class="panel" id="bookPanel"><div class="sectionTitle">', T.bookTitle, '</div><div class="sectionNote">', T.bookNote, '</div><div class="grid"><div><label for="dateInput">', T.date, '</label><input id="dateInput" type="date"></div><div><label for="roomSelect">', T.room, '</label><select id="roomSelect"></select></div><div><label for="startSelect">', T.start, '</label><select id="startSelect"></select></div><div><label for="endSelect">', T.end, '</label><select id="endSelect"></select></div><div><label for="technicianInput">', T.tech, '</label><select id="technicianInput"></select></div><div class="wide"><label for="serviceTargetInput">服務對象</label><div id="serviceTargetInput" class="serviceCheckGrid serviceTargetGrid"></div></div><div id="techNameWrap" class="techNameWrap"><label for="techNameInput">美容師 / 支援技師姓名</label><input id="techNameInput" type="text" autocomplete="off"></div><div id="coupleWrap" class="coupleWrap"><label for="coupleSelect">\u5169\u4eba\u540c\u623f</label><select id="coupleSelect"></select></div><div id="secondTechWrap" class="secondTechWrap"><label for="technicianInput2">\u7b2c\u4e8c\u4f4d\u6280\u5e2b</label><select id="technicianInput2"></select></div><div id="techNameWrap2" class="techNameWrap"><label for="techNameInput2">第二位姓名</label><input id="techNameInput2" type="text" autocomplete="off"></div><div class="wide"><label>', T.service, '</label><div id="serviceInput" class="serviceCheckGrid"></div></div><div id="mainCustomerWrap" class="mainCustomerWrap"><label for="mainCustomerSelect">服務項目標記</label><select id="mainCustomerSelect"><option value="">請選擇</option><option value="B">B</option><option value="F">F</option><option value="BF">BF</option></select></div><div><label for="customerInput">', T.customer, '</label><input id="customerInput" type="text" autocomplete="off"></div><div><label for="userNameInput">', T.user, '</label><input id="userNameInput" type="text" autocomplete="off" readonly></div></div><div class="actions"><button class="btn" id="bookBtn" type="button">', T.bookBtn, '</button><button class="btn reset" id="resetBtn" type="button">', T.resetBtn, '</button></div><div id="message" class="message"></div><div class="availableTitle">', T.available, '</div><div id="availableSlots" class="slotBoxGrid"></div></section>',
           '<section class="panel" id="cancelPanel"><div class="sectionTitle">', T.cancelTitle, '</div><div class="sectionNote">', T.cancelNote, '</div><div class="summaryControls"><div><label for="cancelDateInput">', T.date, '</label><input id="cancelDateInput" type="date"></div><button class="btn refresh" id="cancelSearchBtn" type="button">', T.searchCancel, '</button></div><div id="cancelMessage" class="message"></div><div id="cancelList" class="bookingList"></div></section>',
@@ -647,8 +649,15 @@
         '</main>'
       ].join('');
 
-      byId('tabSchedule').onclick = showScheduleHome;
-      byId('tabPeople').onclick = showPeopleHome;
+      document.querySelector('main.page').insertAdjacentHTML('beforeend', '<section class="panel" id="portalConstructionPanel"><button class="btn headcountBack" id="constructionHomeBtn" type="button">\u8fd4\u56de\u9996\u9801</button><div class="sectionTitle" id="constructionTitle">\u529f\u80fd\u5efa\u7f6e\u4e2d</div><div class="sectionNote" id="constructionText">\u9019\u500b\u529f\u80fd\u6b63\u5728\u65bd\u5de5\u4e2d\uff0c\u5b8c\u6210\u5f8c\u5c31\u6703\u958b\u653e\u4f7f\u7528\u3002</div><div class="slotBox empty">\u2692\ufe0f<br>\u65bd\u5de5\u4e2d</div></section>');
+
+      byId('portalBookingBtn').onclick = showScheduleHome;
+      byId('portalHeadcountBtn').onclick = showTechHeadcountPanel;
+      byId('portalScheduleBtn').onclick = showTechSchedulePanel;
+      byId('portalBonusBtn').onclick = function () { showConstructionPage('\u5de5\u8cc7\u8a66\u7b97', '\u9019\u500b\u529f\u80fd\u6b63\u5728\u65bd\u5de5\u4e2d\uff0c\u5b8c\u6210\u5f8c\u53ef\u4ee5\u8a66\u7b97\u5de5\u8cc7\u3002'); };
+      byId('portalSalesBtn').onclick = function () { showConstructionPage('\u500b\u4eba\u7576\u6708\u696d\u7e3e', '\u9019\u500b\u529f\u80fd\u6b63\u5728\u65bd\u5de5\u4e2d\uff0c\u5b8c\u6210\u5f8c\u53ef\u67e5\u8a62\u500b\u4eba\u7576\u6708\u696d\u7e3e\u3002'); };
+      byId('portalServicesBtn').onclick = function () { showConstructionPage('\u500b\u4eba\u7576\u6708\u670d\u52d9\u4e00\u89bd', '\u9019\u500b\u529f\u80fd\u6b63\u5728\u65bd\u5de5\u4e2d\uff0c\u5b8c\u6210\u5f8c\u53ef\u67e5\u8a62\u500b\u4eba\u7576\u6708\u670d\u52d9\u660e\u7d30\u3002'); };
+      byId('constructionHomeBtn').onclick = showHome;
       byId('tabBook').onclick = function () { showTab('book'); };
       byId('reportBtn').onclick = showTomorrowReport;
       byId('adminBtn').onclick = showAdminPanel;
@@ -732,6 +741,14 @@
 
     function routeInitialPage() {
       var page = getInitialPageParam();
+      if (!page) {
+        showHome();
+        return;
+      }
+      if (page === 'booking') {
+        showScheduleHome();
+        return;
+      }
       if (page === 'headcount' || page === 'techHeadcount') {
         showTechHeadcountPanel();
         return;
@@ -740,13 +757,26 @@
         showTechSchedulePanel();
         return;
       }
-      loadSummary();
+      if (page === 'bonusCalc') {
+        showConstructionPage('\u5de5\u8cc7\u8a66\u7b97', '\u9019\u500b\u529f\u80fd\u6b63\u5728\u65bd\u5de5\u4e2d\uff0c\u5b8c\u6210\u5f8c\u53ef\u4ee5\u8a66\u7b97\u5de5\u8cc7\u3002');
+        return;
+      }
+      if (page === 'myMonthlySales') {
+        showConstructionPage('\u500b\u4eba\u7576\u6708\u696d\u7e3e', '\u9019\u500b\u529f\u80fd\u6b63\u5728\u65bd\u5de5\u4e2d\uff0c\u5b8c\u6210\u5f8c\u53ef\u67e5\u8a62\u500b\u4eba\u7576\u6708\u696d\u7e3e\u3002');
+        return;
+      }
+      if (page === 'myMonthlyServices') {
+        showConstructionPage('\u500b\u4eba\u7576\u6708\u670d\u52d9\u4e00\u89bd', '\u9019\u500b\u529f\u80fd\u6b63\u5728\u65bd\u5de5\u4e2d\uff0c\u5b8c\u6210\u5f8c\u53ef\u67e5\u8a62\u500b\u4eba\u7576\u6708\u670d\u52d9\u660e\u7d30\u3002');
+        return;
+      }
+      showHome();
     }
 
     function showTechHeadcountPanel() {
       document.body.classList.remove('reportShotMode');
       document.body.classList.add('headcountOnly');
       document.body.classList.remove('scheduleOnly');
+      if (byId('portalConstructionPanel')) byId('portalConstructionPanel').classList.remove('active');
       byId('reportPanel').classList.remove('active');
       byId('adminPanel').classList.remove('active');
       byId('scheduleTabs').classList.remove('active');
@@ -822,6 +852,7 @@
       document.body.classList.remove('reportShotMode');
       document.body.classList.remove('headcountOnly');
       document.body.classList.add('scheduleOnly');
+      if (byId('portalConstructionPanel')) byId('portalConstructionPanel').classList.remove('active');
       byId('reportPanel').classList.remove('active');
       byId('adminPanel').classList.remove('active');
       byId('scheduleTabs').classList.remove('active');
@@ -1061,6 +1092,7 @@
       document.body.classList.remove('scheduleOnly');
       byId('reportPanel').classList.remove('active');
       byId('adminPanel').classList.remove('active');
+      if (byId('portalConstructionPanel')) byId('portalConstructionPanel').classList.remove('active');
       if (byId('techHeadcountPanel')) byId('techHeadcountPanel').classList.remove('active');
       if (byId('techSchedulePanel')) byId('techSchedulePanel').classList.remove('active');
       byId('scheduleTabs').classList.remove('active');
@@ -1072,6 +1104,29 @@
         if (tabBtn) tabBtn.classList.remove('active');
         if (panel) panel.classList.remove('active');
       });
+    }
+
+    function showConstructionPage(title, text) {
+      document.body.classList.remove('reportShotMode');
+      document.body.classList.remove('headcountOnly');
+      document.body.classList.remove('scheduleOnly');
+      byId('reportPanel').classList.remove('active');
+      byId('adminPanel').classList.remove('active');
+      if (byId('techHeadcountPanel')) byId('techHeadcountPanel').classList.remove('active');
+      if (byId('techSchedulePanel')) byId('techSchedulePanel').classList.remove('active');
+      byId('scheduleTabs').classList.remove('active');
+      byId('tabSchedule').classList.remove('active');
+      byId('tabPeople').classList.remove('active');
+      ['book','cancel','summary','query'].forEach(function (tab) {
+        var tabBtn = byId('tab' + cap(tab));
+        var panel = byId(tab + 'Panel');
+        if (tabBtn) tabBtn.classList.remove('active');
+        if (panel) panel.classList.remove('active');
+      });
+      byId('constructionTitle').textContent = title || '\u529f\u80fd\u5efa\u7f6e\u4e2d';
+      byId('constructionText').textContent = text || '\u9019\u500b\u529f\u80fd\u6b63\u5728\u65bd\u5de5\u4e2d\u3002';
+      byId('portalConstructionPanel').classList.add('active');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     function showScheduleHome() {
@@ -1096,6 +1151,7 @@
       document.body.classList.remove('reportShotMode');
       byId('reportPanel').classList.remove('active');
       byId('adminPanel').classList.remove('active');
+      if (byId('portalConstructionPanel')) byId('portalConstructionPanel').classList.remove('active');
       if (byId('techHeadcountPanel')) byId('techHeadcountPanel').classList.remove('active');
       if (byId('techSchedulePanel')) byId('techSchedulePanel').classList.remove('active');
       ['book','cancel','summary','query'].forEach(function (tab) {
@@ -1218,6 +1274,7 @@
       byId('tabSchedule').classList.remove('active');
       byId('tabPeople').classList.remove('active');
       byId('reportPanel').classList.remove('active');
+      if (byId('portalConstructionPanel')) byId('portalConstructionPanel').classList.remove('active');
       if (byId('techHeadcountPanel')) byId('techHeadcountPanel').classList.remove('active');
       if (byId('techSchedulePanel')) byId('techSchedulePanel').classList.remove('active');
       byId('adminPanel').classList.add('active');
@@ -1553,6 +1610,7 @@
       byId('tabSchedule').classList.remove('active');
       byId('tabPeople').classList.remove('active');
       byId('adminPanel').classList.remove('active');
+      if (byId('portalConstructionPanel')) byId('portalConstructionPanel').classList.remove('active');
       if (byId('techHeadcountPanel')) byId('techHeadcountPanel').classList.remove('active');
       if (byId('techSchedulePanel')) byId('techSchedulePanel').classList.remove('active');
       byId('reportPanel').classList.add('active');
@@ -2181,6 +2239,7 @@
   </script>
 </body>
 </html>
+
 
 
 
