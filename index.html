@@ -102,7 +102,9 @@
     .tab.active { background: linear-gradient(135deg, var(--green), var(--green2)); color: #fff; }
     .homeTabs { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     .homeTabs.portalTabs { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
-    .homeTabs.portalTabs .tab { min-height: 104px; font-size: clamp(18px, 4vw, 28px); line-height: 1.15; white-space: normal; }
+    .homeTabs.portalTabs .tab { min-height: 132px; display: grid; place-items: center; gap: 8px; padding: 14px 8px; font-size: clamp(16px, 3.8vw, 24px); line-height: 1.15; white-space: normal; }
+    .portalIcon { width: 54px; height: 54px; border-radius: 18px; display: grid; place-items: center; background: #fff7ee; box-shadow: inset 0 0 0 2px rgba(109,92,73,.08), 0 8px 18px rgba(43,70,52,.10); font-size: 31px; }
+    .portalText { display: block; font-weight: 950; }
     body.headcountOnly .modeSwitcher,
     body.headcountOnly .homeTabs,
     body.headcountOnly .subTabs { display: none !important; }
@@ -221,9 +223,10 @@
     .summaryGrid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; }
     .summaryCell { border-radius: 10px; padding: 6px 4px; min-height: 82px; font-weight: 900; border: 2px solid transparent; overflow: hidden; cursor: pointer; text-align: left; width: 100%; font-family: inherit; }
     .summaryCell.free { background: #eff9f0; color: #21713f; border-color: #94ca93; }
-    .summaryCell.free:active, .summaryCell.busy:active, .summaryCell.experience:active { transform: scale(.98); filter: brightness(.97); }
+    .summaryCell.free:active, .summaryCell.busy:active, .summaryCell.experience:active, .summaryCell.mainCustomer:active { transform: scale(.98); filter: brightness(.97); }
     .summaryCell.past { opacity: .62; cursor: default; filter: grayscale(.18); }
     .summaryCell.busy { background: #fff0f0; color: #b32020; border-color: #e07b7b; }
+    .summaryCell.mainCustomer { background: #ffe8e8; color: #b32020; border-color: #e05252; }
     .summaryCell.experience { background: #eaf3ff; color: #1d5f9f; border-color: #76a9df; }
     .reportPanel {
       padding: 2px;
@@ -298,6 +301,12 @@
     .scheduleStatusCell.empty { background: rgba(255,255,255,.72); color: transparent; }
     .scheduleStatusCell.duty { background: #e1f5e7; color: #20734d; }
     .scheduleStatusCell.leave { background: #fff0df; color: #9a4c22; }
+    .scheduleStatusCell.statusHoliday { background: #fff2d9; color: #9a5a18; }
+    .scheduleStatusCell.statusSpecial { background: #eaf3ff; color: #1d5f9f; }
+    .scheduleStatusCell.statusPersonal { background: #f0eaff; color: #6740a8; }
+    .scheduleStatusCell.statusTyphoon { background: #e9f4f5; color: #2f6f7a; }
+    .scheduleStatusCell.statusAbsent { background: #ffe6e6; color: #b32020; }
+    .scheduleStatusCell.statusDuty { background: #e1f5e7; color: #20734d; }
     .scheduleHint { font-size: clamp(13px, 3.2vw, 18px); font-weight: 850; color: var(--muted); margin-top: 8px; }
     .scheduleStaffCard { border: 2px solid #d9eadf; background: rgba(255,255,255,.96); border-radius: 18px; padding: 14px; text-align: left; box-shadow: 0 8px 20px rgba(53,82,61,.08); }
     .scheduleStaffName { font-size: clamp(22px, 5vw, 31px); font-weight: 950; color: var(--ink); }
@@ -636,7 +645,7 @@
           '<section class="hero"><button class="adminIcon" id="adminBtn" type="button" title="admin">⚙</button><button class="reportIcon" id="reportBtn" type="button" title="report"><span></span><span></span><span></span></button><div><h1>', T.title, '</h1><div class="sub" id="statusText">', T.subtitle, '</div></div></section>',
           '<section class="topNowCard"><div><div class="todayLabel">\u4eca\u5929\u65e5\u671f</div><div class="todayValue" id="todayDateText"></div></div><div><div class="todayLabel">\u73fe\u5728\u6642\u9593</div><div class="todayValue" id="todayTimeText"></div></div></section>',
           '<section class="modeSwitcher" id="modeSwitcher"><button class="modeBtn" id="modeManageBtn" type="button">\u7ba1\u7406\u8005\u6a21\u5f0f</button><button class="modeBtn" id="modeReadBtn" type="button">\u552f\u8b80\u6a21\u5f0f</button></section>',
-          '<nav class="tabs homeTabs portalTabs" id="homeTabs"><button class="tab" id="portalBookingBtn" type="button">1 \u6392\u623f\u9810\u7d04\u7cfb\u7d71</button><button class="tab" id="portalHeadcountBtn" type="button">2 \u7f8e\u6280\u4eba\u982d\u8a08\u7b97</button><button class="tab" id="portalScheduleBtn" type="button">3 \u7f8e\u6280\u73ed\u8868</button><button class="tab" id="portalBonusBtn" type="button">4 \u5de5\u8cc7\u8a66\u7b97</button><button class="tab" id="portalSalesBtn" type="button">5 \u500b\u4eba\u7576\u6708\u696d\u7e3e</button><button class="tab" id="portalServicesBtn" type="button">6 \u500b\u4eba\u7576\u6708\u670d\u52d9\u4e00\u89bd</button><button class="tab" id="tabSchedule" type="button" style="display:none"></button><button class="tab" id="tabPeople" type="button" style="display:none"></button></nav>',
+          '<nav class="tabs homeTabs portalTabs" id="homeTabs"><button class="tab" id="portalBookingBtn" type="button"><span class="portalIcon">📅</span><span class="portalText">1 排房預約系統</span></button><button class="tab" id="portalHeadcountBtn" type="button"><span class="portalIcon">👥</span><span class="portalText">2 美技人頭計算</span></button><button class="tab" id="portalScheduleBtn" type="button"><span class="portalIcon">🗓️</span><span class="portalText">3 美技班表</span></button><button class="tab" id="portalBonusBtn" type="button"><span class="portalIcon">💰</span><span class="portalText">4 工資試算</span></button><button class="tab" id="portalSalesBtn" type="button"><span class="portalIcon">📋</span><span class="portalText">5 個人當月業績</span></button><button class="tab" id="portalServicesBtn" type="button"><span class="portalIcon">✅</span><span class="portalText">6 個人當月服務一覽</span></button><button class="tab" id="tabSchedule" type="button" style="display:none"></button><button class="tab" id="tabPeople" type="button" style="display:none"></button></nav>',
           '<nav class="tabs subTabs" id="scheduleTabs"><button class="tab active" id="tabSummary" type="button">', T.summary, '</button><button class="tab" id="tabBook" type="button">', T.book, '</button><button class="tab" id="tabCancel" type="button">', T.cancel, '</button></nav>',
           '<section class="panel" id="bookPanel"><div class="sectionTitle">', T.bookTitle, '</div><div class="sectionNote">', T.bookNote, '</div><div class="grid"><div><label for="dateInput">', T.date, '</label><input id="dateInput" type="date"></div><div><label for="roomSelect">', T.room, '</label><select id="roomSelect"></select></div><div><label for="startSelect">', T.start, '</label><select id="startSelect"></select></div><div><label for="endSelect">', T.end, '</label><select id="endSelect"></select></div><div><label for="technicianInput">', T.tech, '</label><select id="technicianInput"></select></div><div class="wide"><label for="serviceTargetInput">服務對象</label><div id="serviceTargetInput" class="serviceCheckGrid serviceTargetGrid"></div></div><div id="techNameWrap" class="techNameWrap"><label for="techNameInput">美容師 / 支援技師姓名</label><input id="techNameInput" type="text" autocomplete="off"></div><div id="coupleWrap" class="coupleWrap"><label for="coupleSelect">\u5169\u4eba\u540c\u623f</label><select id="coupleSelect"></select></div><div id="secondTechWrap" class="secondTechWrap"><label for="technicianInput2">\u7b2c\u4e8c\u4f4d\u6280\u5e2b</label><select id="technicianInput2"></select></div><div id="techNameWrap2" class="techNameWrap"><label for="techNameInput2">第二位姓名</label><input id="techNameInput2" type="text" autocomplete="off"></div><div class="wide"><label>', T.service, '</label><div id="serviceInput" class="serviceCheckGrid"></div></div><div id="mainCustomerWrap" class="mainCustomerWrap"><label for="mainCustomerSelect">服務項目標記</label><select id="mainCustomerSelect"><option value="">請選擇</option><option value="B">B</option><option value="F">F</option><option value="BF">BF</option></select></div><div><label for="customerInput">', T.customer, '</label><input id="customerInput" type="text" autocomplete="off"></div><div><label for="userNameInput">', T.user, '</label><input id="userNameInput" type="text" autocomplete="off" readonly></div></div><div class="actions"><button class="btn" id="bookBtn" type="button">', T.bookBtn, '</button><button class="btn reset" id="resetBtn" type="button">', T.resetBtn, '</button></div><div id="message" class="message"></div><div class="availableTitle">', T.available, '</div><div id="availableSlots" class="slotBoxGrid"></div></section>',
           '<section class="panel" id="cancelPanel"><div class="sectionTitle">', T.cancelTitle, '</div><div class="sectionNote">', T.cancelNote, '</div><div class="summaryControls"><div><label for="cancelDateInput">', T.date, '</label><input id="cancelDateInput" type="date"></div><button class="btn refresh" id="cancelSearchBtn" type="button">', T.searchCancel, '</button></div><div id="cancelMessage" class="message"></div><div id="cancelList" class="bookingList"></div></section>',
@@ -962,6 +971,18 @@
       return map[status] || '';
     }
 
+    function getScheduleStatusClass(status) {
+      var map = {
+        '\u4f8b\u4f11': ' statusHoliday',
+        '\u7279\u4f11': ' statusSpecial',
+        '\u4e8b\u5047': ' statusPersonal',
+        '\u98b1\u98a8\u5047': ' statusTyphoon',
+        '\u66e0\u8077': ' statusAbsent',
+        '\u503c\u65e5\u751f': ' statusDuty'
+      };
+      return map[status] || (status ? ' leave' : ' empty');
+    }
+
     function renderTechSchedule(result) {
       result = result || {};
       window.TECH_SCHEDULE_RESULT = result;
@@ -978,7 +999,7 @@
         staff.forEach(function (person) {
           var day = (person.days || [])[dayIndex] || {};
           var status = day.status || '';
-          var klass = status === '\u503c\u65e5\u751f' ? ' duty' : (status ? ' leave' : ' empty');
+          var klass = getScheduleStatusClass(status);
           rows += '<td><div class="scheduleStatusCell' + klass + '">' + escapeHtml(formatScheduleShortStatus(status)) + '</div></td>';
         });
         rows += '</tr>';
@@ -1633,13 +1654,12 @@
     }
 
     function renderTomorrowReport(data) {
-      byId('reportDateText').textContent = (data.date || String(byId('reportDateInput').value || '').replace(/-/g, '/')) + '   \u7da0\u8272=\u7a7a\u623f   \u7d05\u8272=\u5df2\u9810\u7d04   \u85cd\u8272=\u9ad4\u9a57\u5ba2';
+      byId('reportDateText').textContent = (data.date || String(byId('reportDateInput').value || '').replace(/-/g, '/')) + '   \u7da0\u8272=\u7a7a\u623f   \u7d05\u8272=\u4e3b\u9867\u5ba2   \u85cd\u8272=\u9ad4\u9a57\u5ba2';
       var rooms = data.rooms || [];
       if (!rooms.length) { byId('reportArea').innerHTML = '<div class="slotBox empty">' + T.noBookings + '</div>'; return; }
       byId('reportArea').innerHTML = rooms.map(function (room) {
         var cells = (room.slots || []).map(function (slot) {
-          var isExperience = !slot.available && slot.booking && slot.booking.service === '\u9ad4\u9a57\u5ba2';
-          var klass = slot.available ? 'free' : (isExperience ? 'experience' : 'busy');
+          var klass = getBookingColorClass(slot);
           var detail = slot.available ? '\u7a7a' : formatReportSlotDetail(slot.booking);
           return '<div class="summaryCell ' + klass + '"><div class="summaryTime">' + escapeHtml(formatReportTimeLabel(slot.start)) + '</div><div class="summaryDetail">' + detail + '</div></div>';
         }).join('');
@@ -1747,8 +1767,7 @@
       var summaryDate = String(data.date || byId('summaryDateInput').value || '').replace(/\//g, '-');
       area.innerHTML = data.rooms.map(function (room) {
         var cells = room.slots.map(function (slot) {
-          var isExperience = !slot.available && slot.booking && slot.booking.service === '\u9ad4\u9a57\u5ba2';
-          var klass = slot.available ? 'free' : (isExperience ? 'experience' : 'busy');
+          var klass = getBookingColorClass(slot);
           var detail = slot.available ? T.free : formatBookedSummaryDetail(slot.booking);
           var row = '';
           var isPastSlot = isPastDateTime(summaryDate, slot.end || slot.start);
@@ -2050,10 +2069,20 @@
       return text + '~' + minToTime(timeToMin(text) + 30);
     }
 
+    function getBookingColorClass(slot) {
+      if (!slot || slot.available) return 'free';
+      var booking = slot.booking || {};
+      var service = String(booking.service || '');
+      if (service.indexOf('\u9ad4\u9a57\u5ba2') !== -1) return 'experience';
+      if (service.indexOf('\u4e3b\u9867\u5ba2') !== -1) return 'mainCustomer';
+      return 'busy';
+    }
+
     function formatReportSlotDetail(booking) {
       booking = booking || {};
       var service = String(booking.service || '');
-      if (service === '\u9ad4\u9a57\u5ba2') return '\u9ad4';
+      if (service.indexOf('\u9ad4\u9a57\u5ba2') !== -1) return '\u9ad4';
+      if (service.indexOf('\u4e3b\u9867\u5ba2') !== -1) return '\u4e3b';
       var technician = String(booking.technician || '\u9810');
       return escapeHtml(technician.slice(0, 2));
     }
@@ -2239,6 +2268,7 @@
   </script>
 </body>
 </html>
+
 
 
 
