@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>美技人頭計算</title>
+  <style>
+    body { margin: 0; min-height: 100vh; display: grid; place-items: center; font-family: system-ui, -apple-system, "Noto Sans TC", sans-serif; background: #f8f6ec; color: #233427; }
+    .box { text-align: center; padding: 28px; font-size: 28px; font-weight: 900; line-height: 1.4; }
+  </style>
+</head>
+<body>
+  <div class="box">正在開啟<br>美技人頭計算</div>
+  <script>
+    sessionStorage.setItem('WENCHENG_ENTRY_PAGE', "techHeadcount");
+    location.replace('index.html?page=' + encodeURIComponent("techHeadcount") + '&v=2026050708');
+  </script>
+</body>
+</html>
