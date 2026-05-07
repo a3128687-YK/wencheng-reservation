@@ -33,14 +33,15 @@
       background-size: cover;
       background-attachment: fixed;
     }
-    .page { max-width: 1120px; margin: 0 auto; padding: 26px 16px 40px; }
+    .page { max-width: 1120px; margin: 0 auto; padding: 18px 14px 40px; }
     .hero {
       position: relative;
-      min-height: 180px;
+      min-height: 150px;
       display: grid;
-      grid-template-columns: 1fr;
-      align-items: end;
-      padding: 32px 26px;
+      grid-template-columns: 1.25fr .75fr;
+      align-items: center;
+      gap: 16px;
+      padding: 22px 24px;
       border-radius: 26px;
       background: linear-gradient(135deg, rgba(255,255,255,.92), rgba(255,250,238,.72));
       box-shadow: var(--shadow);
@@ -60,8 +61,22 @@
       pointer-events: none;
     }
     .hero > * { position: relative; z-index: 1; }
-    h1 { margin: 0; font-size: clamp(34px, 6vw, 56px); line-height: 1.08; letter-spacing: 0; }
-    .sub { margin-top: 12px; font-size: clamp(20px, 3.4vw, 28px); color: var(--muted); font-weight: 700; }
+    .heroMain { align-self: center; padding-top: 2px; }
+    .heroTimeGrid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+      justify-self: end;
+      width: min(100%, 340px);
+      padding: 12px 14px;
+      border-radius: 20px;
+      background: rgba(255,255,255,.7);
+      border: 1px solid rgba(70, 92, 74, .12);
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.56);
+    }
+    .heroTimeRow { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+    h1 { margin: 0; font-size: clamp(32px, 5.2vw, 52px); line-height: 1.06; letter-spacing: 0; }
+    .sub { margin-top: 8px; font-size: clamp(18px, 3vw, 26px); color: var(--muted); font-weight: 700; }
     .quickInfo { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin: 18px 0; }
     .infoCard { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 18px; box-shadow: 0 10px 22px rgba(43, 70, 52, .08); }
     .infoLabel { font-size: 18px; color: var(--muted); font-weight: 800; }
@@ -82,8 +97,8 @@
       justify-content: space-between;
       gap: 18px;
     }
-    .todayLabel { font-size: clamp(15px, 3vw, 22px); font-weight: 950; color: var(--muted); }
-    .todayValue { font-size: clamp(22px, 5vw, 36px); font-weight: 950; line-height: 1; color: var(--ink); }
+    .todayLabel { font-size: clamp(13px, 2.4vw, 18px); font-weight: 950; color: var(--muted); white-space: nowrap; }
+    .todayValue { font-size: clamp(18px, 3.7vw, 30px); font-weight: 950; line-height: 1; color: var(--ink); white-space: nowrap; }
     .tabs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin: 16px 0 20px; }
     .tab {
       border: 0;
@@ -101,10 +116,10 @@
     }
     .tab.active { background: linear-gradient(135deg, var(--green), var(--green2)); color: #fff; }
     .homeTabs { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-    .homeTabs.portalTabs { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin-top: 12px; }
+    .homeTabs.portalTabs { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin-top: 14px; }
     .homeTabs.portalTabs .tab {
       position: relative;
-      min-height: clamp(142px, 31vw, 206px);
+      min-height: clamp(128px, 29vw, 190px);
       display: grid;
       grid-template-rows: 1fr auto;
       align-items: stretch;
@@ -136,7 +151,7 @@
     .portalIcon {
       width: 100%;
       height: 100%;
-      min-height: 104px;
+      min-height: clamp(82px, 21vw, 126px);
       display: grid;
       place-items: center;
       border-radius: 16px 16px 8px 8px;
@@ -159,12 +174,12 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      min-height: clamp(34px, 8vw, 50px);
-      padding: 5px 4px;
+      min-height: clamp(30px, 7vw, 44px);
+      padding: 4px 4px;
       border-radius: 999px;
       background: #202020;
       color: #fff;
-      font-size: clamp(11px, 2.8vw, 22px);
+      font-size: clamp(10px, 2.55vw, 18px);
       line-height: 1.05;
       font-weight: 950;
       letter-spacing: 0;
@@ -181,12 +196,14 @@
       height: 54px;
       border: 0;
       border-radius: 18px 0 0 18px;
-      background: rgba(32,32,32,.88);
+      background: rgba(32,32,32,.48);
       color: #fff;
       font-size: 16px;
       font-weight: 950;
       letter-spacing: 0;
       box-shadow: 0 10px 26px rgba(0,0,0,.18);
+      border: 1px solid rgba(255,255,255,.34);
+      backdrop-filter: blur(5px);
     }
     body.headcountOnly .modeSwitcher,
     body.headcountOnly .homeTabs,
@@ -520,14 +537,20 @@
       line-height: 1.2;
     }
     @media (max-width: 720px) {
-      .page { padding: 14px 10px 28px; }
+      .page { padding: 12px 9px 28px; }
       .hero {
-      position: relative; padding: 26px 18px; border-radius: 22px; }
+      position: relative; grid-template-columns: 1fr; gap: 12px; padding: 16px 14px; border-radius: 22px; min-height: 0; }
+      .heroTimeGrid { justify-self: stretch; width: 100%; grid-template-columns: 1fr 1fr; gap: 8px; padding: 10px; }
+      .heroTimeRow { display: block; }
       .quickInfo, .grid, .actions, .summaryControls, .bookingItem { grid-template-columns: 1fr; }
       .tabs { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .topNowCard { flex-direction: column; align-items: flex-start; padding: 20px; }
       .tabs { gap: 10px; }
       .homeTabs { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .homeTabs.portalTabs { gap: 7px; }
+      .homeTabs.portalTabs .tab { min-height: clamp(120px, 30vw, 150px); padding: 6px; border-radius: 16px; }
+      .portalIcon { min-height: clamp(78px, 21vw, 96px); border-radius: 13px 13px 8px 8px; }
+      .portalText { min-height: 30px; font-size: clamp(10px, 2.55vw, 14px); padding: 3px 2px; }
     body.headcountOnly .modeSwitcher,
     body.headcountOnly .homeTabs,
     body.headcountOnly .subTabs { display: none !important; }
@@ -725,8 +748,7 @@
       var app = document.getElementById('app');
       app.innerHTML = [
         '<main class="page">',
-          '<section class="hero"><button class="adminIcon" id="adminBtn" type="button" title="admin">⚙</button><button class="reportIcon" id="reportBtn" type="button" title="report"><span></span><span></span><span></span></button><div><h1>', T.title, '</h1><div class="sub" id="statusText">', T.subtitle, '</div></div></section>',
-          '<section class="topNowCard"><div><div class="todayLabel">\u4eca\u5929\u65e5\u671f</div><div class="todayValue" id="todayDateText"></div></div><div><div class="todayLabel">\u73fe\u5728\u6642\u9593</div><div class="todayValue" id="todayTimeText"></div></div></section>',
+          '<section class="hero"><div class="heroMain"><h1>', T.title, '</h1><div class="sub" id="statusText">', T.subtitle, '</div></div><div class="heroTimeGrid"><div class="heroTimeRow"><div class="todayLabel">\u4eca\u5929\u65e5\u671f</div><div class="todayValue" id="todayDateText"></div></div><div class="heroTimeRow"><div class="todayLabel">\u73fe\u5728\u6642\u9593</div><div class="todayValue" id="todayTimeText"></div></div></div></section>',
           '<section class="modeSwitcher" id="modeSwitcher"><button class="modeBtn" id="modeManageBtn" type="button">\u7ba1\u7406\u8005\u6a21\u5f0f</button><button class="modeBtn" id="modeReadBtn" type="button">\u552f\u8b80\u6a21\u5f0f</button></section>',
           '<nav class="tabs homeTabs portalTabs" id="homeTabs"><button class="tab" id="portalBookingBtn" type="button"><span class="portalIcon portalIconBooking"></span><span class="portalText">排房預約系統</span></button><button class="tab" id="portalHeadcountBtn" type="button"><span class="portalIcon portalIconHeadcount"></span><span class="portalText">美技人頭計算</span></button><button class="tab" id="portalScheduleBtn" type="button"><span class="portalIcon portalIconSchedule"></span><span class="portalText">美技班表</span></button><button class="tab" id="portalBonusBtn" type="button"><span class="portalIcon portalIconBonus"></span><span class="portalText">工獎計算</span></button><button class="tab" id="portalSalesBtn" type="button"><span class="portalIcon portalIconSales"></span><span class="portalText">個人當月業績</span></button><button class="tab" id="portalServicesBtn" type="button"><span class="portalIcon portalIconServices"></span><span class="portalText">個人當月服務一覽</span></button><button class="tab" id="tabSchedule" type="button" style="display:none"></button><button class="tab" id="tabPeople" type="button" style="display:none"></button></nav>',
           '<nav class="tabs subTabs" id="scheduleTabs"><button class="tab active" id="tabSummary" type="button">', T.summary, '</button><button class="tab" id="tabBook" type="button">', T.book, '</button><button class="tab" id="tabCancel" type="button">', T.cancel, '</button></nav>',
@@ -752,8 +774,8 @@
       byId('portalServicesBtn').onclick = function () { showConstructionPage('\u500b\u4eba\u7576\u6708\u670d\u52d9\u4e00\u89bd', '\u9019\u500b\u529f\u80fd\u6b63\u5728\u65bd\u5de5\u4e2d\uff0c\u5b8c\u6210\u5f8c\u53ef\u67e5\u8a62\u500b\u4eba\u7576\u6708\u670d\u52d9\u660e\u7d30\u3002'); };
       byId('constructionHomeBtn').onclick = showHome;
       byId('tabBook').onclick = function () { showTab('book'); };
-      byId('reportBtn').onclick = showTomorrowReport;
-      byId('adminBtn').onclick = showAdminPanel;
+      if (byId('reportBtn')) byId('reportBtn').onclick = showTomorrowReport;
+      if (byId('adminBtn')) byId('adminBtn').onclick = showAdminPanel;
       byId('reportBackBtn').onclick = showHome;
       byId('reportSearchBtn').onclick = loadReportByDate;
       byId('reportDateInput').onchange = loadReportByDate;
