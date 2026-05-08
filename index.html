@@ -406,10 +406,11 @@
     .salesAdminPicker { display: none; margin-top: 10px; }
     .salesAdminPicker.active { display: block; }
     .salesActionToggles { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin: 16px 0; }
-    .salesActionToggles .btn { width: 100%; min-height: 68px; font-size: clamp(17px, 3.5vw, 26px); padding: 10px 6px; line-height: 1.15; }
+    .salesActionToggles .btn { width: 100%; min-height: 82px; height: 100%; font-size: clamp(18px, 3.8vw, 28px); padding: 12px 8px; line-height: 1.15; margin: 0; display: grid; place-items: center; }
     .salesFormBox.collapsed, #salesDetailArea.collapsed { display: none; }
     .salesEditActions { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-top: 18px; }
     .salesEditActions .btn { width: 100%; min-height: 58px; font-size: clamp(13px, 2.9vw, 18px); padding: 7px 4px; line-height: 1.1; white-space: normal; margin: 0; }
+    #salesCreateBtn { font-size: clamp(16px, 3.4vw, 21px); font-weight: 950; }
     .salesDeleteBtn { background: #b33a3a !important; }
     .salesAmountWrap { display: grid; grid-template-columns: 1fr 76px; gap: 8px; align-items: end; }
     .salesAmountWrap label { grid-column: 1 / -1; }
