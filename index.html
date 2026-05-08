@@ -224,7 +224,7 @@
     .subTabs { display: none; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin: 14px 0 18px; }
     .subTabs.active { display: grid; }
     .subTabs .tab { min-height: 78px; padding: 12px 8px; font-size: clamp(20px, 4vw, 30px); white-space: nowrap; }
-    .reportIcon {
+    .reportIcon { pointer-events: auto;
       position: absolute;
       top: 18px;
       right: 18px;
@@ -408,7 +408,7 @@
     .salesActionToggles .btn { min-height: 68px; font-size: clamp(20px, 4vw, 30px); }
     .salesFormBox.collapsed, #salesDetailArea.collapsed { display: none; }
     .salesEditActions { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-top: 18px; }
-    .salesEditActions .btn { min-height: 58px; font-size: clamp(16px, 3.5vw, 23px); padding: 8px 6px; line-height: 1.15; }
+    .salesEditActions .btn { min-height: 56px; font-size: clamp(14px, 3.1vw, 20px); padding: 7px 5px; line-height: 1.12; white-space: normal; }
     .salesDeleteBtn { background: #b33a3a !important; }
     .topFloatBtn.dragReady { box-shadow: 0 0 0 5px rgba(76,127,105,.22), 0 10px 26px rgba(0,0,0,.18); }
     .topFloatBtn.dragging { opacity: .86; transition: none; }
@@ -802,7 +802,7 @@
       byId('portalServicesBtn').onclick = function () { showConstructionPage('\u500b\u4eba\u7576\u6708\u670d\u52d9\u4e00\u89bd', '\u9019\u500b\u529f\u80fd\u6b63\u5728\u65bd\u5de5\u4e2d\uff0c\u5b8c\u6210\u5f8c\u53ef\u67e5\u8a62\u500b\u4eba\u7576\u6708\u670d\u52d9\u660e\u7d30\u3002'); };
       byId('constructionHomeBtn').onclick = showHome;
       byId('tabBook').onclick = function () { showTab('book'); };
-      if (byId('reportBtn')) byId('reportBtn').onclick = showTomorrowReport;
+      if (byId('reportBtn')) byId('reportBtn').addEventListener('click', function (event) { event.preventDefault(); event.stopPropagation(); showTomorrowReport(); });
       if (byId('adminBtn')) byId('adminBtn').onclick = showAdminPanel;
       byId('reportBackBtn').onclick = showHome;
       byId('reportSearchBtn').onclick = loadReportByDate;
@@ -866,8 +866,8 @@
       if (!btn) return;
       var holdTimer = null;
       var pressing = false;
+      var dragArmed = false;
       var dragging = false;
-      var moved = false;
       var side = localStorage.getItem('topFloatSide') || 'right';
       var savedTop = Number(localStorage.getItem('topFloatTop') || 0);
       function applyPosition(topValue) {
@@ -880,47 +880,60 @@
         btn.style.right = side === 'right' ? '0px' : 'auto';
         btn.style.borderRadius = side === 'left' ? '0 18px 18px 0' : '18px 0 0 18px';
       }
-      function pointY(event) { return event.touches && event.touches.length ? event.touches[0].clientY : event.clientY; }
-      function pointX(event) { return event.touches && event.touches.length ? event.touches[0].clientX : event.clientX; }
       function start(event) {
         pressing = true;
-        moved = false;
-        if (event && event.cancelable) event.preventDefault();
+        dragArmed = false;
+        dragging = false;
         clearTimeout(holdTimer);
         holdTimer = setTimeout(function () {
-          dragging = true;
+          if (!pressing) return;
+          dragArmed = true;
           btn.classList.add('dragReady');
+          if (event && btn.setPointerCapture && event.pointerId !== undefined) {
+            try { btn.setPointerCapture(event.pointerId); } catch (err) {}
+          }
         }, 500);
       }
       function move(event) {
-        if (!dragging) return;
-        moved = true;
-        event.preventDefault();
+        if (!pressing || !dragArmed) return;
+        dragging = true;
+        if (event && event.cancelable) event.preventDefault();
         btn.classList.add('dragging');
-        side = pointX(event) < window.innerWidth / 2 ? 'left' : 'right';
-        savedTop = pointY(event);
+        var x = event.clientX || 0;
+        var y = event.clientY || savedTop || Math.round(window.innerHeight / 3);
+        side = x < window.innerWidth / 2 ? 'left' : 'right';
+        savedTop = y;
         applyPosition(savedTop);
       }
-      function end() {
+      function end(event) {
         if (!pressing) return;
         pressing = false;
         clearTimeout(holdTimer);
         btn.classList.remove('dragReady');
         btn.classList.remove('dragging');
-        if (dragging) {
+        if (dragArmed) {
           localStorage.setItem('topFloatSide', side);
           localStorage.setItem('topFloatTop', String(savedTop || Math.round(window.innerHeight / 3)));
-        } else if (!moved) {
+        } else {
           window.scrollTo({ top: 0, behavior: 'smooth' });
         }
+        dragArmed = false;
         dragging = false;
+        if (event && btn.releasePointerCapture && event.pointerId !== undefined) {
+          try { btn.releasePointerCapture(event.pointerId); } catch (err) {}
+        }
       }
-      btn.addEventListener('mousedown', start);
-      btn.addEventListener('touchstart', start, { passive: false });
-      window.addEventListener('mousemove', move, { passive: false });
-      window.addEventListener('touchmove', move, { passive: false });
-      window.addEventListener('mouseup', end);
-      window.addEventListener('touchend', end);
+      btn.addEventListener('pointerdown', start);
+      btn.addEventListener('pointermove', move);
+      btn.addEventListener('pointerup', end);
+      btn.addEventListener('pointercancel', function () {
+        pressing = false;
+        dragArmed = false;
+        dragging = false;
+        clearTimeout(holdTimer);
+        btn.classList.remove('dragReady');
+        btn.classList.remove('dragging');
+      });
       window.addEventListener('resize', function () { applyPosition(savedTop); });
       applyPosition(savedTop);
     }
