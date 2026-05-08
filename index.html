@@ -398,6 +398,12 @@
     .salesDetailItem { width: 100%; text-align: left; cursor: pointer; font-family: inherit; border-radius: 16px; padding: 12px; background: #fffdf7; border: 2px solid rgba(70,126,88,.16); box-shadow: 0 6px 16px rgba(53,82,61,.07); }
     .salesDetailMain { font-size: clamp(18px, 4vw, 24px); font-weight: 950; color: var(--ink); }
     .salesDetailSub { margin-top: 6px; font-size: clamp(15px, 3.3vw, 20px); font-weight: 800; color: var(--muted); line-height: 1.45; }
+    .salesAdminPicker { display: none; margin-top: 10px; }
+    .salesAdminPicker.active { display: block; }
+    .salesEditActions { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-top: 18px; }
+    .salesDeleteBtn { background: #b33a3a !important; }
+    .topFloatBtn.dragReady { box-shadow: 0 0 0 5px rgba(76,127,105,.22), 0 10px 26px rgba(0,0,0,.18); }
+    .topFloatBtn.dragging { opacity: .86; transition: none; }
     body.scheduleOnly .modeSwitcher,
     body.scheduleOnly .homeTabs,
     body.scheduleOnly .subTabs { display: none !important; }
@@ -739,7 +745,7 @@
       var readBtn = byId('modeReadBtn');
       if (manageBtn) manageBtn.classList.toggle('active', APP_MODE === 'MANAGE');
       if (readBtn) readBtn.classList.toggle('active', APP_MODE === 'READONLY');
-      ['tabBook','tabCancel','adminArchiveBtn','adminBtn','reportBtn'].forEach(function (id) { var el = byId(id); if (el) el.style.display = can ? '' : 'none'; });
+      ['tabBook','tabCancel','adminArchiveBtn','adminBtn'].forEach(function (id) { var el = byId(id); if (el) el.style.display = can ? '' : 'none'; });
       if (!can) {
         var bookPanel = byId('bookPanel');
         var cancelPanel = byId('cancelPanel');
@@ -774,14 +780,13 @@
           '<section class="panel reportPanel" id="reportPanel"><button class="btn reportBack" id="reportBackBtn" type="button">\u8fd4\u56de\u9996\u9801</button><div class="sectionTitle">\u623f\u9593\u5831\u8868</div><div class="reportControls"><div><label for="reportDateInput">\u5831\u8868\u65e5\u671f</label><input id="reportDateInput" type="date"></div><button class="btn refresh" id="reportSearchBtn" type="button">\u67e5\u8a62</button></div><div class="sectionNote" id="reportDateText">\u8f09\u5165\u4e2d...</div><div id="reportArea"></div></section>',
           '<section class="panel" id="techHeadcountPanel"><button class="btn headcountBack" id="headcountHomeBtn" type="button">\u8fd4\u56de\u9996\u9801</button><div class="sectionTitle">\u7f8e\u6280\u4eba\u982d\u8a08\u7b97</div><div class="sectionNote">\u53ea\u986f\u793a\u7f8e\u537f\u3001\u96ef\u8431\u3001\u839b\u7a4e\u3001\u4f73\u59a4\u3001\u7f8e\u73b2\u3001\u66fc\u7433\uff1b\u4f9d\u670d\u52d9\u65e5\u671f\u7d71\u8a08\u7576\u6708\u6709\u6548\u9810\u7d04\u3002</div><div class="summaryControls"><div><label for="headcountMonthInput">\u67e5\u8a62\u6708\u4efd</label><input id="headcountMonthInput" type="month"></div><button class="btn refresh" id="headcountSearchBtn" type="button">\u67e5\u8a62</button></div><div id="headcountMessage" class="message"></div><div id="headcountArea"></div><div id="headcountDetailArea"></div></section>',
           '<section class="panel" id="techSchedulePanel"><button class="btn headcountBack" id="scheduleHomeBtn" type="button">\u8fd4\u56de\u9996\u9801</button><div class="sectionTitle">\u7f8e\u6280\u73ed\u8868</div><div class="sectionNote">\u6ac3\u9577\u54c1\u85df\u8207\u516d\u4f4d\u6280\u5e2b\u7576\u6708\u73ed\u8868\uff1b\u7a7a\u767d\u4ee3\u8868\u6b63\u5e38\u4e0a\u73ed\uff0c\u7e3d\u8868\u53ea\u986f\u793a\u7c21\u5beb\uff1a\u4f8b\u3001\u7279\u3001\u4e8b\u3001\u98b1\u3001\u66e0\u3001\u503c\u3002</div><div class="summaryControls"><div><label for="scheduleMonthInput">\u67e5\u8a62\u6708\u4efd</label><input id="scheduleMonthInput" type="month"></div><button class="btn refresh" id="scheduleSearchBtn" type="button">\u67e5\u8a62</button></div><button class="btn scheduleEditToggle" id="scheduleEditToggleBtn" type="button">\u2699\ufe0f \u8a2d\u5b9a\u73ed\u8868</button><div id="scheduleMessage" class="message"></div><div id="scheduleArea"></div><div id="scheduleDetailArea"></div><div id="scheduleEditBox" class="scheduleEditBox"><div class="sectionNote">\u54c1\u85df\u8207\u7ba1\u7406\u54e1\u53ef\u8a2d\u5b9a\u73ed\u8868</div><div class="grid"><div><label for="scheduleEditStaff">\u4eba\u54e1</label><select id="scheduleEditStaff"></select></div><div class="wide"><label>\u65e5\u671f\uff08\u53ef\u8907\u9078\uff09</label><div id="scheduleCalendar" class="scheduleCalendar"></div><input id="scheduleEditDates" type="hidden"></div><div><label for="scheduleEditStatus">\u72c0\u614b</label><select id="scheduleEditStatus"></select></div><div><label for="scheduleEditNote">\u5099\u8a3b</label><input id="scheduleEditNote" type="text"></div></div><button class="btn refresh" id="scheduleSaveBtn" type="button">\u5132\u5b58\u73ed\u8868</button></div></section>',
-          '<section class="panel" id="myMonthlySalesPanel"><button class="btn headcountBack" id="salesHomeBtn" type="button">\u8fd4\u56de\u9996\u9801</button><div class="sectionTitle">\u500b\u4eba\u7576\u6708\u696d\u7e3e</div><div class="sectionNote">\u4f9d\u4f60\u539f\u672c Excel \u300c\u696d\u7e3e\u7d2f\u8a08\u300d\u908f\u8f2f\u8a08\u7b97\uff1a\u696d\u7e3e\u52a0\u7e3d\u3001\u6263\u5e95\u3001\u7d1a\u8ddd\u734e\u91d1\u6bd4\u4f8b\u8207\u9810\u4f30\u5be6\u9818\u3002</div><div class="summaryControls"><div><label for="salesMonthInput">\u67e5\u8a62\u6708\u4efd</label><input id="salesMonthInput" type="month"></div><button class="btn refresh" id="salesSearchBtn" type="button">\u67e5\u8a62</button></div><div id="salesMessage" class="message"></div><div id="salesArea"></div><div class="salesFormBox"><div class="sectionTitle" id="salesFormTitle">\u65b0\u589e\u696d\u7e3e</div><div class="grid"><div><label for="salesOwnerInput">\u767b\u5165\u8005</label><input id="salesOwnerInput" type="text" readonly></div><div><label for="salesDateInput">\u65e5\u671f</label><input id="salesDateInput" type="date"></div><div><label for="salesAmountInput">\u696d\u7e3e\u91d1\u984d</label><input id="salesAmountInput" type="number" min="0" step="1" inputmode="numeric"></div><div><label for="salesVenueInput">\u6703\u9928</label><select id="salesVenueInput"></select></div><div><label for="salesCounterInput">\u5c08\u6ac3</label><select id="salesCounterInput"></select></div></div><div class="actions"><button class="btn refresh" id="salesCreateBtn" type="button">\u5132\u5b58\u696d\u7e3e</button><button class="btn reset" id="salesCancelEditBtn" type="button">\u53d6\u6d88\u7de8\u8f2f</button></div></div><div id="salesDetailArea"></div></section>',
-        '</main><button class="topFloatBtn" id="topFloatBtn" type="button">TOP</button>'
+          '<section class="panel" id="myMonthlySalesPanel"><button class="btn headcountBack" id="salesHomeBtn" type="button">返回首頁</button><div class="sectionTitle">個人當月業績</div><div class="sectionNote">依你原本 Excel「業績累計」邏輯計算：業績加總、扣底、級距獎金比例與預估實領。</div><div class="summaryControls"><div><label for="salesMonthInput">查詢月份</label><input id="salesMonthInput" type="month"></div><button class="btn refresh" id="salesSearchBtn" type="button">查詢</button></div><div class="salesAdminPicker" id="salesPersonWrap"><label for="salesPersonSelect">查詢人員</label><select id="salesPersonSelect"></select></div><div id="salesMessage" class="message"></div><div id="salesArea"></div><div class="salesFormBox"><div class="sectionTitle" id="salesFormTitle">新增業績</div><div class="grid"><div><label for="salesOwnerInput">登入者</label><input id="salesOwnerInput" type="text" readonly></div><div><label for="salesDateInput">日期</label><input id="salesDateInput" type="date"></div><div><label for="salesAmountInput">業績金額</label><input id="salesAmountInput" type="number" step="1" inputmode="numeric"></div><div><label for="salesVenueInput">會館</label><select id="salesVenueInput"></select></div><div><label for="salesCounterInput">專櫃</label><select id="salesCounterInput"></select></div></div><div class="salesEditActions"><button class="btn refresh" id="salesCreateBtn" type="button">儲存業績</button><button class="btn salesDeleteBtn" id="salesDeleteBtn" type="button">刪除業績</button><button class="btn reset" id="salesCancelEditBtn" type="button">取消編輯</button></div></div><div id="salesDetailArea"></div></section>',        '</main><button class="topFloatBtn" id="topFloatBtn" type="button">TOP</button>'
       ].join('');
 
       document.querySelector('main.page').insertAdjacentHTML('beforeend', '<section class="panel" id="portalConstructionPanel"><button class="btn headcountBack" id="constructionHomeBtn" type="button">\u8fd4\u56de\u9996\u9801</button><div class="sectionTitle" id="constructionTitle">\u529f\u80fd\u5efa\u7f6e\u4e2d</div><div class="sectionNote" id="constructionText">\u9019\u500b\u529f\u80fd\u6b63\u5728\u65bd\u5de5\u4e2d\uff0c\u5b8c\u6210\u5f8c\u5c31\u6703\u958b\u653e\u4f7f\u7528\u3002</div><div class="slotBox empty">\u2692\ufe0f<br>\u65bd\u5de5\u4e2d</div></section>');
 
       byId('portalBookingBtn').onclick = showScheduleHome;
-      byId('topFloatBtn').onclick = function () { window.scrollTo({ top: 0, behavior: 'smooth' }); };
+      setupTopFloatButton();
       byId('portalHeadcountBtn').onclick = showTechHeadcountPanel;
       byId('portalScheduleBtn').onclick = showTechSchedulePanel;
       byId('portalBonusBtn').onclick = function () { showConstructionPage('\u5de5\u734e\u8a08\u7b97', '\u9019\u500b\u529f\u80fd\u6b63\u5728\u65bd\u5de5\u4e2d\uff0c\u5b8c\u6210\u5f8c\u53ef\u4ee5\u8a08\u7b97\u5de5\u734e\u3002'); };
@@ -830,7 +835,13 @@
       byId('salesHomeBtn').onclick = showHome;
       byId('salesSearchBtn').onclick = loadMyMonthlySales;
       byId('salesMonthInput').onchange = loadMyMonthlySales;
+      byId('salesPersonSelect').onchange = loadMyMonthlySales;
+      byId('salesVenueInput').onchange = function () { if (this.value) byId('salesCounterInput').value = ''; clearSalesFieldError('salesVenueInput'); clearSalesFieldError('salesCounterInput'); };
+      byId('salesCounterInput').onchange = function () { if (this.value) byId('salesVenueInput').value = ''; clearSalesFieldError('salesVenueInput'); clearSalesFieldError('salesCounterInput'); };
+      byId('salesDateInput').onchange = function () { clearSalesFieldError('salesDateInput'); };
+      byId('salesAmountInput').oninput = function () { clearSalesFieldError('salesAmountInput'); };
       byId('salesCreateBtn').onclick = createMyMonthlySale;
+      byId('salesDeleteBtn').onclick = deleteMonthlySale;
       byId('salesCancelEditBtn').onclick = resetSalesForm;
       byId('scheduleHomeBtn').onclick = showHome;
       byId('scheduleSearchBtn').onclick = loadTechSchedule;
@@ -840,6 +851,64 @@
     }
 
 
+    function setupTopFloatButton() {
+      var btn = byId('topFloatBtn');
+      if (!btn) return;
+      var holdTimer = null;
+      var dragging = false;
+      var moved = false;
+      var side = localStorage.getItem('topFloatSide') || 'right';
+      var savedTop = Number(localStorage.getItem('topFloatTop') || 0);
+      function applyPosition(topValue) {
+        var maxTop = Math.max(72, window.innerHeight - 72);
+        var nextTop = topValue || savedTop || Math.round(window.innerHeight / 3);
+        nextTop = Math.max(72, Math.min(maxTop, nextTop));
+        btn.style.top = nextTop + 'px';
+        btn.style.transform = 'none';
+        btn.style.left = side === 'left' ? '0px' : 'auto';
+        btn.style.right = side === 'right' ? '0px' : 'auto';
+        btn.style.borderRadius = side === 'left' ? '0 18px 18px 0' : '18px 0 0 18px';
+      }
+      function pointY(event) { return event.touches && event.touches.length ? event.touches[0].clientY : event.clientY; }
+      function pointX(event) { return event.touches && event.touches.length ? event.touches[0].clientX : event.clientX; }
+      function start(event) {
+        moved = false;
+        clearTimeout(holdTimer);
+        holdTimer = setTimeout(function () {
+          dragging = true;
+          btn.classList.add('dragReady');
+        }, 500);
+      }
+      function move(event) {
+        if (!dragging) return;
+        moved = true;
+        event.preventDefault();
+        btn.classList.add('dragging');
+        side = pointX(event) < window.innerWidth / 2 ? 'left' : 'right';
+        savedTop = pointY(event);
+        applyPosition(savedTop);
+      }
+      function end() {
+        clearTimeout(holdTimer);
+        btn.classList.remove('dragReady');
+        btn.classList.remove('dragging');
+        if (dragging) {
+          localStorage.setItem('topFloatSide', side);
+          localStorage.setItem('topFloatTop', String(savedTop || Math.round(window.innerHeight / 3)));
+        } else if (!moved) {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+        dragging = false;
+      }
+      btn.addEventListener('mousedown', start);
+      btn.addEventListener('touchstart', start, { passive: true });
+      window.addEventListener('mousemove', move, { passive: false });
+      window.addEventListener('touchmove', move, { passive: false });
+      window.addEventListener('mouseup', end);
+      window.addEventListener('touchend', end);
+      window.addEventListener('resize', function () { applyPosition(savedTop); });
+      applyPosition(savedTop);
+    }
     function startClock() {
       updateClock();
       setInterval(updateClock, 1000);
@@ -1031,24 +1100,35 @@
     }
 
     function fillSalesDefaults(result) {
-      var venues = result && result.venueOptions ? result.venueOptions : ['\u6587\u6210\u6703\u9928'];
-      var counters = result && result.counterOptions ? result.counterOptions : ['\u5c1a\u9752','\u4f73\u5927','\u6587\u8ce2','\u4ec1\u5fb7','\u591c\u5e02A28','\u5c0f\u5317','\u6b66\u8056','\u5927\u6771','\u6c38\u5927','\u5b89\u897f','\u5e73\u7b49','\u725b\u589f','\u5584\u5316','\u5fa9\u83ef','\u5927\u76ca','\u4e2d\u5dde\u5bee','\u65b0\u5e02','\u570b\u5b85','\u6a3a\u8c37','\u82b1\u5712','\u6021\u5b89','\u6c34\u4ed9\u5bae'];
-      byId('salesOwnerInput').value = result && result.displayName ? result.displayName : (LINE_PROFILE.displayName || '');
-      fillSelect('salesVenueInput', venues, byId('salesVenueInput').value || venues[0], '\u8acb\u9078\u64c7');
-      fillSelect('salesCounterInput', counters, byId('salesCounterInput').value || '', '\u8acb\u9078\u64c7');
+      var venues = result && result.venueOptions ? result.venueOptions : ['文成會館'];
+      var counters = result && result.counterOptions ? result.counterOptions : ['尚青','佳大','文賢','仁德','夜市A28','小北','武聖','大東','永大','安西','平等','牛墟','善化','復華','大益','中州寮','新市','國宅','樺谷','花園','怡安','水仙宮'];
+      byId('salesOwnerInput').value = result && result.currentUserName ? result.currentUserName : (LINE_PROFILE.displayName || '');
+      fillSelect('salesVenueInput', venues, byId('salesVenueInput').value || '', '不選會館');
+      fillSelect('salesCounterInput', counters, byId('salesCounterInput').value || '', '不選專櫃');
+      renderSalesPersonPicker(result || {});
     }
 
-    function isSalesSuperAdmin() {
-      return String(LINE_PROFILE.userId || '') === 'Uaf7dfcd798ac46ede7c3bac25cdd2f50';
+    function renderSalesPersonPicker(result) {
+      var wrap = byId('salesPersonWrap');
+      var select = byId('salesPersonSelect');
+      if (!wrap || !select) return;
+      if (!result.canViewAll) {
+        wrap.classList.remove('active');
+        select.innerHTML = '';
+        return;
+      }
+      var selected = result.selectedUserId || select.value || '';
+      select.innerHTML = '';
+      select.appendChild(new Option('全部登記人', ''));
+      (result.peopleOptions || []).forEach(function (person) {
+        select.appendChild(new Option(person.name || '未命名', person.userId || ''));
+      });
+      select.value = selected;
+      wrap.classList.add('active');
     }
 
-    function normalizeFrontendSalesTech(value) {
-      var text = String(value || '').replace(/\s+/g, '');
-      var match = text.match(/^(?:\u7f8e\u5bb9\u5e2b|\u652f\u63f4\u6280\u5e2b)[\uFF08(](.+?)[\uFF09)]$/);
-      if (match) text = String(match[1] || '').replace(/\s+/g, '');
-      if (text === '\u6587\u8431') return '\u96ef\u8431';
-      if (text === '\u66fc\u73b2') return '\u66fc\u7433';
-      return text;
+    function getSalesTargetUserId() {
+      return byId('salesPersonSelect') && byId('salesPersonWrap').classList.contains('active') ? byId('salesPersonSelect').value : '';
     }
 
     function loadMyMonthlySales() {
@@ -1061,7 +1141,7 @@
         byId('salesArea').innerHTML = '<div class="slotBox empty">' + T.backendFail + '</div>';
         return;
       }
-      apiCall('getMyMonthlySales', { month: month }, renderMyMonthlySales, function (err) {
+      apiCall('getMyMonthlySales', { month: month, targetUserId: getSalesTargetUserId() }, renderMyMonthlySales, function (err) {
         showPanelMessage('salesMessage', err, true);
         byId('salesArea').innerHTML = '';
         if (byId('salesDetailArea')) byId('salesDetailArea').innerHTML = '';
@@ -1074,45 +1154,72 @@
       if (result.month) byId('salesMonthInput').value = result.month;
       var monthText = String(result.month || byId('salesMonthInput').value || '').replace('-', '/');
       var stats = [
-        ['\u672c\u6708\u696d\u7e3e', '$' + formatMoney(result.total || 0)],
-        ['\u696d\u7e3e\u7b46\u6578', formatMoney(result.count || 0) + ' \u7b46'],
-        ['\u6263\u5e95\u5f8c\u91d1\u984d', '$' + formatMoney(result.bonusBase || 0)],
-        ['\u734e\u91d1\u6bd4\u4f8b', Math.round(Number(result.rate || 0) * 100) + '%'],
-        ['\u5be6\u969b\u734e\u91d1', '$' + formatMoney(result.bonus || 0)],
-        ['\u9810\u4f30\u5be6\u9818', '$' + formatMoney(result.estimatedPay || 0)]
+        ['本月業績', '$' + formatMoney(result.total || 0)],
+        ['業績筆數', formatMoney(result.count || 0) + ' 筆'],
+        ['扣底後金額', '$' + formatMoney(result.bonusBase || 0)],
+        ['獎金比例', Math.round(Number(result.rate || 0) * 100) + '%'],
+        ['實際獎金', '$' + formatMoney(result.bonus || 0)],
+        ['預估實領', '$' + formatMoney(result.estimatedPay || 0)]
       ].map(function (item) {
         return '<div class="salesStat"><div class="salesStatLabel">' + escapeHtml(item[0]) + '</div><div class="salesStatValue">' + escapeHtml(item[1]) + '</div></div>';
       }).join('');
       var details = result.details || [];
       var detailHtml = details.length ? '<div class="salesDetailList">' + details.map(function (row) {
-        return '<button class="salesDetailItem" type="button" data-sales-row="' + escapeHtml(row.rowNumber || '') + '"><div class="salesDetailMain">' + escapeHtml(String(row.date || '').replace(/-/g, '/') + '　$' + formatMoney(row.amount || 0)) + '</div><div class="salesDetailSub">\u6703\u9928\uff1a' + escapeHtml(row.venue || '') + '<br>\u5c08\u6ac3\uff1a' + escapeHtml(row.counter || '') + '<br>\u767b\u8a18\u8005\uff1a' + escapeHtml(row.createdBy || '') + '<br>\u9ede\u6211\u4fee\u6539\u9019\u7b46</div></button>';
-      }).join('') + '</div>' : '<div class="slotBox empty">\u672c\u6708\u5c1a\u7121\u696d\u7e3e\u8cc7\u6599</div>';
-      byId('salesArea').innerHTML = '<div class="headcountHero"><div class="headcountTotal">' + escapeHtml(result.displayName || result.staff || '') + '</div><div class="headcountTotalLabel">' + escapeHtml(monthText) + ' \u696d\u7e3e\u7d71\u8a08</div></div><div class="salesStats">' + stats + '</div>';
-      byId('salesDetailArea').innerHTML = '<div class="headcountDetailTitle">\u672c\u6708\u6bcf\u4e00\u7b46\u8cc7\u6599</div>' + detailHtml;
+        var place = row.venue ? ('會館：' + row.venue) : ('專櫃：' + (row.counter || ''));
+        return '<button class="salesDetailItem" type="button" data-sales-row="' + escapeHtml(row.rowNumber || '') + '"><div class="salesDetailMain">' + escapeHtml(String(row.date || '').replace(/-/g, '/') + '　$' + formatMoney(row.amount || 0)) + '</div><div class="salesDetailSub">' + escapeHtml(place) + '<br>登記者：' + escapeHtml(row.createdBy || '') + '<br>操作時間：' + escapeHtml(row.createdAt || '') + '<br>點我修改或刪除這筆</div></button>';
+      }).join('') + '</div>' : '<div class="slotBox empty">本月尚無業績資料</div>';
+      byId('salesArea').innerHTML = '<div class="headcountHero"><div class="headcountTotal">' + escapeHtml(result.displayName || result.staff || '') + '</div><div class="headcountTotalLabel">' + escapeHtml(monthText) + ' 業績統計</div></div><div class="salesStats">' + stats + '</div>';
+      byId('salesDetailArea').innerHTML = '<div class="headcountDetailTitle">本月每一筆資料</div>' + detailHtml;
       window.SALES_DETAILS = details;
       Array.prototype.forEach.call(document.querySelectorAll('[data-sales-row]'), function (btn) {
         btn.onclick = function () { editMonthlySale(Number(btn.getAttribute('data-sales-row'))); };
       });
     }
 
+    function validateMonthlySaleForm() {
+      clearSalesFieldErrors();
+      var date = byId('salesDateInput').value;
+      var amountText = String(byId('salesAmountInput').value || '').trim();
+      var venue = byId('salesVenueInput').value;
+      var counter = byId('salesCounterInput').value;
+      if (!date) return showSalesFieldError('salesDateInput', '請選擇日期');
+      if (amountText === '' || isNaN(Number(amountText))) return showSalesFieldError('salesAmountInput', '請輸入業績金額，負數也可以');
+      if (!venue && !counter) return showSalesFieldError('salesVenueInput', '請選擇會館或專櫃其中一個');
+      if (venue && counter) return showSalesFieldError('salesCounterInput', '會館與專櫃只能擇一，請清除其中一個');
+      return true;
+    }
+
+    function showSalesFieldError(id, message) {
+      markFieldError(id);
+      showPanelMessage('salesMessage', message, true);
+      var el = byId(id);
+      var target = getFieldWrapper(el);
+      if (target && target.scrollIntoView) target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      setTimeout(function () { if (el && el.focus) el.focus(); }, 350);
+      return false;
+    }
+
+    function clearSalesFieldError(id) { clearFieldError(id); }
+    function clearSalesFieldErrors() {
+      ['salesDateInput','salesAmountInput','salesVenueInput','salesCounterInput'].forEach(clearFieldError);
+    }
+
     function createMyMonthlySale() {
       clearBox('salesMessage');
+      if (!validateMonthlySaleForm()) return;
       var data = {
         rowNumber: window.SALES_EDIT_ROW_NUMBER || '',
         date: byId('salesDateInput').value,
         amount: byId('salesAmountInput').value,
         venue: byId('salesVenueInput').value,
-        counter: byId('salesCounterInput').value
+        counter: byId('salesCounterInput').value,
+        targetUserId: getSalesTargetUserId()
       };
-      if (!data.date || !data.amount || !data.venue || !data.counter) {
-        showPanelMessage('salesMessage', '\u8acb\u586b\u5beb\u65e5\u671f\u3001\u696d\u7e3e\u91d1\u984d\u3001\u6703\u9928\u8207\u5c08\u6ac3', true);
-        return;
-      }
-      showPanelMessage('salesMessage', '\u5132\u5b58\u4e2d...', false);
+      showPanelMessage('salesMessage', '儲存中...', false);
       apiCall(window.SALES_EDIT_ROW_NUMBER ? 'updateMyMonthlySale' : 'createMyMonthlySale', data, function (result) {
         byId('salesAmountInput').value = '';
         resetSalesForm(false);
-        showPanelMessage('salesMessage', '\u2705 \u696d\u7e3e\u5df2\u5132\u5b58', false);
+        showPanelMessage('salesMessage', '✅ 業績已儲存', false);
         renderMyMonthlySales(result);
       }, function (err) {
         showPanelMessage('salesMessage', err, true);
@@ -1123,25 +1230,40 @@
       var rows = window.SALES_DETAILS || [];
       var row = rows.filter(function (item) { return Number(item.rowNumber) === Number(rowNumber); })[0];
       if (!row) return;
+      clearSalesFieldErrors();
       window.SALES_EDIT_ROW_NUMBER = Number(row.rowNumber);
-      byId('salesFormTitle').textContent = '\u4fee\u6539\u696d\u7e3e';
+      byId('salesFormTitle').textContent = '修改業績';
       byId('salesDateInput').value = String(row.date || '').replace(/\//g, '-');
       byId('salesAmountInput').value = Number(row.amount || 0);
       byId('salesVenueInput').value = row.venue || '';
       byId('salesCounterInput').value = row.counter || '';
-      byId('salesCreateBtn').textContent = '\u5132\u5b58\u4fee\u6539';
+      byId('salesCreateBtn').textContent = '修改業績';
+      byId('salesDeleteBtn').style.display = '';
       byId('salesCancelEditBtn').style.display = '';
       byId('salesDateInput').scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
 
+    function deleteMonthlySale() {
+      if (!window.SALES_EDIT_ROW_NUMBER) return;
+      if (!window.confirm('確定要刪除這筆業績嗎？')) return;
+      clearBox('salesMessage');
+      showPanelMessage('salesMessage', '刪除中...', false);
+      apiCall('deleteMyMonthlySale', { rowNumber: window.SALES_EDIT_ROW_NUMBER, month: byId('salesMonthInput').value, targetUserId: getSalesTargetUserId() }, function (result) {
+        resetSalesForm(false);
+        showPanelMessage('salesMessage', '✅ 業績已刪除', false);
+        renderMyMonthlySales(result);
+      }, function (err) { showPanelMessage('salesMessage', err, true); });
+    }
+
     function resetSalesForm(clearMessage) {
       window.SALES_EDIT_ROW_NUMBER = 0;
-      if (byId('salesFormTitle')) byId('salesFormTitle').textContent = '\u65b0\u589e\u696d\u7e3e';
-      if (byId('salesCreateBtn')) byId('salesCreateBtn').textContent = '\u5132\u5b58\u696d\u7e3e';
+      clearSalesFieldErrors();
+      if (byId('salesFormTitle')) byId('salesFormTitle').textContent = '新增業績';
+      if (byId('salesCreateBtn')) byId('salesCreateBtn').textContent = '儲存業績';
+      if (byId('salesDeleteBtn')) byId('salesDeleteBtn').style.display = 'none';
       if (byId('salesCancelEditBtn')) byId('salesCancelEditBtn').style.display = 'none';
       if (clearMessage !== false) clearBox('salesMessage');
     }
-
     function formatMoney(value) {
       var n = Number(value || 0);
       return Math.round(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
@@ -1402,6 +1524,7 @@
       document.body.classList.remove('reportShotMode');
       document.body.classList.remove('headcountOnly');
       document.body.classList.remove('scheduleOnly');
+      document.body.classList.remove('salesOnly');
       byId('reportPanel').classList.remove('active');
       byId('adminPanel').classList.remove('active');
       if (byId('portalConstructionPanel')) byId('portalConstructionPanel').classList.remove('active');
@@ -1417,6 +1540,7 @@
         if (tabBtn) tabBtn.classList.remove('active');
         if (panel) panel.classList.remove('active');
       });
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     function showConstructionPage(title, text) {
@@ -1918,7 +2042,6 @@
       document.body.classList.remove('headcountOnly');
       document.body.classList.remove('scheduleOnly');
       document.body.classList.remove('salesOnly');
-      if (!canManageBookings()) { denyManageAction('message'); return; }
       document.body.classList.add('reportShotMode');
       ['book','cancel','summary','query'].forEach(function (tab) {
         var tabBtn = byId('tab' + cap(tab));
