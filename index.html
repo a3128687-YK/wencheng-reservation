@@ -359,14 +359,14 @@
       gap: 1px;
     }
     .reportPanel .summaryCell {
-      height: 24px;
-      min-height: 24px;
-      padding: 1px 0 2px;
+      height: 28px;
+      min-height: 28px;
+      padding: 1px 0 3px;
       border-radius: 4px;
       border-width: 1px;
     }
     .reportPanel .summaryTime { font-size: clamp(5px, 1.28vw, 6.5px); font-weight: 950; margin-bottom: 0; line-height: 1; white-space: nowrap; overflow: hidden; text-align: center; }
-    .reportPanel .summaryDetail { font-size: clamp(4.6px, 1.1vw, 5.6px); font-weight: 950; line-height: 1.08; text-align: center; overflow: hidden; word-break: keep-all; display: grid; gap: 1px; }
+    .reportPanel .summaryDetail { font-size: clamp(4.6px, 1.1vw, 5.6px); font-weight: 950; line-height: 1.08; text-align: center; overflow: hidden; word-break: keep-all; display: grid; gap: 1px; margin-top: 3px; }
     .reportPanel .reportMark { display: block; font-size: 1.08em; line-height: 1; }
     .reportPanel .reportTech { display: block; font-size: .94em; line-height: 1; }
     .reportShotMode .hero,
@@ -379,7 +379,7 @@
     @media (min-width: 560px) { .summaryGrid { grid-template-columns: repeat(5, minmax(0, 1fr)); } }
     @media (max-width: 720px) {
       .reportPanel .summaryGrid { grid-template-columns: repeat(12, minmax(0, 1fr)); }
-      .reportPanel .summaryCell { height: 24px; min-height: 24px; }
+      .reportPanel .summaryCell { height: 28px; min-height: 28px; }
     }
     .summaryTime { font-size: clamp(7px, 1.95vw, 11px); margin-bottom: 4px; line-height: 1.05; font-weight: 950; white-space: nowrap; letter-spacing: 0; }
     .summaryDetail { font-size: clamp(7px, 2vw, 10px); line-height: 1.14; font-weight: 950; word-break: break-word; overflow-wrap: anywhere; }
@@ -1465,11 +1465,13 @@
     function openServicesDeleteConfirm(row) {
       closeMonthlySaleReview();
       var wrap = document.createElement('div');
+      wrap.id = 'monthlySaleReviewOverlay';
       wrap.className = 'cancelConfirmOverlay monthlySaleReview';
       wrap.innerHTML = '<div class="cancelConfirmCard bookingDetailCard cancelledStatus"><div class="cancelConfirmTitle">⚠️ 確定要刪除這筆服務資料嗎？</div><div class="cancelConfirmText">' + buildServicesDeleteText(row) + '</div><div class="cancelConfirmActions"><button class="btn cancelConfirmYes" id="servicesDeleteYes" type="button">確認刪除</button><button class="btn cancelConfirmNo" id="servicesDeleteNo" type="button">返回</button></div></div>';
       document.body.appendChild(wrap);
       byId('servicesDeleteYes').onclick = function () { closeMonthlySaleReview(); performServicesDelete(row); };
       byId('servicesDeleteNo').onclick = closeMonthlySaleReview;
+      wrap.onclick = function (event) { if (event.target === wrap) closeMonthlySaleReview(); };
     }
 
     function buildServicesDeleteText(row) {
