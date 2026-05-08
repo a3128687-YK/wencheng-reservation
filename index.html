@@ -204,6 +204,10 @@
       box-shadow: 0 10px 26px rgba(0,0,0,.18);
       border: 1px solid rgba(255,255,255,.34);
       backdrop-filter: blur(5px);
+      -webkit-user-select: none;
+      user-select: none;
+      -webkit-touch-callout: none;
+      touch-action: none;
     }
     body.headcountOnly .modeSwitcher,
     body.headcountOnly .homeTabs,
@@ -400,7 +404,11 @@
     .salesDetailSub { margin-top: 6px; font-size: clamp(15px, 3.3vw, 20px); font-weight: 800; color: var(--muted); line-height: 1.45; }
     .salesAdminPicker { display: none; margin-top: 10px; }
     .salesAdminPicker.active { display: block; }
+    .salesActionToggles { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 16px 0; }
+    .salesActionToggles .btn { min-height: 68px; font-size: clamp(20px, 4vw, 30px); }
+    .salesFormBox.collapsed, #salesDetailArea.collapsed { display: none; }
     .salesEditActions { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-top: 18px; }
+    .salesEditActions .btn { min-height: 58px; font-size: clamp(16px, 3.5vw, 23px); padding: 8px 6px; line-height: 1.15; }
     .salesDeleteBtn { background: #b33a3a !important; }
     .topFloatBtn.dragReady { box-shadow: 0 0 0 5px rgba(76,127,105,.22), 0 10px 26px rgba(0,0,0,.18); }
     .topFloatBtn.dragging { opacity: .86; transition: none; }
@@ -780,7 +788,7 @@
           '<section class="panel reportPanel" id="reportPanel"><button class="btn reportBack" id="reportBackBtn" type="button">\u8fd4\u56de\u9996\u9801</button><div class="sectionTitle">\u623f\u9593\u5831\u8868</div><div class="reportControls"><div><label for="reportDateInput">\u5831\u8868\u65e5\u671f</label><input id="reportDateInput" type="date"></div><button class="btn refresh" id="reportSearchBtn" type="button">\u67e5\u8a62</button></div><div class="sectionNote" id="reportDateText">\u8f09\u5165\u4e2d...</div><div id="reportArea"></div></section>',
           '<section class="panel" id="techHeadcountPanel"><button class="btn headcountBack" id="headcountHomeBtn" type="button">\u8fd4\u56de\u9996\u9801</button><div class="sectionTitle">\u7f8e\u6280\u4eba\u982d\u8a08\u7b97</div><div class="sectionNote">\u53ea\u986f\u793a\u7f8e\u537f\u3001\u96ef\u8431\u3001\u839b\u7a4e\u3001\u4f73\u59a4\u3001\u7f8e\u73b2\u3001\u66fc\u7433\uff1b\u4f9d\u670d\u52d9\u65e5\u671f\u7d71\u8a08\u7576\u6708\u6709\u6548\u9810\u7d04\u3002</div><div class="summaryControls"><div><label for="headcountMonthInput">\u67e5\u8a62\u6708\u4efd</label><input id="headcountMonthInput" type="month"></div><button class="btn refresh" id="headcountSearchBtn" type="button">\u67e5\u8a62</button></div><div id="headcountMessage" class="message"></div><div id="headcountArea"></div><div id="headcountDetailArea"></div></section>',
           '<section class="panel" id="techSchedulePanel"><button class="btn headcountBack" id="scheduleHomeBtn" type="button">\u8fd4\u56de\u9996\u9801</button><div class="sectionTitle">\u7f8e\u6280\u73ed\u8868</div><div class="sectionNote">\u6ac3\u9577\u54c1\u85df\u8207\u516d\u4f4d\u6280\u5e2b\u7576\u6708\u73ed\u8868\uff1b\u7a7a\u767d\u4ee3\u8868\u6b63\u5e38\u4e0a\u73ed\uff0c\u7e3d\u8868\u53ea\u986f\u793a\u7c21\u5beb\uff1a\u4f8b\u3001\u7279\u3001\u4e8b\u3001\u98b1\u3001\u66e0\u3001\u503c\u3002</div><div class="summaryControls"><div><label for="scheduleMonthInput">\u67e5\u8a62\u6708\u4efd</label><input id="scheduleMonthInput" type="month"></div><button class="btn refresh" id="scheduleSearchBtn" type="button">\u67e5\u8a62</button></div><button class="btn scheduleEditToggle" id="scheduleEditToggleBtn" type="button">\u2699\ufe0f \u8a2d\u5b9a\u73ed\u8868</button><div id="scheduleMessage" class="message"></div><div id="scheduleArea"></div><div id="scheduleDetailArea"></div><div id="scheduleEditBox" class="scheduleEditBox"><div class="sectionNote">\u54c1\u85df\u8207\u7ba1\u7406\u54e1\u53ef\u8a2d\u5b9a\u73ed\u8868</div><div class="grid"><div><label for="scheduleEditStaff">\u4eba\u54e1</label><select id="scheduleEditStaff"></select></div><div class="wide"><label>\u65e5\u671f\uff08\u53ef\u8907\u9078\uff09</label><div id="scheduleCalendar" class="scheduleCalendar"></div><input id="scheduleEditDates" type="hidden"></div><div><label for="scheduleEditStatus">\u72c0\u614b</label><select id="scheduleEditStatus"></select></div><div><label for="scheduleEditNote">\u5099\u8a3b</label><input id="scheduleEditNote" type="text"></div></div><button class="btn refresh" id="scheduleSaveBtn" type="button">\u5132\u5b58\u73ed\u8868</button></div></section>',
-          '<section class="panel" id="myMonthlySalesPanel"><button class="btn headcountBack" id="salesHomeBtn" type="button">返回首頁</button><div class="sectionTitle">個人當月業績</div><div class="sectionNote">依你原本 Excel「業績累計」邏輯計算：業績加總、扣底、級距獎金比例與預估實領。</div><div class="summaryControls"><div><label for="salesMonthInput">查詢月份</label><input id="salesMonthInput" type="month"></div><button class="btn refresh" id="salesSearchBtn" type="button">查詢</button></div><div class="salesAdminPicker" id="salesPersonWrap"><label for="salesPersonSelect">查詢人員</label><select id="salesPersonSelect"></select></div><div id="salesMessage" class="message"></div><div id="salesArea"></div><div class="salesFormBox"><div class="sectionTitle" id="salesFormTitle">新增業績</div><div class="grid"><div><label for="salesOwnerInput">登入者</label><input id="salesOwnerInput" type="text" readonly></div><div><label for="salesDateInput">日期</label><input id="salesDateInput" type="date"></div><div><label for="salesAmountInput">業績金額</label><input id="salesAmountInput" type="number" step="1" inputmode="numeric"></div><div><label for="salesVenueInput">會館</label><select id="salesVenueInput"></select></div><div><label for="salesCounterInput">專櫃</label><select id="salesCounterInput"></select></div></div><div class="salesEditActions"><button class="btn refresh" id="salesCreateBtn" type="button">儲存業績</button><button class="btn salesDeleteBtn" id="salesDeleteBtn" type="button">刪除業績</button><button class="btn reset" id="salesCancelEditBtn" type="button">取消編輯</button></div></div><div id="salesDetailArea"></div></section>',        '</main><button class="topFloatBtn" id="topFloatBtn" type="button">TOP</button>'
+          '<section class="panel" id="myMonthlySalesPanel"><button class="btn headcountBack" id="salesHomeBtn" type="button">返回首頁</button><div class="sectionTitle">個人當月業績</div><div class="sectionNote">依你原本 Excel「業績累計」邏輯計算：業績加總、扣底、級距獎金比例與預估實領。</div><div id="salesArea"></div><div class="summaryControls"><div><label for="salesMonthInput">查詢月份</label><input id="salesMonthInput" type="month"></div><button class="btn refresh" id="salesSearchBtn" type="button">查詢</button></div><div class="salesAdminPicker" id="salesPersonWrap"><label for="salesPersonSelect">查詢人員</label><select id="salesPersonSelect"></select></div><div id="salesMessage" class="message"></div><div class="salesActionToggles"><button class="btn refresh" id="salesAddToggleBtn" type="button">新增業績</button><button class="btn reset" id="salesListToggleBtn" type="button">本月業績一覽</button></div><div class="salesFormBox collapsed" id="salesFormBox"><div class="sectionTitle" id="salesFormTitle">新增業績</div><div class="grid"><div><label for="salesOwnerInput">登入者</label><input id="salesOwnerInput" type="text" readonly></div><div><label for="salesDateInput">日期</label><input id="salesDateInput" type="date"></div><div><label for="salesAmountInput">業績金額</label><input id="salesAmountInput" type="text" inputmode="decimal" pattern="-?[0-9,]*"></div><div><label for="salesVenueInput">會館</label><select id="salesVenueInput"></select></div><div><label for="salesCounterInput">專櫃</label><select id="salesCounterInput"></select></div></div><div class="salesEditActions"><button class="btn refresh" id="salesCreateBtn" type="button">儲存業績</button><button class="btn salesDeleteBtn" id="salesDeleteBtn" type="button">刪除業績</button><button class="btn reset" id="salesCancelEditBtn" type="button">取消編輯</button></div></div><div id="salesDetailArea" class="collapsed"></div></section>',        '</main><button class="topFloatBtn" id="topFloatBtn" type="button">TOP</button>'
       ].join('');
 
       document.querySelector('main.page').insertAdjacentHTML('beforeend', '<section class="panel" id="portalConstructionPanel"><button class="btn headcountBack" id="constructionHomeBtn" type="button">\u8fd4\u56de\u9996\u9801</button><div class="sectionTitle" id="constructionTitle">\u529f\u80fd\u5efa\u7f6e\u4e2d</div><div class="sectionNote" id="constructionText">\u9019\u500b\u529f\u80fd\u6b63\u5728\u65bd\u5de5\u4e2d\uff0c\u5b8c\u6210\u5f8c\u5c31\u6703\u958b\u653e\u4f7f\u7528\u3002</div><div class="slotBox empty">\u2692\ufe0f<br>\u65bd\u5de5\u4e2d</div></section>');
@@ -834,6 +842,8 @@
       byId('headcountHomeBtn').onclick = showHome;
       byId('salesHomeBtn').onclick = showHome;
       byId('salesSearchBtn').onclick = loadMyMonthlySales;
+      byId('salesAddToggleBtn').onclick = toggleSalesForm;
+      byId('salesListToggleBtn').onclick = toggleSalesDetails;
       byId('salesMonthInput').onchange = loadMyMonthlySales;
       byId('salesPersonSelect').onchange = loadMyMonthlySales;
       byId('salesVenueInput').onchange = function () { if (this.value) byId('salesCounterInput').value = ''; clearSalesFieldError('salesVenueInput'); clearSalesFieldError('salesCounterInput'); };
@@ -855,6 +865,7 @@
       var btn = byId('topFloatBtn');
       if (!btn) return;
       var holdTimer = null;
+      var pressing = false;
       var dragging = false;
       var moved = false;
       var side = localStorage.getItem('topFloatSide') || 'right';
@@ -872,7 +883,9 @@
       function pointY(event) { return event.touches && event.touches.length ? event.touches[0].clientY : event.clientY; }
       function pointX(event) { return event.touches && event.touches.length ? event.touches[0].clientX : event.clientX; }
       function start(event) {
+        pressing = true;
         moved = false;
+        if (event && event.cancelable) event.preventDefault();
         clearTimeout(holdTimer);
         holdTimer = setTimeout(function () {
           dragging = true;
@@ -889,6 +902,8 @@
         applyPosition(savedTop);
       }
       function end() {
+        if (!pressing) return;
+        pressing = false;
         clearTimeout(holdTimer);
         btn.classList.remove('dragReady');
         btn.classList.remove('dragging');
@@ -901,7 +916,7 @@
         dragging = false;
       }
       btn.addEventListener('mousedown', start);
-      btn.addEventListener('touchstart', start, { passive: true });
+      btn.addEventListener('touchstart', start, { passive: false });
       window.addEventListener('mousemove', move, { passive: false });
       window.addEventListener('touchmove', move, { passive: false });
       window.addEventListener('mouseup', end);
@@ -1093,6 +1108,8 @@
       byId('myMonthlySalesPanel').classList.add('active');
       fillSalesDefaults();
       resetSalesForm(false);
+      collapseSalesForm();
+      collapseSalesDetails();
       if (!byId('salesMonthInput').value) byId('salesMonthInput').value = currentMonthValue();
       if (!byId('salesDateInput').value) setToday('salesDateInput');
       loadMyMonthlySales();
@@ -1169,13 +1186,55 @@
         return '<button class="salesDetailItem" type="button" data-sales-row="' + escapeHtml(row.rowNumber || '') + '"><div class="salesDetailMain">' + escapeHtml(String(row.date || '').replace(/-/g, '/') + '　$' + formatMoney(row.amount || 0)) + '</div><div class="salesDetailSub">' + escapeHtml(place) + '<br>登記者：' + escapeHtml(row.createdBy || '') + '<br>操作時間：' + escapeHtml(row.createdAt || '') + '<br>點我修改或刪除這筆</div></button>';
       }).join('') + '</div>' : '<div class="slotBox empty">本月尚無業績資料</div>';
       byId('salesArea').innerHTML = '<div class="headcountHero"><div class="headcountTotal">' + escapeHtml(result.displayName || result.staff || '') + '</div><div class="headcountTotalLabel">' + escapeHtml(monthText) + ' 業績統計</div></div><div class="salesStats">' + stats + '</div>';
-      byId('salesDetailArea').innerHTML = '<div class="headcountDetailTitle">本月每一筆資料</div>' + detailHtml;
+      byId('salesDetailArea').innerHTML = '<div class="headcountDetailTitle">本月業績一覽</div>' + detailHtml;
       window.SALES_DETAILS = details;
       Array.prototype.forEach.call(document.querySelectorAll('[data-sales-row]'), function (btn) {
         btn.onclick = function () { editMonthlySale(Number(btn.getAttribute('data-sales-row'))); };
       });
     }
 
+    function expandSalesForm() {
+      var box = byId('salesFormBox');
+      if (box) box.classList.remove('collapsed');
+    }
+
+    function collapseSalesForm() {
+      var box = byId('salesFormBox');
+      if (box) box.classList.add('collapsed');
+    }
+
+    function toggleSalesForm() {
+      var box = byId('salesFormBox');
+      if (!box) return;
+      if (box.classList.contains('collapsed')) {
+        resetSalesForm(false);
+        expandSalesForm();
+        byId('salesDateInput').scrollIntoView({ behavior: 'smooth', block: 'center' });
+      } else {
+        collapseSalesForm();
+      }
+    }
+
+    function expandSalesDetails() {
+      var box = byId('salesDetailArea');
+      if (box) box.classList.remove('collapsed');
+    }
+
+    function collapseSalesDetails() {
+      var box = byId('salesDetailArea');
+      if (box) box.classList.add('collapsed');
+    }
+
+    function toggleSalesDetails() {
+      var box = byId('salesDetailArea');
+      if (!box) return;
+      if (box.classList.contains('collapsed')) {
+        expandSalesDetails();
+        box.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      } else {
+        collapseSalesDetails();
+      }
+    }
     function validateMonthlySaleForm() {
       clearSalesFieldErrors();
       var date = byId('salesDateInput').value;
@@ -1207,7 +1266,12 @@
     function createMyMonthlySale() {
       clearBox('salesMessage');
       if (!validateMonthlySaleForm()) return;
-      var data = {
+      var data = collectMonthlySaleData();
+      openMonthlySaleReview(data);
+    }
+
+    function collectMonthlySaleData() {
+      return {
         rowNumber: window.SALES_EDIT_ROW_NUMBER || '',
         date: byId('salesDateInput').value,
         amount: byId('salesAmountInput').value,
@@ -1215,17 +1279,64 @@
         counter: byId('salesCounterInput').value,
         targetUserId: getSalesTargetUserId()
       };
-      showPanelMessage('salesMessage', '儲存中...', false);
+    }
+
+    function openMonthlySaleReview(data) {
+      closeMonthlySaleReview();
+      var wrap = document.createElement('div');
+      wrap.id = 'monthlySaleReviewOverlay';
+      wrap.className = 'cancelConfirmOverlay';
+      wrap.innerHTML = '<div class="cancelConfirmCard bookingReviewCard"><div class="cancelConfirmTitle">請確認業績資料是否正確</div><div class="cancelConfirmText">' + buildMonthlySaleReviewText(data) + '</div><div class="cancelConfirmActions"><button class="btn" id="monthlySaleReviewYes" type="button">確定儲存</button><button class="btn cancelConfirmNo" id="monthlySaleReviewNo" type="button">返回修改</button></div></div>';
+      document.body.appendChild(wrap);
+      byId('monthlySaleReviewYes').onclick = function () { closeMonthlySaleReview(); performMonthlySaleSave(data); };
+      byId('monthlySaleReviewNo').onclick = closeMonthlySaleReview;
+      wrap.onclick = function (event) { if (event.target === wrap) closeMonthlySaleReview(); };
+    }
+
+    function closeMonthlySaleReview() {
+      var old = document.getElementById('monthlySaleReviewOverlay');
+      if (old) old.remove();
+    }
+
+    function buildMonthlySaleReviewText(data) {
+      var place = data.venue ? ('會館：' + data.venue) : ('專櫃：' + data.counter);
+      return [
+        '日期：' + String(data.date || '').replace(/-/g, '/'),
+        '業績金額：$' + formatMoney(Number(String(data.amount || '').replace(/,/g, '')) || 0),
+        place,
+        '登記者：' + (byId('salesOwnerInput').value || LINE_PROFILE.displayName || '')
+      ].map(escapeHtml).join('\n');
+    }
+
+    function performMonthlySaleSave(data) {
+      showMonthlySaleProgress('儲存中...');
       apiCall(window.SALES_EDIT_ROW_NUMBER ? 'updateMyMonthlySale' : 'createMyMonthlySale', data, function (result) {
+        closeMonthlySaleProgress();
         byId('salesAmountInput').value = '';
         resetSalesForm(false);
         showPanelMessage('salesMessage', '✅ 業績已儲存', false);
         renderMyMonthlySales(result);
       }, function (err) {
+        closeMonthlySaleProgress();
         showPanelMessage('salesMessage', err, true);
       });
     }
 
+    function showMonthlySaleProgress(text) {
+      var old = document.getElementById('monthlySaleProgressOverlay');
+      if (!old) {
+        old = document.createElement('div');
+        old.id = 'monthlySaleProgressOverlay';
+        old.className = 'cancelConfirmOverlay';
+        document.body.appendChild(old);
+      }
+      old.innerHTML = '<div class="cancelConfirmCard bookingSuccessCard"><div class="cancelConfirmTitle">' + escapeHtml(text) + '</div></div>';
+    }
+
+    function closeMonthlySaleProgress() {
+      var old = document.getElementById('monthlySaleProgressOverlay');
+      if (old) old.remove();
+    }
     function editMonthlySale(rowNumber) {
       var rows = window.SALES_DETAILS || [];
       var row = rows.filter(function (item) { return Number(item.rowNumber) === Number(rowNumber); })[0];
@@ -1237,6 +1348,7 @@
       byId('salesAmountInput').value = Number(row.amount || 0);
       byId('salesVenueInput').value = row.venue || '';
       byId('salesCounterInput').value = row.counter || '';
+      expandSalesForm();
       byId('salesCreateBtn').textContent = '修改業績';
       byId('salesDeleteBtn').style.display = '';
       byId('salesCancelEditBtn').style.display = '';
