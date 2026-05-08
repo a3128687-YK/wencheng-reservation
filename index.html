@@ -426,6 +426,23 @@
     .bonusBadge.ok { background: #edf8ef; color: #2f7a4d; }
     .bonusBadge.warn { background: #fff0ed; color: #b43f2f; }
     .bonusFormula { font-size: clamp(13px, 3vw, 17px); color: #76594d; font-weight: 800; line-height: 1.35; }
+    .bonusSettingsBox { margin: 14px 0; padding: 14px; border-radius: 18px; background: rgba(255,250,244,.96); border: 2px solid rgba(214,93,55,.18); box-shadow: 0 10px 24px rgba(96,62,41,.08); }
+    .bonusSettingsTitle { font-size: clamp(18px, 4vw, 24px); font-weight: 950; color: #5b3f32; margin-bottom: 10px; }
+    .bonusRoleGrid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin-bottom: 12px; }
+    .bonusRoleCard { background: #fff; border: 1px solid rgba(91,68,54,.16); border-radius: 14px; padding: 10px; display: grid; gap: 8px; }
+    .bonusRoleCardTitle { font-weight: 950; color: #c35b38; font-size: 18px; }
+    .bonusMiniGrid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+    .bonusStaffRows { display: grid; gap: 8px; }
+    .bonusStaffRow { display: grid; grid-template-columns: 1fr 92px 72px; gap: 8px; align-items: end; background: #fff; border: 1px solid rgba(91,68,54,.14); border-radius: 14px; padding: 8px; }
+    .bonusStaffName { font-weight: 950; color: var(--ink); font-size: clamp(16px, 3.8vw, 20px); padding-bottom: 12px; }
+    .bonusSettingsBox label { font-size: 12px; }
+    .bonusSettingsBox input,
+    .bonusSettingsBox select { min-height: 42px; padding: 8px; font-size: 16px; border-radius: 10px; }
+    .bonusSaveBtn { width: 100%; margin-top: 12px; background: #c85d3e; }
+    @media (max-width: 520px) {
+      .bonusRoleGrid { grid-template-columns: 1fr; }
+      .bonusStaffRow { grid-template-columns: 1fr 84px 66px; }
+    }
     .salesStats { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin: 14px 0; }
     .salesStat { border-radius: 18px; padding: 14px; background: rgba(255,255,255,.95); border: 2px solid rgba(70,126,88,.18); box-shadow: 0 8px 20px rgba(53,82,61,.08); }
     .salesStatLabel { font-size: clamp(14px, 3.2vw, 19px); font-weight: 900; color: var(--muted); }
@@ -1305,14 +1322,59 @@
       var monthText = String(result.month || byId('bonusMonthInput').value || '').replace('-', '/');
       byId('bonusDetailArea').innerHTML = '';
       var stats = '<div class="bonusStats"><div class="bonusStat"><div class="bonusStatValue">$' + formatMoney(result.totalBonus || 0) + '</div><div class="bonusStatLabel">總工獎</div></div><div class="bonusStat"><div class="bonusStatValue">' + formatMoney(result.totalHeads || 0) + '</div><div class="bonusStatLabel">總人頭</div></div><div class="bonusStat"><div class="bonusStatValue">' + formatMoney(result.totalParts || 0) + '</div><div class="bonusStatLabel">計算部位</div></div></div>';
+      var settingsHtml = result.canEdit ? renderBonusSettingsHtml(result) : '';
       var cards = items.map(function (item, index) {
         var ok = Number(item.heads || 0) >= Number(item.targetHeads || 0);
         var cleanOk = item.cleanPass !== false;
         return '<button class="headcountCard bonusCard" type="button" data-bonus-index="' + index + '"><div class="headcountName">' + escapeHtml(item.name || '') + '<span class="bonusBadge">' + escapeHtml(item.role || '') + '</span></div><div class="headcountCount">$' + formatMoney(item.bonusAmount || 0) + '</div><div class="bonusFormula">' + escapeHtml((item.heads || 0) + '/' + (item.targetHeads || 0) + '人｜' + (item.cappedParts || 0) + '/' + (item.partCap || 0) + '部位｜單價' + (item.finalRate || 0)) + '</div><div class="bonusBadgeRow"><span class="bonusBadge ' + (ok ? 'ok' : 'warn') + '">' + (ok ? '已達標' : '未達標') + '</span><span class="bonusBadge ' + (cleanOk ? 'ok' : 'warn') + '">' + (cleanOk ? '清潔通過' : '清潔未通過') + '</span></div></button>';
       }).join('');
-      byId('bonusArea').innerHTML = '<div class="headcountHero"><div class="headcountTotal">' + escapeHtml(monthText) + '</div><div class="headcountTotalLabel">工獎計算到 ' + escapeHtml(String(result.end || '').replace(/-/g, '/')) + '</div></div>' + stats + '<div class="headcountGrid">' + cards + '</div>';
+      byId('bonusArea').innerHTML = '<div class="headcountHero"><div class="headcountTotal">' + escapeHtml(monthText) + '</div><div class="headcountTotalLabel">工獎計算到 ' + escapeHtml(String(result.end || '').replace(/-/g, '/')) + '</div></div>' + stats + settingsHtml + '<div class="headcountGrid">' + cards + '</div>';
+      if (byId('bonusSaveSettingsBtn')) byId('bonusSaveSettingsBtn').onclick = saveBonusSettings;
       Array.prototype.forEach.call(document.querySelectorAll('[data-bonus-index]'), function (btn) {
         btn.onclick = function () { renderBonusDetail(Number(btn.getAttribute('data-bonus-index'))); };
+      });
+    }
+
+    function renderBonusSettingsHtml(result) {
+      var settings = result.monthlySettings || {};
+      function roleCard(role, title) {
+        var s = settings[role] || {};
+        return '<div class="bonusRoleCard" data-bonus-role="' + escapeHtml(role) + '"><div class="bonusRoleCardTitle">' + escapeHtml(title) + '</div><div class="bonusMiniGrid"><div><label>應達人頭</label><input type="number" data-bonus-setting="' + escapeHtml(role) + '|target" value="' + escapeHtml(s.target || '') + '"></div><div><label>部位上限</label><input type="number" data-bonus-setting="' + escapeHtml(role) + '|cap" value="' + escapeHtml(s.cap || '') + '"></div><div><label>基本單價</label><input type="number" data-bonus-setting="' + escapeHtml(role) + '|base" value="' + escapeHtml(s.base || '') + '"></div><div><label>未達扣款</label><input type="number" data-bonus-setting="' + escapeHtml(role) + '|missDeduct" value="' + escapeHtml(s.missDeduct || '') + '"></div><div class="wide"><label>清潔未過扣款</label><input type="number" data-bonus-setting="' + escapeHtml(role) + '|cleanDeduct" value="' + escapeHtml(s.cleanDeduct || '') + '"></div></div></div>';
+      }
+      var staffRows = (result.items || []).map(function (item, index) {
+        return '<div class="bonusStaffRow" data-bonus-staff-row="' + index + '"><div class="bonusStaffName" data-bonus-staff-name="' + escapeHtml(item.name || '') + '">' + escapeHtml(item.name || '') + '</div><div><label>身分</label><select data-bonus-staff-role><option value="美技"' + (item.role === '美技' ? ' selected' : '') + '>美技</option><option value="美助"' + (item.role === '美助' ? ' selected' : '') + '>美助</option></select></div><div><label>清潔</label><select data-bonus-clean><option value="TRUE"' + (item.cleanPass !== false ? ' selected' : '') + '>通過</option><option value="FALSE"' + (item.cleanPass === false ? ' selected' : '') + '>未過</option></select></div></div>';
+      }).join('');
+      return '<div class="bonusSettingsBox"><div class="bonusSettingsTitle">工獎設定</div><div class="sectionNote">管理員可直接在這裡修改當月條件，儲存後會寫入 Google Sheet 並重新計算。</div><div class="bonusRoleGrid">' + roleCard('美技', '美技公式') + roleCard('美助', '美助公式') + '</div><div class="bonusStaffRows">' + staffRows + '</div><button class="btn bonusSaveBtn" id="bonusSaveSettingsBtn" type="button">儲存設定並重新計算</button></div>';
+    }
+
+    function saveBonusSettings() {
+      var month = byId('bonusMonthInput').value || currentMonthValue();
+      var monthlySettings = { '美技': {}, '美助': {} };
+      Array.prototype.forEach.call(document.querySelectorAll('[data-bonus-setting]'), function (input) {
+        var parts = String(input.getAttribute('data-bonus-setting') || '').split('|');
+        if (parts.length !== 2) return;
+        if (!monthlySettings[parts[0]]) monthlySettings[parts[0]] = {};
+        monthlySettings[parts[0]][parts[1]] = Number(input.value || 0);
+      });
+      var staffSettings = [];
+      Array.prototype.forEach.call(document.querySelectorAll('[data-bonus-staff-row]'), function (row, index) {
+        var nameEl = row.querySelector('[data-bonus-staff-name]');
+        var roleEl = row.querySelector('[data-bonus-staff-role]');
+        var cleanEl = row.querySelector('[data-bonus-clean]');
+        staffSettings.push({
+          name: nameEl ? nameEl.getAttribute('data-bonus-staff-name') : '',
+          role: roleEl ? roleEl.value : '美技',
+          cleanPass: cleanEl ? cleanEl.value !== 'FALSE' : true,
+          enabled: true,
+          sort: index + 1
+        });
+      });
+      showPanelMessage('bonusMessage', '儲存中...', false);
+      apiCall('saveBonusCalcSettings', { month: month, monthlySettings: monthlySettings, staffSettings: staffSettings }, function (result) {
+        showPanelMessage('bonusMessage', '設定已儲存，已重新計算', false);
+        renderBonusCalc(result);
+      }, function (err) {
+        showPanelMessage('bonusMessage', err, true);
       });
     }
 
