@@ -419,8 +419,10 @@
     .bonusStatValue { font-size: clamp(20px, 5vw, 34px); font-weight: 950; color: #c35b38; line-height: 1.05; white-space: nowrap; overflow: hidden; text-overflow: clip; }
     .bonusStatLabel { font-size: clamp(12px, 3vw, 17px); font-weight: 900; color: #76594d; }
     .bonusCard { border-color: #f0c7b6; background: linear-gradient(180deg, #fffdf9, #fff5ee); }
+    .bonusCard { position: relative; padding-top: 18px; }
     .bonusCard.active { border-color: #d65d37; box-shadow: 0 0 0 4px rgba(214,93,55,.14); }
     .bonusCard .headcountCount { color: #c35b38; font-size: clamp(24px, 5.6vw, 38px); }
+    .bonusTargetPct { position: absolute; right: 10px; top: 8px; border-radius: 999px; padding: 4px 8px; font-size: 12px; font-weight: 950; color: #b84b31; background: #fff3ec; border: 1px solid rgba(214,93,55,.2); }
     .bonusBadgeRow { display: flex; flex-wrap: wrap; gap: 6px; }
     .bonusBadge { border-radius: 999px; padding: 4px 8px; font-size: 12px; font-weight: 900; background: #fff; border: 1px solid rgba(91,68,54,.18); color: #704f42; }
     .bonusBadge.ok { background: #edf8ef; color: #2f7a4d; }
@@ -1321,14 +1323,14 @@
       var items = result.items || [];
       var monthText = String(result.month || byId('bonusMonthInput').value || '').replace('-', '/');
       byId('bonusDetailArea').innerHTML = '';
-      var stats = '<div class="bonusStats"><div class="bonusStat"><div class="bonusStatValue">$' + formatMoney(result.totalBonus || 0) + '</div><div class="bonusStatLabel">總工獎</div></div><div class="bonusStat"><div class="bonusStatValue">' + formatMoney(result.totalHeads || 0) + '</div><div class="bonusStatLabel">總人頭</div></div><div class="bonusStat"><div class="bonusStatValue">' + formatMoney(result.totalParts || 0) + '</div><div class="bonusStatLabel">計算部位</div></div></div>';
       var settingsHtml = result.canEdit ? renderBonusSettingsHtml(result) : '';
       var cards = items.map(function (item, index) {
         var ok = Number(item.heads || 0) >= Number(item.targetHeads || 0);
         var cleanOk = item.cleanPass !== false;
-        return '<button class="headcountCard bonusCard" type="button" data-bonus-index="' + index + '"><div class="headcountName">' + escapeHtml(item.name || '') + '<span class="bonusBadge">' + escapeHtml(item.role || '') + '</span></div><div class="headcountCount">$' + formatMoney(item.bonusAmount || 0) + '</div><div class="bonusFormula">' + escapeHtml((item.heads || 0) + '/' + (item.targetHeads || 0) + '人｜' + (item.cappedParts || 0) + '/' + (item.partCap || 0) + '部位｜單價' + (item.finalRate || 0)) + '</div><div class="bonusBadgeRow"><span class="bonusBadge ' + (ok ? 'ok' : 'warn') + '">' + (ok ? '已達標' : '未達標') + '</span><span class="bonusBadge ' + (cleanOk ? 'ok' : 'warn') + '">' + (cleanOk ? '清潔通過' : '清潔未通過') + '</span></div></button>';
+        var targetPct = Number(item.targetHeads || 0) ? Math.round(Number(item.heads || 0) / Number(item.targetHeads || 0) * 100) : 0;
+        return '<button class="headcountCard bonusCard" type="button" data-bonus-index="' + index + '"><div class="bonusTargetPct">' + escapeHtml(targetPct) + '%</div><div class="headcountName">' + escapeHtml(item.name || '') + '<span class="bonusBadge">' + escapeHtml(item.role || '') + '</span></div><div class="headcountCount">$' + formatMoney(item.bonusAmount || 0) + '</div><div class="bonusFormula">' + escapeHtml((item.heads || 0) + '/' + (item.targetHeads || 0) + '人｜' + (item.cappedParts || 0) + '/' + (item.partCap || 0) + '部位｜單價' + (item.finalRate || 0)) + '</div><div class="bonusBadgeRow"><span class="bonusBadge ' + (ok ? 'ok' : 'warn') + '">' + (ok ? '已達標' : '未達標') + '</span><span class="bonusBadge ' + (cleanOk ? 'ok' : 'warn') + '">' + (cleanOk ? '清潔通過' : '清潔未通過') + '</span></div></button>';
       }).join('');
-      byId('bonusArea').innerHTML = '<div class="headcountHero"><div class="headcountTotal">' + escapeHtml(monthText) + '</div><div class="headcountTotalLabel">工獎計算到 ' + escapeHtml(String(result.end || '').replace(/-/g, '/')) + '</div></div><div class="headcountGrid">' + cards + '</div>' + stats + settingsHtml;
+      byId('bonusArea').innerHTML = '<div class="headcountGrid">' + cards + '</div><div class="sectionNote">' + escapeHtml(monthText) + ' 工獎計算到 ' + escapeHtml(String(result.end || '').replace(/-/g, '/')) + '</div>' + settingsHtml;
       if (byId('bonusSaveSettingsBtn')) byId('bonusSaveSettingsBtn').onclick = saveBonusSettings;
       Array.prototype.forEach.call(document.querySelectorAll('[data-bonus-index]'), function (btn) {
         btn.onclick = function () { renderBonusDetail(Number(btn.getAttribute('data-bonus-index'))); };
