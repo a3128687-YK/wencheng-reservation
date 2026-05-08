@@ -215,6 +215,18 @@
     body.headcountOnly .hero { margin-bottom: 12px; }
     body.headcountOnly .topNowCard { display: none; }
     body.headcountOnly #techHeadcountPanel { display: block; margin-top: 12px; }
+    body.bonusOnly .modeSwitcher,
+    body.bonusOnly .homeTabs,
+    body.bonusOnly .subTabs { display: none !important; }
+    body.bonusOnly .hero { margin-bottom: 12px; }
+    body.bonusOnly .topNowCard { display: none; }
+    body.bonusOnly #bonusCalcPanel { display: block; margin-top: 12px; }
+    body.bonusOnly .modeSwitcher,
+    body.bonusOnly .homeTabs,
+    body.bonusOnly .subTabs { display: none !important; }
+    body.bonusOnly .hero { margin-bottom: 12px; }
+    body.bonusOnly .topNowCard { display: none; }
+    body.bonusOnly #bonusCalcPanel { display: block; margin-top: 12px; }
     body.salesOnly .modeSwitcher,
     body.salesOnly .homeTabs,
     body.salesOnly .subTabs { display: none !important; }
@@ -402,6 +414,18 @@
     .headcountDetailMain { font-size: clamp(19px, 4.5vw, 27px); font-weight: 950; line-height: 1.25; }
     .headcountDetailSub { margin-top: 6px; font-size: clamp(15px, 3.7vw, 21px); font-weight: 820; color: var(--muted); line-height: 1.45; }
     .headcountBack { margin-bottom: 14px; background: #60746a; }
+    .bonusStats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin: 14px 0; }
+    .bonusStat { border-radius: 18px; padding: 12px 8px; text-align: center; background: #fff7f0; border: 2px solid rgba(214,93,55,.18); box-shadow: 0 8px 18px rgba(96,62,41,.08); min-width: 0; }
+    .bonusStatValue { font-size: clamp(20px, 5vw, 34px); font-weight: 950; color: #c35b38; line-height: 1.05; white-space: nowrap; overflow: hidden; text-overflow: clip; }
+    .bonusStatLabel { font-size: clamp(12px, 3vw, 17px); font-weight: 900; color: #76594d; }
+    .bonusCard { border-color: #f0c7b6; background: linear-gradient(180deg, #fffdf9, #fff5ee); }
+    .bonusCard.active { border-color: #d65d37; box-shadow: 0 0 0 4px rgba(214,93,55,.14); }
+    .bonusCard .headcountCount { color: #c35b38; font-size: clamp(24px, 5.6vw, 38px); }
+    .bonusBadgeRow { display: flex; flex-wrap: wrap; gap: 6px; }
+    .bonusBadge { border-radius: 999px; padding: 4px 8px; font-size: 12px; font-weight: 900; background: #fff; border: 1px solid rgba(91,68,54,.18); color: #704f42; }
+    .bonusBadge.ok { background: #edf8ef; color: #2f7a4d; }
+    .bonusBadge.warn { background: #fff0ed; color: #b43f2f; }
+    .bonusFormula { font-size: clamp(13px, 3vw, 17px); color: #76594d; font-weight: 800; line-height: 1.35; }
     .salesStats { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin: 14px 0; }
     .salesStat { border-radius: 18px; padding: 14px; background: rgba(255,255,255,.95); border: 2px solid rgba(70,126,88,.18); box-shadow: 0 8px 20px rgba(53,82,61,.08); }
     .salesStatLabel { font-size: clamp(14px, 3.2vw, 19px); font-weight: 900; color: var(--muted); }
@@ -870,13 +894,15 @@
           '<section class="panel" id="myMonthlySalesPanel"><button class="btn headcountBack" id="salesHomeBtn" type="button">返回首頁</button><div class="sectionTitle">個人當月業績</div><div class="sectionNote">依你原本 Excel「業績累計」邏輯計算：業績加總、扣底、級距獎金比例與預估實領。</div><div id="salesArea"></div><div class="summaryControls"><div><label for="salesMonthInput">查詢月份</label><input id="salesMonthInput" type="month"></div><button class="btn refresh" id="salesSearchBtn" type="button">查詢</button></div><div class="salesAdminPicker" id="salesPersonWrap"><label for="salesPersonSelect">查詢人員</label><select id="salesPersonSelect"></select></div><div id="salesMessage" class="message"></div><div class="salesActionToggles"><button class="btn refresh salesBigToggle" id="salesAddToggleBtn" type="button">新增業績</button><button class="btn reset salesBigToggle" id="salesListToggleBtn" type="button">本月業績一覽</button><button class="btn reset salesBigToggle" id="salesHistoryBtn" type="button">歷史查詢</button></div><div class="salesFormBox collapsed" id="salesFormBox"><div class="sectionTitle" id="salesFormTitle">新增業績</div><div class="grid"><div><label for="salesOwnerInput">登入者</label><input id="salesOwnerInput" type="text" readonly></div><div><label for="salesDateInput">日期</label><input id="salesDateInput" type="date"></div><div class="salesAmountWrap"><label for="salesAmountInput">業績金額</label><input id="salesAmountInput" type="text" inputmode="text" pattern="-?[0-9,]*" placeholder="恭喜開包"><button class="salesMinusBtn" id="salesMinusBtn" type="button">−</button></div><div><label for="salesVenueInput">會館</label><select id="salesVenueInput"></select></div><div><label for="salesCounterInput">專櫃</label><select id="salesCounterInput"></select></div></div><div class="salesEditActions"><button class="btn refresh salesPrimaryAction" id="salesCreateBtn" type="button">儲存業績</button><button class="btn salesDeleteBtn" id="salesDeleteBtn" type="button">刪除業績</button><button class="btn reset" id="salesCancelEditBtn" type="button">取消編輯</button></div></div><div id="salesDetailArea" class="collapsed"></div></section>',        '</main><button class="topFloatBtn" id="topFloatBtn" type="button">TOP</button>'
       ].join('');
 
-            document.querySelector('main.page').insertAdjacentHTML('beforeend', '<section class="panel" id="myMonthlyServicesPanel"><button class="btn headcountBack" id="servicesHomeBtn" type="button">返回首頁</button><div class="sectionTitle">個人當月服務一覽</div><div class="sectionNote">每人只能查看與編輯自己的服務資料；最高權限者可切換查詢人員。</div><div class="summaryControls"><div><label for="servicesMonthInput">查詢月份</label><input id="servicesMonthInput" type="month"></div><button class="btn refresh" id="servicesSearchBtn" type="button">查詢</button></div><div class="salesAdminPicker" id="servicesPersonWrap"><label for="servicesPersonSelect">查詢人員</label><select id="servicesPersonSelect"></select></div><div id="servicesStatsArea"></div><div id="servicesMessage" class="message"></div><div class="servicesActionToggles"><button class="btn refresh" id="servicesAddToggleBtn" type="button">新增服務</button><button class="btn reset" id="servicesListToggleBtn" type="button">服務一覽</button></div><div class="servicesFormBox collapsed" id="servicesFormBox"><div class="sectionTitle" id="servicesFormTitle">新增服務</div><div class="grid"><div><label for="servicesOwnerInput">登入者</label><input id="servicesOwnerInput" type="text" readonly></div><div><label for="servicesDateInput">日期</label><input id="servicesDateInput" type="date"></div><div><label for="servicesBaInput">BA</label><input id="servicesBaInput" type="text"></div><div><label for="servicesConsultantInput">諮詢者</label><input id="servicesConsultantInput" type="text" placeholder="沒有則填無"></div><div><label for="servicesSpeakerInput">主講</label><select id="servicesSpeakerInput"></select></div><div><label for="servicesHelperInput">幫忙美容師</label><input id="servicesHelperInput" type="text" placeholder="沒有則填無"></div><div><label for="servicesCustomerInput">顧客姓名</label><input id="servicesCustomerInput" type="text"></div><div><label for="servicesDealInput">是否成交</label><select id="servicesDealInput"></select></div><div><label for="servicesFinanceInput">分期公司</label><select id="servicesFinanceInput"></select></div><div id="servicesUnitWrap"><label for="servicesUnitPriceInput">單價</label><input id="servicesUnitPriceInput" type="number" inputmode="numeric"></div><div id="servicesInstallmentWrap"><label for="servicesInstallmentsInput">期數</label><input id="servicesInstallmentsInput" type="number" inputmode="numeric"></div><div><label for="servicesTotalPriceInput">總價</label><input id="servicesTotalPriceInput" type="number" inputmode="numeric"></div><div class="wide"><label for="servicesNoteInput">備註</label><input id="servicesNoteInput" type="text"></div></div><div class="servicesEditActions"><button class="btn refresh" id="servicesSaveBtn" type="button">登記服務</button><button class="btn servicesDeleteBtn" id="servicesDeleteBtn" type="button">刪除此筆</button><button class="btn reset" id="servicesCancelEditBtn" type="button">取消編輯</button></div></div><div id="servicesDetailArea" class="collapsed"></div></section>');document.querySelector('main.page').insertAdjacentHTML('beforeend', '<section class="panel" id="portalConstructionPanel"><button class="btn headcountBack" id="constructionHomeBtn" type="button">\u8fd4\u56de\u9996\u9801</button><div class="sectionTitle" id="constructionTitle">\u529f\u80fd\u5efa\u7f6e\u4e2d</div><div class="sectionNote" id="constructionText">\u9019\u500b\u529f\u80fd\u6b63\u5728\u65bd\u5de5\u4e2d\uff0c\u5b8c\u6210\u5f8c\u5c31\u6703\u958b\u653e\u4f7f\u7528\u3002</div><div class="slotBox empty">\u2692\ufe0f<br>\u65bd\u5de5\u4e2d</div></section>');
+            document.querySelector('main.page').insertAdjacentHTML('beforeend', '<section class="panel" id="myMonthlyServicesPanel"><button class="btn headcountBack" id="servicesHomeBtn" type="button">返回首頁</button><div class="sectionTitle">個人當月服務一覽</div><div class="sectionNote">每人只能查看與編輯自己的服務資料；最高權限者可切換查詢人員。</div><div class="summaryControls"><div><label for="servicesMonthInput">查詢月份</label><input id="servicesMonthInput" type="month"></div><button class="btn refresh" id="servicesSearchBtn" type="button">查詢</button></div><div class="salesAdminPicker" id="servicesPersonWrap"><label for="servicesPersonSelect">查詢人員</label><select id="servicesPersonSelect"></select></div><div id="servicesStatsArea"></div><div id="servicesMessage" class="message"></div><div class="servicesActionToggles"><button class="btn refresh" id="servicesAddToggleBtn" type="button">新增服務</button><button class="btn reset" id="servicesListToggleBtn" type="button">服務一覽</button></div><div class="servicesFormBox collapsed" id="servicesFormBox"><div class="sectionTitle" id="servicesFormTitle">新增服務</div><div class="grid"><div><label for="servicesOwnerInput">登入者</label><input id="servicesOwnerInput" type="text" readonly></div><div><label for="servicesDateInput">日期</label><input id="servicesDateInput" type="date"></div><div><label for="servicesBaInput">BA</label><input id="servicesBaInput" type="text"></div><div><label for="servicesConsultantInput">諮詢者</label><input id="servicesConsultantInput" type="text" placeholder="沒有則填無"></div><div><label for="servicesSpeakerInput">主講</label><select id="servicesSpeakerInput"></select></div><div><label for="servicesHelperInput">幫忙美容師</label><input id="servicesHelperInput" type="text" placeholder="沒有則填無"></div><div><label for="servicesCustomerInput">顧客姓名</label><input id="servicesCustomerInput" type="text"></div><div><label for="servicesDealInput">是否成交</label><select id="servicesDealInput"></select></div><div><label for="servicesFinanceInput">分期公司</label><select id="servicesFinanceInput"></select></div><div id="servicesUnitWrap"><label for="servicesUnitPriceInput">單價</label><input id="servicesUnitPriceInput" type="number" inputmode="numeric"></div><div id="servicesInstallmentWrap"><label for="servicesInstallmentsInput">期數</label><input id="servicesInstallmentsInput" type="number" inputmode="numeric"></div><div><label for="servicesTotalPriceInput">總價</label><input id="servicesTotalPriceInput" type="number" inputmode="numeric"></div><div class="wide"><label for="servicesNoteInput">備註</label><input id="servicesNoteInput" type="text"></div></div><div class="servicesEditActions"><button class="btn refresh" id="servicesSaveBtn" type="button">登記服務</button><button class="btn servicesDeleteBtn" id="servicesDeleteBtn" type="button">刪除此筆</button><button class="btn reset" id="servicesCancelEditBtn" type="button">取消編輯</button></div></div><div id="servicesDetailArea" class="collapsed"></div></section>');
+      document.querySelector('main.page').insertAdjacentHTML('beforeend', '<section class="panel" id="bonusCalcPanel"><button class="btn headcountBack" id="bonusHomeBtn" type="button">返回首頁</button><div class="sectionTitle">工獎計算</div><div class="sectionNote">依服務日期統計當月有效預約；B=2部位、F=1部位、BF=3部位，並套用每月設定表計算工獎。</div><div class="summaryControls"><div><label for="bonusMonthInput">查詢月份</label><input id="bonusMonthInput" type="month"></div><button class="btn refresh" id="bonusSearchBtn" type="button">查詢</button></div><div id="bonusMessage" class="message"></div><div id="bonusArea"></div><div id="bonusDetailArea"></div></section>');
+      document.querySelector('main.page').insertAdjacentHTML('beforeend', '<section class="panel" id="portalConstructionPanel"><button class="btn headcountBack" id="constructionHomeBtn" type="button">\u8fd4\u56de\u9996\u9801</button><div class="sectionTitle" id="constructionTitle">\u529f\u80fd\u5efa\u7f6e\u4e2d</div><div class="sectionNote" id="constructionText">\u9019\u500b\u529f\u80fd\u6b63\u5728\u65bd\u5de5\u4e2d\uff0c\u5b8c\u6210\u5f8c\u5c31\u6703\u958b\u653e\u4f7f\u7528\u3002</div><div class="slotBox empty">\u2692\ufe0f<br>\u65bd\u5de5\u4e2d</div></section>');
 
       byId('portalBookingBtn').onclick = showScheduleHome;
       setupTopFloatButton();
       byId('portalHeadcountBtn').onclick = showTechHeadcountPanel;
       byId('portalScheduleBtn').onclick = showTechSchedulePanel;
-      byId('portalBonusBtn').onclick = function () { showConstructionPage('\u5de5\u734e\u8a08\u7b97', '\u9019\u500b\u529f\u80fd\u6b63\u5728\u65bd\u5de5\u4e2d\uff0c\u5b8c\u6210\u5f8c\u53ef\u4ee5\u8a08\u7b97\u5de5\u734e\u3002'); };
+      byId('portalBonusBtn').onclick = showBonusCalcPanel;
       byId('portalSalesBtn').onclick = showMyMonthlySalesPanel;
       byId('portalServicesBtn').onclick = showMyMonthlyServicesPanel;
       byId('constructionHomeBtn').onclick = showHome;
@@ -919,6 +945,9 @@
       byId('headcountSearchBtn').onclick = loadTechHeadcount;
       byId('headcountMonthInput').onchange = loadTechHeadcount;
       byId('headcountHomeBtn').onclick = showHome;
+      byId('bonusHomeBtn').onclick = showHome;
+      byId('bonusSearchBtn').onclick = loadBonusCalc;
+      byId('bonusMonthInput').onchange = loadBonusCalc;
       byId('salesHomeBtn').onclick = showHome;
       byId('salesSearchBtn').onclick = loadMyMonthlySales;
       byId('salesAddToggleBtn').onclick = toggleSalesForm;
@@ -1125,7 +1154,7 @@
         return;
       }
       if (page === 'bonusCalc') {
-        showConstructionPage('\u5de5\u734e\u8a08\u7b97', '\u9019\u500b\u529f\u80fd\u6b63\u5728\u65bd\u5de5\u4e2d\uff0c\u5b8c\u6210\u5f8c\u53ef\u4ee5\u8a08\u7b97\u5de5\u734e\u3002');
+        showBonusCalcPanel();
         return;
       }
       if (page === 'myMonthlySales') {
@@ -1145,6 +1174,7 @@
       document.body.classList.remove('scheduleOnly');
       document.body.classList.remove('salesOnly');
       document.body.classList.remove('servicesOnly');
+      document.body.classList.remove('bonusOnly');
       if (byId('portalConstructionPanel')) byId('portalConstructionPanel').classList.remove('active');
       byId('reportPanel').classList.remove('active');
       byId('adminPanel').classList.remove('active');
@@ -1159,6 +1189,7 @@
       });
       if (byId('myMonthlySalesPanel')) byId('myMonthlySalesPanel').classList.remove('active');
       if (byId('myMonthlyServicesPanel')) byId('myMonthlyServicesPanel').classList.remove('active');
+      if (byId('bonusCalcPanel')) byId('bonusCalcPanel').classList.remove('active');
       byId('techHeadcountPanel').classList.add('active');
       if (!byId('headcountMonthInput').value) byId('headcountMonthInput').value = currentMonthValue();
       loadTechHeadcount();
@@ -1220,9 +1251,94 @@
       byId('headcountDetailArea').scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 
+    function showBonusCalcPanel() {
+      document.body.classList.remove('reportShotMode');
+      document.body.classList.remove('headcountOnly');
+      document.body.classList.remove('scheduleOnly');
+      document.body.classList.remove('salesOnly');
+      document.body.classList.remove('servicesOnly');
+      document.body.classList.add('bonusOnly');
+      if (byId('portalConstructionPanel')) byId('portalConstructionPanel').classList.remove('active');
+      byId('reportPanel').classList.remove('active');
+      byId('adminPanel').classList.remove('active');
+      byId('scheduleTabs').classList.remove('active');
+      byId('tabSchedule').classList.remove('active');
+      byId('tabPeople').classList.remove('active');
+      ['book','cancel','summary','query'].forEach(function (tab) {
+        var tabBtn = byId('tab' + cap(tab));
+        var panel = byId(tab + 'Panel');
+        if (tabBtn) tabBtn.classList.remove('active');
+        if (panel) panel.classList.remove('active');
+      });
+      if (byId('techHeadcountPanel')) byId('techHeadcountPanel').classList.remove('active');
+      if (byId('techSchedulePanel')) byId('techSchedulePanel').classList.remove('active');
+      if (byId('myMonthlySalesPanel')) byId('myMonthlySalesPanel').classList.remove('active');
+      if (byId('myMonthlyServicesPanel')) byId('myMonthlyServicesPanel').classList.remove('active');
+      byId('bonusCalcPanel').classList.add('active');
+      if (!byId('bonusMonthInput').value) byId('bonusMonthInput').value = currentMonthValue();
+      loadBonusCalc();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function loadBonusCalc() {
+      var month = byId('bonusMonthInput').value || currentMonthValue();
+      byId('bonusMonthInput').value = month;
+      clearBox('bonusMessage');
+      byId('bonusDetailArea').innerHTML = '';
+      byId('bonusArea').innerHTML = '<div class="slotBox empty">' + T.loading + '</div>';
+      if (!hasBackend() || !LINE_READY) {
+        byId('bonusArea').innerHTML = '<div class="slotBox empty">' + T.backendFail + '</div>';
+        return;
+      }
+      apiCall('getBonusCalcMonthly', { month: month }, renderBonusCalc, function (err) {
+        var msg = String(err || '');
+        if (msg.indexOf('getBonusCalcMonthly') !== -1) msg = '後台尚未更新「工獎計算」功能，請貼上新版 Code.gs 並重新部署 Apps Script。';
+        showPanelMessage('bonusMessage', msg, true);
+        byId('bonusArea').innerHTML = '';
+      });
+    }
+
+    function renderBonusCalc(result) {
+      result = result || {};
+      window.BONUS_CALC_RESULT = result;
+      var items = result.items || [];
+      var monthText = String(result.month || byId('bonusMonthInput').value || '').replace('-', '/');
+      byId('bonusDetailArea').innerHTML = '';
+      var stats = '<div class="bonusStats"><div class="bonusStat"><div class="bonusStatValue">$' + formatMoney(result.totalBonus || 0) + '</div><div class="bonusStatLabel">總工獎</div></div><div class="bonusStat"><div class="bonusStatValue">' + formatMoney(result.totalHeads || 0) + '</div><div class="bonusStatLabel">總人頭</div></div><div class="bonusStat"><div class="bonusStatValue">' + formatMoney(result.totalParts || 0) + '</div><div class="bonusStatLabel">計算部位</div></div></div>';
+      var cards = items.map(function (item, index) {
+        var ok = Number(item.heads || 0) >= Number(item.targetHeads || 0);
+        var cleanOk = item.cleanPass !== false;
+        return '<button class="headcountCard bonusCard" type="button" data-bonus-index="' + index + '"><div class="headcountName">' + escapeHtml(item.name || '') + '<span class="bonusBadge">' + escapeHtml(item.role || '') + '</span></div><div class="headcountCount">$' + formatMoney(item.bonusAmount || 0) + '</div><div class="bonusFormula">' + escapeHtml((item.heads || 0) + '/' + (item.targetHeads || 0) + '人｜' + (item.cappedParts || 0) + '/' + (item.partCap || 0) + '部位｜單價' + (item.finalRate || 0)) + '</div><div class="bonusBadgeRow"><span class="bonusBadge ' + (ok ? 'ok' : 'warn') + '">' + (ok ? '已達標' : '未達標') + '</span><span class="bonusBadge ' + (cleanOk ? 'ok' : 'warn') + '">' + (cleanOk ? '清潔通過' : '清潔未通過') + '</span></div></button>';
+      }).join('');
+      byId('bonusArea').innerHTML = '<div class="headcountHero"><div class="headcountTotal">' + escapeHtml(monthText) + '</div><div class="headcountTotalLabel">工獎計算到 ' + escapeHtml(String(result.end || '').replace(/-/g, '/')) + '</div></div>' + stats + '<div class="headcountGrid">' + cards + '</div>';
+      Array.prototype.forEach.call(document.querySelectorAll('[data-bonus-index]'), function (btn) {
+        btn.onclick = function () { renderBonusDetail(Number(btn.getAttribute('data-bonus-index'))); };
+      });
+    }
+
+    function renderBonusDetail(index) {
+      var result = window.BONUS_CALC_RESULT || {};
+      var item = (result.items || [])[index];
+      if (!item) return;
+      Array.prototype.forEach.call(document.querySelectorAll('[data-bonus-index]'), function (btn) { btn.classList.toggle('active', Number(btn.getAttribute('data-bonus-index')) === index); });
+      var details = item.details || [];
+      var html = '<div class="headcountDetailTitle">' + escapeHtml(item.name) + ' 工獎明細</div>';
+      html += '<div class="slotBox"><b>計算方式</b><br>人頭：' + escapeHtml(item.heads || 0) + ' / ' + escapeHtml(item.targetHeads || 0) + '<br>部位：' + escapeHtml(item.parts || 0) + '，計算上限：' + escapeHtml(item.partCap || 0) + '<br>實算部位：' + escapeHtml(item.cappedParts || 0) + '<br>基本單價：' + escapeHtml(item.baseRate || 0) + '，扣款：' + escapeHtml(item.deductText || '') + '<br>最後單價：' + escapeHtml(item.finalRate || 0) + '<br><b>工獎：$' + formatMoney(item.bonusAmount || 0) + '</b></div>';
+      if (!details.length) {
+        html += '<div class="slotBox empty">本月查無明細</div>';
+      } else {
+        html += '<div class="headcountDetailList">' + details.map(function (b) {
+          return '<div class="headcountDetailItem"><div class="headcountDetailMain">' + escapeHtml(String(b.date || '').replace(/-/g, '/') + ' ' + (b.start || '') + '-' + (b.end || '') + '　' + (b.marker || '') + ' / ' + (b.parts || 0) + '部位') + '</div><div class="headcountDetailSub">房間：' + escapeHtml(b.room || '') + '<br>顧客：' + escapeHtml(b.customer || '') + '<br>服務：' + escapeHtml(b.service || '') + '<br>預約人：' + escapeHtml(b.userName || '') + '</div></div>';
+        }).join('') + '</div>';
+      }
+      byId('bonusDetailArea').innerHTML = html;
+      byId('bonusDetailArea').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
     function showMyMonthlyServicesPanel() {
       document.body.classList.remove('reportShotMode');
       document.body.classList.remove('headcountOnly');
+      document.body.classList.remove('bonusOnly');
       document.body.classList.remove('scheduleOnly');
       document.body.classList.remove('salesOnly');
       document.body.classList.remove('servicesOnly');
@@ -1243,6 +1359,7 @@
       if (byId('techSchedulePanel')) byId('techSchedulePanel').classList.remove('active');
       if (byId('myMonthlySalesPanel')) byId('myMonthlySalesPanel').classList.remove('active');
       if (byId('myMonthlyServicesPanel')) byId('myMonthlyServicesPanel').classList.remove('active');
+      if (byId('bonusCalcPanel')) byId('bonusCalcPanel').classList.remove('active');
       byId('myMonthlyServicesPanel').classList.add('active');
       fillServicesDefaults();
       resetServicesForm(false);
@@ -1552,6 +1669,7 @@
       document.body.classList.remove('scheduleOnly');
       document.body.classList.remove('salesOnly');
       document.body.classList.remove('servicesOnly');
+      document.body.classList.remove('bonusOnly');
       document.body.classList.add('salesOnly');
       if (byId('portalConstructionPanel')) byId('portalConstructionPanel').classList.remove('active');
       byId('reportPanel').classList.remove('active');
@@ -1567,6 +1685,7 @@
       });
       if (byId('techHeadcountPanel')) byId('techHeadcountPanel').classList.remove('active');
       if (byId('techSchedulePanel')) byId('techSchedulePanel').classList.remove('active');
+      if (byId('bonusCalcPanel')) byId('bonusCalcPanel').classList.remove('active');
       byId('myMonthlySalesPanel').classList.add('active');
       fillSalesDefaults();
       resetSalesForm(false);
@@ -1879,6 +1998,7 @@
       document.body.classList.add('scheduleOnly');
       document.body.classList.remove('salesOnly');
       document.body.classList.remove('servicesOnly');
+      document.body.classList.remove('bonusOnly');
       if (byId('portalConstructionPanel')) byId('portalConstructionPanel').classList.remove('active');
       byId('reportPanel').classList.remove('active');
       byId('adminPanel').classList.remove('active');
@@ -1894,6 +2014,7 @@
       if (byId('techHeadcountPanel')) byId('techHeadcountPanel').classList.remove('active');
       if (byId('myMonthlySalesPanel')) byId('myMonthlySalesPanel').classList.remove('active');
       if (byId('myMonthlyServicesPanel')) byId('myMonthlyServicesPanel').classList.remove('active');
+      if (byId('bonusCalcPanel')) byId('bonusCalcPanel').classList.remove('active');
       byId('techSchedulePanel').classList.add('active');
       if (!byId('scheduleMonthInput').value) byId('scheduleMonthInput').value = currentMonthValue();
       fillScheduleEditControls();
@@ -2133,6 +2254,7 @@
       document.body.classList.remove('scheduleOnly');
       document.body.classList.remove('salesOnly');
       document.body.classList.remove('servicesOnly');
+      document.body.classList.remove('bonusOnly');
       byId('reportPanel').classList.remove('active');
       byId('adminPanel').classList.remove('active');
       if (byId('portalConstructionPanel')) byId('portalConstructionPanel').classList.remove('active');
@@ -2140,6 +2262,7 @@
       if (byId('techSchedulePanel')) byId('techSchedulePanel').classList.remove('active');
       if (byId('myMonthlySalesPanel')) byId('myMonthlySalesPanel').classList.remove('active');
       if (byId('myMonthlyServicesPanel')) byId('myMonthlyServicesPanel').classList.remove('active');
+      if (byId('bonusCalcPanel')) byId('bonusCalcPanel').classList.remove('active');
       byId('scheduleTabs').classList.remove('active');
       byId('tabSchedule').classList.remove('active');
       byId('tabPeople').classList.remove('active');
@@ -2158,12 +2281,14 @@
       document.body.classList.remove('scheduleOnly');
       document.body.classList.remove('salesOnly');
       document.body.classList.remove('servicesOnly');
+      document.body.classList.remove('bonusOnly');
       byId('reportPanel').classList.remove('active');
       byId('adminPanel').classList.remove('active');
       if (byId('techHeadcountPanel')) byId('techHeadcountPanel').classList.remove('active');
       if (byId('techSchedulePanel')) byId('techSchedulePanel').classList.remove('active');
       if (byId('myMonthlySalesPanel')) byId('myMonthlySalesPanel').classList.remove('active');
       if (byId('myMonthlyServicesPanel')) byId('myMonthlyServicesPanel').classList.remove('active');
+      if (byId('bonusCalcPanel')) byId('bonusCalcPanel').classList.remove('active');
       byId('scheduleTabs').classList.remove('active');
       byId('tabSchedule').classList.remove('active');
       byId('tabPeople').classList.remove('active');
@@ -2199,6 +2324,7 @@
       document.body.classList.remove('scheduleOnly');
       document.body.classList.remove('salesOnly');
       document.body.classList.remove('servicesOnly');
+      document.body.classList.remove('bonusOnly');
       if ((name === 'book' || name === 'cancel') && !canManageBookings()) { denyManageAction(name === 'cancel' ? 'cancelMessage' : 'message'); name = 'summary'; }
       document.body.classList.remove('reportShotMode');
       byId('reportPanel').classList.remove('active');
@@ -2208,6 +2334,7 @@
       if (byId('techSchedulePanel')) byId('techSchedulePanel').classList.remove('active');
       if (byId('myMonthlySalesPanel')) byId('myMonthlySalesPanel').classList.remove('active');
       if (byId('myMonthlyServicesPanel')) byId('myMonthlyServicesPanel').classList.remove('active');
+      if (byId('bonusCalcPanel')) byId('bonusCalcPanel').classList.remove('active');
       ['book','cancel','summary','query'].forEach(function (tab) {
         var tabBtn = byId('tab' + cap(tab));
         var panel = byId(tab + 'Panel');
@@ -2317,6 +2444,7 @@
       document.body.classList.remove('scheduleOnly');
       document.body.classList.remove('salesOnly');
       document.body.classList.remove('servicesOnly');
+      document.body.classList.remove('bonusOnly');
       if (!canManageBookings()) { denyManageAction('adminMessage'); return; }
       if (!requireLineReady('adminMessage')) return;
       document.body.classList.remove('reportShotMode');
@@ -2335,6 +2463,7 @@
       if (byId('techSchedulePanel')) byId('techSchedulePanel').classList.remove('active');
       if (byId('myMonthlySalesPanel')) byId('myMonthlySalesPanel').classList.remove('active');
       if (byId('myMonthlyServicesPanel')) byId('myMonthlyServicesPanel').classList.remove('active');
+      if (byId('bonusCalcPanel')) byId('bonusCalcPanel').classList.remove('active');
       byId('adminPanel').classList.add('active');
       setToday('adminDateInput');
       byId('adminLogList').innerHTML = '';
@@ -2658,6 +2787,7 @@
       document.body.classList.remove('scheduleOnly');
       document.body.classList.remove('salesOnly');
       document.body.classList.remove('servicesOnly');
+      document.body.classList.remove('bonusOnly');
       document.body.classList.add('reportShotMode');
       ['book','cancel','summary','query'].forEach(function (tab) {
         var tabBtn = byId('tab' + cap(tab));
@@ -2674,6 +2804,7 @@
       if (byId('techSchedulePanel')) byId('techSchedulePanel').classList.remove('active');
       if (byId('myMonthlySalesPanel')) byId('myMonthlySalesPanel').classList.remove('active');
       if (byId('myMonthlyServicesPanel')) byId('myMonthlyServicesPanel').classList.remove('active');
+      if (byId('bonusCalcPanel')) byId('bonusCalcPanel').classList.remove('active');
       byId('reportPanel').classList.add('active');
       byId('reportDateText').textContent = '載入中...';
       byId('reportArea').innerHTML = '<div class="slotBox empty">載入中...</div>';
