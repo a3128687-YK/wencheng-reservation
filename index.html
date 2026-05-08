@@ -224,7 +224,7 @@
     .subTabs { display: none; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin: 14px 0 18px; }
     .subTabs.active { display: grid; }
     .subTabs .tab { min-height: 78px; padding: 12px 8px; font-size: clamp(20px, 4vw, 30px); white-space: nowrap; }
-    .reportIcon { pointer-events: auto;
+    .reportIcon { pointer-events: auto; z-index: 30; touch-action: manipulation; -webkit-user-select: none; user-select: none; -webkit-touch-callout: none;
       position: absolute;
       top: 18px;
       right: 18px;
@@ -241,7 +241,7 @@
       justify-content: center;
       padding: 12px;
     }
-    .reportIcon span { display: block; width: 8px; border-radius: 5px 5px 2px 2px; background: #2f8f61; }
+    .reportIcon span { pointer-events: none; display: block; width: 8px; border-radius: 5px 5px 2px 2px; background: #2f8f61; }
     .reportIcon span:nth-child(1) { height: 18px; }
     .reportIcon span:nth-child(2) { height: 28px; background: #2f6f9f; }
     .reportIcon span:nth-child(3) { height: 38px; background: #d9a441; }
@@ -405,11 +405,25 @@
     .salesAdminPicker { display: none; margin-top: 10px; }
     .salesAdminPicker.active { display: block; }
     .salesActionToggles { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 16px 0; }
-    .salesActionToggles .btn { min-height: 68px; font-size: clamp(20px, 4vw, 30px); }
+    .salesActionToggles .btn { width: 100%; min-height: 68px; font-size: clamp(20px, 4vw, 30px); padding: 10px 8px; line-height: 1.15; }
     .salesFormBox.collapsed, #salesDetailArea.collapsed { display: none; }
     .salesEditActions { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-top: 18px; }
-    .salesEditActions .btn { min-height: 56px; font-size: clamp(14px, 3.1vw, 20px); padding: 7px 5px; line-height: 1.12; white-space: normal; }
+    .salesEditActions .btn { width: 100%; min-height: 58px; font-size: clamp(13px, 2.9vw, 18px); padding: 7px 4px; line-height: 1.1; white-space: normal; margin: 0; }
     .salesDeleteBtn { background: #b33a3a !important; }
+    .salesAmountWrap { display: grid; grid-template-columns: 1fr 76px; gap: 8px; align-items: end; }
+    .salesAmountWrap label { grid-column: 1 / -1; }
+    .salesMinusBtn { min-height: 58px; border: 0; border-radius: 16px; background: #d95f3f; color: #fff; font-size: 28px; font-weight: 950; box-shadow: 0 8px 18px rgba(217,95,63,.22); }
+    body.salesOnly #myMonthlySalesPanel .headcountHero { background: linear-gradient(135deg, #fff4ee, #fff9f2); border-color: rgba(217,95,63,.30); box-shadow: 0 10px 28px rgba(169,78,45,.10); }
+    body.salesOnly #myMonthlySalesPanel .headcountTotal,
+    body.salesOnly #myMonthlySalesPanel .salesStatValue { color: #d95f3f; }
+    body.salesOnly #myMonthlySalesPanel .salesStat { border-color: rgba(217,95,63,.24); box-shadow: 0 8px 20px rgba(169,78,45,.08); }
+    body.salesOnly #myMonthlySalesPanel .btn,
+    body.salesOnly #myMonthlySalesPanel .btn.refresh,
+    body.salesOnly #myMonthlySalesPanel .headcountBack { background: #d95f3f; box-shadow: 0 12px 24px rgba(217,95,63,.20); }
+    body.salesOnly #myMonthlySalesPanel .btn.reset { background: #b86b55; }
+    body.salesOnly #myMonthlySalesPanel .salesDeleteBtn { background: #b33a3a !important; }
+    body.salesOnly #myMonthlySalesPanel input:focus,
+    body.salesOnly #myMonthlySalesPanel select:focus { outline-color: rgba(217,95,63,.22); border-color: #d95f3f; }
     .topFloatBtn.dragReady { box-shadow: 0 0 0 5px rgba(76,127,105,.22), 0 10px 26px rgba(0,0,0,.18); }
     .topFloatBtn.dragging { opacity: .86; transition: none; }
     body.scheduleOnly .modeSwitcher,
@@ -788,7 +802,7 @@
           '<section class="panel reportPanel" id="reportPanel"><button class="btn reportBack" id="reportBackBtn" type="button">\u8fd4\u56de\u9996\u9801</button><div class="sectionTitle">\u623f\u9593\u5831\u8868</div><div class="reportControls"><div><label for="reportDateInput">\u5831\u8868\u65e5\u671f</label><input id="reportDateInput" type="date"></div><button class="btn refresh" id="reportSearchBtn" type="button">\u67e5\u8a62</button></div><div class="sectionNote" id="reportDateText">\u8f09\u5165\u4e2d...</div><div id="reportArea"></div></section>',
           '<section class="panel" id="techHeadcountPanel"><button class="btn headcountBack" id="headcountHomeBtn" type="button">\u8fd4\u56de\u9996\u9801</button><div class="sectionTitle">\u7f8e\u6280\u4eba\u982d\u8a08\u7b97</div><div class="sectionNote">\u53ea\u986f\u793a\u7f8e\u537f\u3001\u96ef\u8431\u3001\u839b\u7a4e\u3001\u4f73\u59a4\u3001\u7f8e\u73b2\u3001\u66fc\u7433\uff1b\u4f9d\u670d\u52d9\u65e5\u671f\u7d71\u8a08\u7576\u6708\u6709\u6548\u9810\u7d04\u3002</div><div class="summaryControls"><div><label for="headcountMonthInput">\u67e5\u8a62\u6708\u4efd</label><input id="headcountMonthInput" type="month"></div><button class="btn refresh" id="headcountSearchBtn" type="button">\u67e5\u8a62</button></div><div id="headcountMessage" class="message"></div><div id="headcountArea"></div><div id="headcountDetailArea"></div></section>',
           '<section class="panel" id="techSchedulePanel"><button class="btn headcountBack" id="scheduleHomeBtn" type="button">\u8fd4\u56de\u9996\u9801</button><div class="sectionTitle">\u7f8e\u6280\u73ed\u8868</div><div class="sectionNote">\u6ac3\u9577\u54c1\u85df\u8207\u516d\u4f4d\u6280\u5e2b\u7576\u6708\u73ed\u8868\uff1b\u7a7a\u767d\u4ee3\u8868\u6b63\u5e38\u4e0a\u73ed\uff0c\u7e3d\u8868\u53ea\u986f\u793a\u7c21\u5beb\uff1a\u4f8b\u3001\u7279\u3001\u4e8b\u3001\u98b1\u3001\u66e0\u3001\u503c\u3002</div><div class="summaryControls"><div><label for="scheduleMonthInput">\u67e5\u8a62\u6708\u4efd</label><input id="scheduleMonthInput" type="month"></div><button class="btn refresh" id="scheduleSearchBtn" type="button">\u67e5\u8a62</button></div><button class="btn scheduleEditToggle" id="scheduleEditToggleBtn" type="button">\u2699\ufe0f \u8a2d\u5b9a\u73ed\u8868</button><div id="scheduleMessage" class="message"></div><div id="scheduleArea"></div><div id="scheduleDetailArea"></div><div id="scheduleEditBox" class="scheduleEditBox"><div class="sectionNote">\u54c1\u85df\u8207\u7ba1\u7406\u54e1\u53ef\u8a2d\u5b9a\u73ed\u8868</div><div class="grid"><div><label for="scheduleEditStaff">\u4eba\u54e1</label><select id="scheduleEditStaff"></select></div><div class="wide"><label>\u65e5\u671f\uff08\u53ef\u8907\u9078\uff09</label><div id="scheduleCalendar" class="scheduleCalendar"></div><input id="scheduleEditDates" type="hidden"></div><div><label for="scheduleEditStatus">\u72c0\u614b</label><select id="scheduleEditStatus"></select></div><div><label for="scheduleEditNote">\u5099\u8a3b</label><input id="scheduleEditNote" type="text"></div></div><button class="btn refresh" id="scheduleSaveBtn" type="button">\u5132\u5b58\u73ed\u8868</button></div></section>',
-          '<section class="panel" id="myMonthlySalesPanel"><button class="btn headcountBack" id="salesHomeBtn" type="button">返回首頁</button><div class="sectionTitle">個人當月業績</div><div class="sectionNote">依你原本 Excel「業績累計」邏輯計算：業績加總、扣底、級距獎金比例與預估實領。</div><div id="salesArea"></div><div class="summaryControls"><div><label for="salesMonthInput">查詢月份</label><input id="salesMonthInput" type="month"></div><button class="btn refresh" id="salesSearchBtn" type="button">查詢</button></div><div class="salesAdminPicker" id="salesPersonWrap"><label for="salesPersonSelect">查詢人員</label><select id="salesPersonSelect"></select></div><div id="salesMessage" class="message"></div><div class="salesActionToggles"><button class="btn refresh" id="salesAddToggleBtn" type="button">新增業績</button><button class="btn reset" id="salesListToggleBtn" type="button">本月業績一覽</button></div><div class="salesFormBox collapsed" id="salesFormBox"><div class="sectionTitle" id="salesFormTitle">新增業績</div><div class="grid"><div><label for="salesOwnerInput">登入者</label><input id="salesOwnerInput" type="text" readonly></div><div><label for="salesDateInput">日期</label><input id="salesDateInput" type="date"></div><div><label for="salesAmountInput">業績金額</label><input id="salesAmountInput" type="text" inputmode="decimal" pattern="-?[0-9,]*"></div><div><label for="salesVenueInput">會館</label><select id="salesVenueInput"></select></div><div><label for="salesCounterInput">專櫃</label><select id="salesCounterInput"></select></div></div><div class="salesEditActions"><button class="btn refresh" id="salesCreateBtn" type="button">儲存業績</button><button class="btn salesDeleteBtn" id="salesDeleteBtn" type="button">刪除業績</button><button class="btn reset" id="salesCancelEditBtn" type="button">取消編輯</button></div></div><div id="salesDetailArea" class="collapsed"></div></section>',        '</main><button class="topFloatBtn" id="topFloatBtn" type="button">TOP</button>'
+          '<section class="panel" id="myMonthlySalesPanel"><button class="btn headcountBack" id="salesHomeBtn" type="button">返回首頁</button><div class="sectionTitle">個人當月業績</div><div class="sectionNote">依你原本 Excel「業績累計」邏輯計算：業績加總、扣底、級距獎金比例與預估實領。</div><div id="salesArea"></div><div class="summaryControls"><div><label for="salesMonthInput">查詢月份</label><input id="salesMonthInput" type="month"></div><button class="btn refresh" id="salesSearchBtn" type="button">查詢</button></div><div class="salesAdminPicker" id="salesPersonWrap"><label for="salesPersonSelect">查詢人員</label><select id="salesPersonSelect"></select></div><div id="salesMessage" class="message"></div><div class="salesActionToggles"><button class="btn refresh" id="salesAddToggleBtn" type="button">新增業績</button><button class="btn reset" id="salesListToggleBtn" type="button">本月業績一覽</button></div><div class="salesFormBox collapsed" id="salesFormBox"><div class="sectionTitle" id="salesFormTitle">新增業績</div><div class="grid"><div><label for="salesOwnerInput">登入者</label><input id="salesOwnerInput" type="text" readonly></div><div><label for="salesDateInput">日期</label><input id="salesDateInput" type="date"></div><div class="salesAmountWrap"><label for="salesAmountInput">業績金額</label><input id="salesAmountInput" type="text" inputmode="text" pattern="-?[0-9,]*" placeholder="可輸入負數"><button class="salesMinusBtn" id="salesMinusBtn" type="button">−</button></div><div><label for="salesVenueInput">會館</label><select id="salesVenueInput"></select></div><div><label for="salesCounterInput">專櫃</label><select id="salesCounterInput"></select></div></div><div class="salesEditActions"><button class="btn refresh" id="salesCreateBtn" type="button">儲存業績</button><button class="btn salesDeleteBtn" id="salesDeleteBtn" type="button">刪除業績</button><button class="btn reset" id="salesCancelEditBtn" type="button">取消編輯</button></div></div><div id="salesDetailArea" class="collapsed"></div></section>',        '</main><button class="topFloatBtn" id="topFloatBtn" type="button">TOP</button>'
       ].join('');
 
       document.querySelector('main.page').insertAdjacentHTML('beforeend', '<section class="panel" id="portalConstructionPanel"><button class="btn headcountBack" id="constructionHomeBtn" type="button">\u8fd4\u56de\u9996\u9801</button><div class="sectionTitle" id="constructionTitle">\u529f\u80fd\u5efa\u7f6e\u4e2d</div><div class="sectionNote" id="constructionText">\u9019\u500b\u529f\u80fd\u6b63\u5728\u65bd\u5de5\u4e2d\uff0c\u5b8c\u6210\u5f8c\u5c31\u6703\u958b\u653e\u4f7f\u7528\u3002</div><div class="slotBox empty">\u2692\ufe0f<br>\u65bd\u5de5\u4e2d</div></section>');
@@ -802,7 +816,7 @@
       byId('portalServicesBtn').onclick = function () { showConstructionPage('\u500b\u4eba\u7576\u6708\u670d\u52d9\u4e00\u89bd', '\u9019\u500b\u529f\u80fd\u6b63\u5728\u65bd\u5de5\u4e2d\uff0c\u5b8c\u6210\u5f8c\u53ef\u67e5\u8a62\u500b\u4eba\u7576\u6708\u670d\u52d9\u660e\u7d30\u3002'); };
       byId('constructionHomeBtn').onclick = showHome;
       byId('tabBook').onclick = function () { showTab('book'); };
-      if (byId('reportBtn')) byId('reportBtn').addEventListener('click', function (event) { event.preventDefault(); event.stopPropagation(); showTomorrowReport(); });
+      setupReportButton();
       if (byId('adminBtn')) byId('adminBtn').onclick = showAdminPanel;
       byId('reportBackBtn').onclick = showHome;
       byId('reportSearchBtn').onclick = loadReportByDate;
@@ -850,6 +864,7 @@
       byId('salesCounterInput').onchange = function () { if (this.value) byId('salesVenueInput').value = ''; clearSalesFieldError('salesVenueInput'); clearSalesFieldError('salesCounterInput'); };
       byId('salesDateInput').onchange = function () { clearSalesFieldError('salesDateInput'); };
       byId('salesAmountInput').oninput = function () { clearSalesFieldError('salesAmountInput'); };
+      byId('salesMinusBtn').onclick = toggleSalesMinus;
       byId('salesCreateBtn').onclick = createMyMonthlySale;
       byId('salesDeleteBtn').onclick = deleteMonthlySale;
       byId('salesCancelEditBtn').onclick = resetSalesForm;
@@ -861,6 +876,24 @@
     }
 
 
+    function setupReportButton() {
+      var btn = byId('reportBtn');
+      if (!btn) return;
+      var firedAt = 0;
+      function open(event) {
+        if (event) {
+          event.preventDefault();
+          event.stopPropagation();
+        }
+        var now = Date.now();
+        if (now - firedAt < 450) return;
+        firedAt = now;
+        showTomorrowReport();
+      }
+      btn.onclick = open;
+      btn.addEventListener('pointerup', open);
+      btn.addEventListener('touchend', open, { passive: false });
+    }
     function setupTopFloatButton() {
       var btn = byId('topFloatBtn');
       if (!btn) return;
@@ -1248,6 +1281,15 @@
         collapseSalesDetails();
       }
     }
+    function toggleSalesMinus() {
+      var input = byId('salesAmountInput');
+      if (!input) return;
+      var text = String(input.value || '').trim();
+      if (text.indexOf('-') === 0) input.value = text.slice(1);
+      else input.value = '-' + text;
+      clearSalesFieldError('salesAmountInput');
+      input.focus();
+    }
     function validateMonthlySaleForm() {
       clearSalesFieldErrors();
       var date = byId('salesDateInput').value;
@@ -1255,7 +1297,7 @@
       var venue = byId('salesVenueInput').value;
       var counter = byId('salesCounterInput').value;
       if (!date) return showSalesFieldError('salesDateInput', '請選擇日期');
-      if (amountText === '' || isNaN(Number(amountText))) return showSalesFieldError('salesAmountInput', '請輸入業績金額，負數也可以');
+      if (amountText === '' || isNaN(Number(amountText.replace(/,/g, '')))) return showSalesFieldError('salesAmountInput', '請輸入業績金額，負數也可以');
       if (!venue && !counter) return showSalesFieldError('salesVenueInput', '請選擇會館或專櫃其中一個');
       if (venue && counter) return showSalesFieldError('salesCounterInput', '會館與專櫃只能擇一，請清除其中一個');
       return true;
@@ -1315,7 +1357,7 @@
       var place = data.venue ? ('會館：' + data.venue) : ('專櫃：' + data.counter);
       return [
         '日期：' + String(data.date || '').replace(/-/g, '/'),
-        '業績金額：$' + formatMoney(Number(String(data.amount || '').replace(/,/g, '')) || 0),
+        '業績金額：$' + formatMoney(Number(String(data.amount || '').replace(/,/g, ''))),
         place,
         '登記者：' + (byId('salesOwnerInput').value || LINE_PROFILE.displayName || '')
       ].map(escapeHtml).join('\n');
@@ -1372,18 +1414,25 @@
       if (!window.SALES_EDIT_ROW_NUMBER) return;
       if (!window.confirm('確定要刪除這筆業績嗎？')) return;
       clearBox('salesMessage');
-      showPanelMessage('salesMessage', '刪除中...', false);
+      showMonthlySaleProgress('刪除中...');
       apiCall('deleteMyMonthlySale', { rowNumber: window.SALES_EDIT_ROW_NUMBER, month: byId('salesMonthInput').value, targetUserId: getSalesTargetUserId() }, function (result) {
-        resetSalesForm(false);
-        showPanelMessage('salesMessage', '✅ 業績已刪除', false);
-        renderMyMonthlySales(result);
-      }, function (err) { showPanelMessage('salesMessage', err, true); });
+        showMonthlySaleProgress('✅ 刪除完成');
+        setTimeout(function () {
+          closeMonthlySaleProgress();
+          resetSalesForm(false);
+          showPanelMessage('salesMessage', '✅ 業績已刪除', false);
+          renderMyMonthlySales(result);
+        }, 1200);
+      }, function (err) { closeMonthlySaleProgress(); showPanelMessage('salesMessage', err, true); });
     }
 
     function resetSalesForm(clearMessage) {
       window.SALES_EDIT_ROW_NUMBER = 0;
       clearSalesFieldErrors();
       if (byId('salesFormTitle')) byId('salesFormTitle').textContent = '新增業績';
+      if (byId('salesAmountInput')) byId('salesAmountInput').value = '';
+      if (byId('salesVenueInput')) byId('salesVenueInput').value = '';
+      if (byId('salesCounterInput')) byId('salesCounterInput').value = '';
       if (byId('salesCreateBtn')) byId('salesCreateBtn').textContent = '儲存業績';
       if (byId('salesDeleteBtn')) byId('salesDeleteBtn').style.display = 'none';
       if (byId('salesCancelEditBtn')) byId('salesCancelEditBtn').style.display = 'none';
@@ -2183,6 +2232,8 @@
       if (byId('techSchedulePanel')) byId('techSchedulePanel').classList.remove('active');
       if (byId('myMonthlySalesPanel')) byId('myMonthlySalesPanel').classList.remove('active');
       byId('reportPanel').classList.add('active');
+      byId('reportDateText').textContent = '載入中...';
+      byId('reportArea').innerHTML = '<div class="slotBox empty">載入中...</div>';
       byId('reportDateInput').value = dateOffsetString(1);
       loadReportByDate();
     }
