@@ -466,6 +466,20 @@
     .servicesActionToggles .btn { min-height: 78px; margin: 0; font-size: clamp(18px, 3.8vw, 28px); display: grid; place-items: center; }
     .servicesFormBox.collapsed, #servicesDetailArea.collapsed { display: none; }
     .servicesEditActions { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 18px; }
+    #myMonthlyServicesPanel .servicesEditActions .btn {
+      width: 100% !important;
+      min-height: 68px !important;
+      height: 68px !important;
+      margin: 0 !important;
+      padding: 10px 8px !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      text-align: center !important;
+      font-size: clamp(17px, 3.7vw, 24px) !important;
+      font-weight: 950 !important;
+      line-height: 1.1 !important;
+    }
     .topFloatBtn.dragReady { box-shadow: 0 0 0 5px rgba(76,127,105,.22), 0 10px 26px rgba(0,0,0,.18); }
     .topFloatBtn.dragging { opacity: .86; transition: none; }
     body.scheduleOnly .modeSwitcher,
@@ -682,6 +696,9 @@
     };
     var DEFAULT_ROOMS = ['\u6587\u6210\u4e00\u6a13','\u6587\u6210\u4e8c\u6a13\u5de6','\u6587\u6210\u4e8c\u6a13\u53f3','\u6587\u6210\u4e09\u6a13\u524d','\u6587\u6210\u4e09\u6a13\u5f8c','\u6587\u6210\u56db\u6a13\u524d','\u6587\u6210\u56db\u6a13\u5de6\u5f8c','\u6587\u6210\u56db\u6a13\u53f3\u5f8c','\u6587\u6210\u4e94\u6a13'];
     var TECHS = ['\u7f8e\u537f','\u96ef\u8431','\u7f8e\u73b2','\u839b\u7a4e','\u66fc\u7433','\u4f73\u59a4','\u7f8e\u5bb9\u5e2b','\u652f\u63f4\u6280\u5e2b'];
+    var SERVICES_SPEAKERS = ['麗榮', '小波', '麗冰', '麗軍', '衍欣', '亞明', '亞妹'];
+    var SERVICES_DEALS = ['有', '無'];
+    var SERVICES_FINANCES = ['仲信', '裕富', '遠信', '現金', '刷卡'];
     var SERVICE_TARGETS = ['\u4e3b\u9867\u5ba2', '\u9ad4\u9a57\u5ba2', '\u7b2c\u4e00\u6b21\u670d\u52d9'];
         var NO_INSTRUMENT_SERVICE = '\u7121\u5100\u5668';
         var STANDARD_SERVICES = ['\u6c34\u98db\u68ad', '\u947d\u77f3\u5fae\u96d5', '\u6ed1\u7f50', '\u5143\u6c23\u5100', 'G5', '\u7d93\u7d61\u5237', '\u7121\u5100\u5668'];
@@ -1212,6 +1229,7 @@
       if (byId('myMonthlySalesPanel')) byId('myMonthlySalesPanel').classList.remove('active');
       if (byId('myMonthlyServicesPanel')) byId('myMonthlyServicesPanel').classList.remove('active');
       byId('myMonthlyServicesPanel').classList.add('active');
+      fillServicesDefaults();
       resetServicesForm(false);
       collapseServicesForm();
       collapseServicesDetails();
@@ -1219,6 +1237,13 @@
       if (!byId('servicesDateInput').value) setToday('servicesDateInput');
       loadMyMonthlyServices();
       window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function fillServicesDefaults(result) {
+      result = result || {};
+      fillSelect('servicesSpeakerInput', result.speakerOptions || SERVICES_SPEAKERS, byId('servicesSpeakerInput') ? byId('servicesSpeakerInput').value : '', '請選擇');
+      fillSelect('servicesDealInput', result.dealOptions || SERVICES_DEALS, byId('servicesDealInput') ? byId('servicesDealInput').value : '', '請選擇');
+      fillSelect('servicesFinanceInput', result.financeOptions || SERVICES_FINANCES, byId('servicesFinanceInput') ? byId('servicesFinanceInput').value : '', '請選擇');
     }
 
     function getServicesTargetUserId() {
@@ -1262,9 +1287,7 @@
       result = result || {};
       window.SERVICES_DETAILS = result.details || [];
       renderServicesPersonPicker(result);
-      fillSelect('servicesSpeakerInput', result.speakerOptions || [], byId('servicesSpeakerInput').value, '請選擇');
-      fillSelect('servicesDealInput', result.dealOptions || [], byId('servicesDealInput').value, '請選擇');
-      fillSelect('servicesFinanceInput', result.financeOptions || [], byId('servicesFinanceInput').value, '請選擇');
+      fillServicesDefaults(result);
       byId('servicesOwnerInput').value = result.currentUserName || LINE_PROFILE.displayName || '';
       var monthText = String(result.month || byId('servicesMonthInput').value || '').replace('-', '/');
       byId('servicesStatsArea').innerHTML =
@@ -1413,6 +1436,7 @@
       if (byId('servicesFormTitle')) byId('servicesFormTitle').textContent = '新增服務';
       if (byId('servicesSaveBtn')) byId('servicesSaveBtn').textContent = '登記服務';
       setToday('servicesDateInput');
+      fillServicesDefaults();
       syncServicesFinanceFields();
       if (clearMessage !== false) clearBox('servicesMessage');
     }
