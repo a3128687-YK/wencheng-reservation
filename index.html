@@ -366,7 +366,7 @@
       border-width: 1px;
     }
     .reportPanel .summaryTime { font-size: clamp(5px, 1.28vw, 6.5px); font-weight: 950; margin-bottom: 0; line-height: 1; white-space: nowrap; overflow: hidden; text-align: center; }
-    .reportPanel .summaryDetail { font-size: clamp(5px, 1.2vw, 6px); font-weight: 950; line-height: 1; text-align: center; overflow: hidden; }
+    .reportPanel .summaryDetail { font-size: clamp(4.8px, 1.15vw, 5.8px); font-weight: 950; line-height: .95; text-align: center; overflow: hidden; word-break: keep-all; }
     .reportShotMode .hero,
     .reportShotMode .quickInfo,
     .reportShotMode .modeSwitcher,
@@ -3060,10 +3060,25 @@
     function formatReportSlotDetail(booking) {
       booking = booking || {};
       var service = String(booking.service || '');
-      if (service.indexOf('\u9ad4\u9a57\u5ba2') !== -1) return '\u9ad4';
-      if (service.indexOf('\u4e3b\u9867\u5ba2') !== -1) return '\u4e3b';
-      var technician = String(booking.technician || '\u9810');
-      return escapeHtml(technician.slice(0, 2));
+      var technician = formatReportTechnicianName(booking.technician);
+      if (service.indexOf('\u9ad4\u9a57\u5ba2') !== -1) return '\u9ad4<br>' + escapeHtml(technician);
+      if (service.indexOf('\u4e3b\u9867\u5ba2') !== -1) return '\u4e3b<br>' + escapeHtml(technician);
+      return escapeHtml(technician);
+    }
+
+    function formatReportTechnicianName(value) {
+      var text = String(value || '').trim();
+      if (!text) return '\u9810';
+      var names = text.split(/[\u3001,，\/]+/).map(function (name) {
+        name = name.trim();
+        var custom = name.match(/^(?:\u7f8e\u5bb9\u5e2b|\u652f\u63f4\u6280\u5e2b)[\uff08(](.+?)[\uff09)]$/);
+        if (custom) return custom[1].trim();
+        return name;
+      }).filter(Boolean);
+      if (!names.length) return '\u9810';
+      return names.slice(0, 2).map(function (name) {
+        return name.length > 3 ? name.slice(0, 3) : name;
+      }).join('/');
     }
 
     function getRoomTitleHtml(roomName) {
