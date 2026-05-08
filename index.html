@@ -913,7 +913,7 @@
           '<section class="panel" id="myMonthlySalesPanel"><button class="btn headcountBack" id="salesHomeBtn" type="button">返回首頁</button><div class="sectionTitle">個人當月業績</div><div class="sectionNote">依你原本 Excel「業績累計」邏輯計算：業績加總、扣底、級距獎金比例與預估實領。</div><div id="salesArea"></div><div class="summaryControls"><div><label for="salesMonthInput">查詢月份</label><input id="salesMonthInput" type="month"></div><button class="btn refresh" id="salesSearchBtn" type="button">查詢</button></div><div class="salesAdminPicker" id="salesPersonWrap"><label for="salesPersonSelect">查詢人員</label><select id="salesPersonSelect"></select></div><div id="salesMessage" class="message"></div><div class="salesActionToggles"><button class="btn refresh salesBigToggle" id="salesAddToggleBtn" type="button">新增業績</button><button class="btn reset salesBigToggle" id="salesListToggleBtn" type="button">本月業績一覽</button><button class="btn reset salesBigToggle" id="salesHistoryBtn" type="button">歷史查詢</button></div><div class="salesFormBox collapsed" id="salesFormBox"><div class="sectionTitle" id="salesFormTitle">新增業績</div><div class="grid"><div><label for="salesOwnerInput">登入者</label><input id="salesOwnerInput" type="text" readonly></div><div><label for="salesDateInput">日期</label><input id="salesDateInput" type="date"></div><div class="salesAmountWrap"><label for="salesAmountInput">業績金額</label><input id="salesAmountInput" type="text" inputmode="text" pattern="-?[0-9,]*" placeholder="恭喜開包"><button class="salesMinusBtn" id="salesMinusBtn" type="button">−</button></div><div><label for="salesVenueInput">會館</label><select id="salesVenueInput"></select></div><div><label for="salesCounterInput">專櫃</label><select id="salesCounterInput"></select></div></div><div class="salesEditActions"><button class="btn refresh salesPrimaryAction" id="salesCreateBtn" type="button">儲存業績</button><button class="btn salesDeleteBtn" id="salesDeleteBtn" type="button">刪除業績</button><button class="btn reset" id="salesCancelEditBtn" type="button">取消編輯</button></div></div><div id="salesDetailArea" class="collapsed"></div></section>',        '</main><button class="topFloatBtn" id="topFloatBtn" type="button">TOP</button>'
       ].join('');
 
-            document.querySelector('main.page').insertAdjacentHTML('beforeend', '<section class="panel" id="myMonthlyServicesPanel"><button class="btn headcountBack" id="servicesHomeBtn" type="button">返回首頁</button><div class="sectionTitle">個人當月服務一覽</div><div class="sectionNote">每人只能查看與編輯自己的服務資料；最高權限者可切換查詢人員。</div><div class="summaryControls"><div><label for="servicesMonthInput">查詢月份</label><input id="servicesMonthInput" type="month"></div><button class="btn refresh" id="servicesSearchBtn" type="button">查詢</button></div><div class="salesAdminPicker" id="servicesPersonWrap"><label for="servicesPersonSelect">查詢人員</label><select id="servicesPersonSelect"></select></div><div id="servicesStatsArea"></div><div id="servicesMessage" class="message"></div><div class="servicesActionToggles"><button class="btn refresh" id="servicesAddToggleBtn" type="button">新增服務</button><button class="btn reset" id="servicesListToggleBtn" type="button">服務一覽</button></div><div class="servicesFormBox collapsed" id="servicesFormBox"><div class="sectionTitle" id="servicesFormTitle">新增服務</div><div class="grid"><div><label for="servicesOwnerInput">登入者</label><input id="servicesOwnerInput" type="text" readonly></div><div><label for="servicesDateInput">日期</label><input id="servicesDateInput" type="date"></div><div><label for="servicesBaInput">BA</label><input id="servicesBaInput" type="text"></div><div><label for="servicesConsultantInput">諮詢者</label><input id="servicesConsultantInput" type="text" placeholder="沒有則填無"></div><div><label for="servicesSpeakerInput">主講</label><select id="servicesSpeakerInput"></select></div><div><label for="servicesHelperInput">幫忙美容師</label><input id="servicesHelperInput" type="text" placeholder="沒有則填無"></div><div><label for="servicesCustomerInput">顧客姓名</label><input id="servicesCustomerInput" type="text"></div><div><label for="servicesDealInput">是否成交</label><select id="servicesDealInput"></select></div><div><label for="servicesFinanceInput">分期公司</label><select id="servicesFinanceInput"></select></div><div id="servicesUnitWrap"><label for="servicesUnitPriceInput">單價</label><input id="servicesUnitPriceInput" type="number" inputmode="numeric"></div><div id="servicesInstallmentWrap"><label for="servicesInstallmentsInput">期數</label><input id="servicesInstallmentsInput" type="number" inputmode="numeric"></div><div><label for="servicesTotalPriceInput">總價</label><input id="servicesTotalPriceInput" type="number" inputmode="numeric"></div><div class="wide"><label for="servicesNoteInput">備註</label><input id="servicesNoteInput" type="text"></div></div><div class="servicesEditActions"><button class="btn refresh" id="servicesSaveBtn" type="button">登記服務</button><button class="btn servicesDeleteBtn" id="servicesDeleteBtn" type="button">刪除此筆</button><button class="btn reset" id="servicesCancelEditBtn" type="button">取消編輯</button></div></div><div id="servicesDetailArea" class="collapsed"></div></section>');
+            document.querySelector('main.page').insertAdjacentHTML('beforeend', '<section class="panel" id="myMonthlyServicesPanel"><button class="btn headcountBack" id="servicesHomeBtn" type="button">返回首頁</button><div class="sectionTitle">個人當月服務一覽</div><div class="sectionNote">每人只能查看與編輯自己的服務資料；最高權限者可切換查詢人員。</div><div class="summaryControls"><div><label for="servicesMonthInput">查詢月份</label><input id="servicesMonthInput" type="month"></div><button class="btn refresh" id="servicesSearchBtn" type="button">查詢</button></div><div class="salesAdminPicker" id="servicesPersonWrap"><label for="servicesPersonSelect">查詢人員</label><select id="servicesPersonSelect"></select></div><div id="servicesStatsArea"></div><div id="servicesMessage" class="message"></div><div class="servicesActionToggles"><button class="btn refresh" id="servicesAddToggleBtn" type="button">新增服務</button><button class="btn reset" id="servicesListToggleBtn" type="button">服務一覽</button></div><div class="servicesFormBox collapsed" id="servicesFormBox"><div class="sectionTitle" id="servicesFormTitle">新增服務</div><div class="grid"><div><label for="servicesOwnerInput">登入者</label><input id="servicesOwnerInput" type="text" readonly></div><div><label for="servicesDateInput">日期</label><input id="servicesDateInput" type="date"></div><div><label for="servicesBaInput">BA</label><input id="servicesBaInput" type="text"></div><div><label for="servicesConsultantInput">諮詢者</label><input id="servicesConsultantInput" type="text" placeholder="沒有則填無"></div><div><label for="servicesSpeakerInput">主講</label><select id="servicesSpeakerInput"></select></div><div><label for="servicesHelperInput">幫忙美容師</label><input id="servicesHelperInput" type="text" placeholder="沒有則填無"></div><div><label for="servicesCustomerInput">顧客姓名</label><input id="servicesCustomerInput" type="text"></div><div><label for="servicesDealInput">是否成交</label><select id="servicesDealInput"></select></div><div><label for="servicesFinanceInput">分期公司</label><select id="servicesFinanceInput"></select></div><div id="servicesUnitWrap"><label for="servicesUnitPriceInput">單價</label><input id="servicesUnitPriceInput" type="text" inputmode="text" pattern="-?[0-9,]*"></div><div id="servicesInstallmentWrap"><label for="servicesInstallmentsInput">期數</label><input id="servicesInstallmentsInput" type="number" inputmode="numeric"></div><div class="salesAmountWrap" id="servicesTotalWrap"><label for="servicesTotalPriceInput">總價</label><input id="servicesTotalPriceInput" type="text" inputmode="text" pattern="-?[0-9,]*"><button class="salesMinusBtn" id="servicesTotalMinusBtn" type="button">−</button></div><div class="wide"><label for="servicesNoteInput">備註</label><input id="servicesNoteInput" type="text"></div></div><div class="servicesEditActions"><button class="btn refresh" id="servicesSaveBtn" type="button">登記服務</button><button class="btn servicesDeleteBtn" id="servicesDeleteBtn" type="button">刪除此筆</button><button class="btn reset" id="servicesCancelEditBtn" type="button">取消編輯</button></div></div><div id="servicesDetailArea" class="collapsed"></div></section>');
       document.querySelector('main.page').insertAdjacentHTML('beforeend', '<section class="panel" id="bonusCalcPanel"><button class="btn headcountBack" id="bonusHomeBtn" type="button">返回首頁</button><div class="sectionTitle">工獎計算</div><div class="sectionNote">只計入服務對象為「主顧客」的有效預約；體驗客與第一次服務不列入。B=2部位、F=1部位、BF=3部位。</div><div class="summaryControls"><div><label for="bonusMonthInput">查詢月份</label><input id="bonusMonthInput" type="month"></div><button class="btn refresh" id="bonusSearchBtn" type="button">查詢</button></div><div id="bonusMessage" class="message"></div><div id="bonusArea"></div><div id="bonusDetailArea"></div></section>');
       document.querySelector('main.page').insertAdjacentHTML('beforeend', '<section class="panel" id="portalConstructionPanel"><button class="btn headcountBack" id="constructionHomeBtn" type="button">\u8fd4\u56de\u9996\u9801</button><div class="sectionTitle" id="constructionTitle">\u529f\u80fd\u5efa\u7f6e\u4e2d</div><div class="sectionNote" id="constructionText">\u9019\u500b\u529f\u80fd\u6b63\u5728\u65bd\u5de5\u4e2d\uff0c\u5b8c\u6210\u5f8c\u5c31\u6703\u958b\u653e\u4f7f\u7528\u3002</div><div class="slotBox empty">\u2692\ufe0f<br>\u65bd\u5de5\u4e2d</div></section>');
 
@@ -999,6 +999,7 @@
       });
       byId('servicesUnitPriceInput').oninput = syncServicesTotalPrice;
       byId('servicesInstallmentsInput').oninput = syncServicesTotalPrice;
+      byId('servicesTotalMinusBtn').onclick = toggleServicesTotalMinus;
       byId('servicesSaveBtn').onclick = saveMyMonthlyService;
       byId('servicesDeleteBtn').onclick = deleteMonthlyService;
       byId('servicesCancelEditBtn').onclick = resetServicesForm;
@@ -1544,8 +1545,9 @@
       byId('servicesFinanceInput').parentElement.style.display = noDeal ? 'none' : '';
       byId('servicesUnitWrap').style.display = (!noDeal && installment) ? '' : 'none';
       byId('servicesInstallmentWrap').style.display = (!noDeal && installment) ? '' : 'none';
-      byId('servicesTotalPriceInput').parentElement.style.display = noDeal ? 'none' : '';
+      byId('servicesTotalWrap').style.display = noDeal ? 'none' : '';
       byId('servicesTotalPriceInput').readOnly = !noDeal && installment;
+      byId('servicesTotalMinusBtn').style.display = (!noDeal && !installment) ? '' : 'none';
       if (noDeal) {
         byId('servicesFinanceInput').value = '';
         byId('servicesUnitPriceInput').value = '';
@@ -1560,9 +1562,18 @@
     }
     function syncServicesTotalPrice() {
       if (!isInstallmentFinance(byId('servicesFinanceInput').value)) return;
-      var unit = Number(byId('servicesUnitPriceInput').value || 0);
+      var unit = Number(String(byId('servicesUnitPriceInput').value || '').replace(/,/g, ''));
       var count = Number(byId('servicesInstallmentsInput').value || 0);
       byId('servicesTotalPriceInput').value = unit && count ? unit * count : '';
+    }
+
+    function toggleServicesTotalMinus() {
+      var input = byId('servicesTotalPriceInput');
+      if (!input || input.readOnly) return;
+      var text = String(input.value || '').trim();
+      input.value = text.indexOf('-') === 0 ? text.slice(1) : '-' + text;
+      clearFieldError('servicesTotalPriceInput');
+      input.focus();
     }
 
     function validateServicesForm() {
@@ -1576,6 +1587,13 @@
       }
       for (var i = 0; i < ids.length; i++) {
         if (!String(byId(ids[i]).value || '').trim()) { markFieldError(ids[i]); scrollToField(ids[i]); return false; }
+      }
+      if (!noDeal) {
+        if (isInstallmentFinance(byId('servicesFinanceInput').value)) {
+          if (isNaN(Number(String(byId('servicesUnitPriceInput').value || '').replace(/,/g, '')))) { markFieldError('servicesUnitPriceInput'); scrollToField('servicesUnitPriceInput'); return false; }
+        } else if (isNaN(Number(String(byId('servicesTotalPriceInput').value || '').replace(/,/g, '')))) {
+          markFieldError('servicesTotalPriceInput'); scrollToField('servicesTotalPriceInput'); return false;
+        }
       }
       return true;
     }
