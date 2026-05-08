@@ -361,15 +361,16 @@
     .reportPanel .summaryCell {
       height: 24px;
       min-height: 24px;
-      padding: 1px 0 2px;
+      padding: 1px 1px 2px;
       border-radius: 4px;
       border-width: 1px;
-      display: grid;
-      grid-template-rows: 7px minmax(0, 1fr);
-      align-items: start;
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      justify-content: flex-start;
     }
-    .reportPanel .summaryTime { font-size: clamp(5px, 1.28vw, 6.5px); font-weight: 950; line-height: 1; white-space: nowrap; overflow: hidden; text-align: center; align-self: start; }
-    .reportPanel .summaryDetail { font-size: clamp(5px, 1.18vw, 6px); font-weight: 950; line-height: 1; text-align: center; overflow: hidden; word-break: keep-all; display: block; padding-top: 1px; }
+    .reportPanel .summaryTime { flex: 0 0 7px; font-size: clamp(4.8px, 1.18vw, 6px); font-weight: 950; line-height: 1; white-space: nowrap; overflow: hidden; text-align: center; }
+    .reportPanel .summaryDetail { flex: 1 1 auto; min-height: 0; font-size: clamp(4.4px, 1.08vw, 5.6px); font-weight: 950; line-height: 1; text-align: center; overflow: hidden; word-break: keep-all; white-space: nowrap; display: flex; align-items: flex-start; justify-content: center; padding-top: 2px; }
     .reportShotMode .hero,
     .reportShotMode .quickInfo,
     .reportShotMode .modeSwitcher,
@@ -3128,6 +3129,7 @@
     function formatReportTechnicianName(value) {
       var text = String(value || '').trim();
       if (!text) return '\u9810';
+      text = text.replace(/\u4e3b\u9867\u5ba2/g, '').replace(/\u9ad4\u9a57\u5ba2/g, '').replace(/^[\u4e3b\u9ad4]\s*/, '').trim();
       var names = text.split(/[\u3001,，\/]+/).map(function (name) {
         name = name.trim();
         var custom = name.match(/^(?:\u7f8e\u5bb9\u5e2b|\u652f\u63f4\u6280\u5e2b)[\uff08(](.+?)[\uff09)]$/);
@@ -3135,9 +3137,7 @@
         return name;
       }).filter(Boolean);
       if (!names.length) return '\u9810';
-      return names.slice(0, 2).map(function (name) {
-        return name.length > 3 ? name.slice(0, 3) : name;
-      }).join('/');
+      return names.slice(0, 2).join('/');
     }
 
     function getRoomTitleHtml(roomName) {
