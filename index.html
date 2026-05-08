@@ -935,6 +935,13 @@
       byId('servicesAddToggleBtn').onclick = toggleServicesForm;
       byId('servicesListToggleBtn').onclick = toggleServicesDetails;
       byId('servicesFinanceInput').onchange = syncServicesFinanceFields;
+      ['servicesSpeakerInput','servicesDealInput','servicesFinanceInput'].forEach(function (id) {
+        var select = byId(id);
+        if (!select) return;
+        select.onclick = function () { fillServicesDefaults(); };
+        select.onfocus = function () { fillServicesDefaults(); };
+        select.ontouchstart = function () { fillServicesDefaults(); };
+      });
       byId('servicesUnitPriceInput').oninput = syncServicesTotalPrice;
       byId('servicesInstallmentsInput').oninput = syncServicesTotalPrice;
       byId('servicesSaveBtn').onclick = saveMyMonthlyService;
@@ -1241,9 +1248,25 @@
 
     function fillServicesDefaults(result) {
       result = result || {};
-      fillSelect('servicesSpeakerInput', result.speakerOptions || SERVICES_SPEAKERS, byId('servicesSpeakerInput') ? byId('servicesSpeakerInput').value : '', '請選擇');
-      fillSelect('servicesDealInput', result.dealOptions || SERVICES_DEALS, byId('servicesDealInput') ? byId('servicesDealInput').value : '', '請選擇');
-      fillSelect('servicesFinanceInput', result.financeOptions || SERVICES_FINANCES, byId('servicesFinanceInput') ? byId('servicesFinanceInput').value : '', '請選擇');
+      var speakers = (result.speakerOptions && result.speakerOptions.length) ? result.speakerOptions : SERVICES_SPEAKERS;
+      var deals = (result.dealOptions && result.dealOptions.length) ? result.dealOptions : SERVICES_DEALS;
+      var finances = (result.financeOptions && result.financeOptions.length) ? result.financeOptions : SERVICES_FINANCES;
+      forceFillServiceSelect('servicesSpeakerInput', speakers, '請選擇');
+      forceFillServiceSelect('servicesDealInput', deals, '請選擇');
+      forceFillServiceSelect('servicesFinanceInput', finances, '請選擇');
+    }
+
+    function forceFillServiceSelect(id, list, placeholder) {
+      var select = byId(id);
+      if (!select) return;
+      var old = select.value || '';
+      select.innerHTML = '';
+      select.appendChild(new Option(placeholder || '請選擇', ''));
+      (list || []).forEach(function (item) {
+        select.appendChild(new Option(item, item));
+      });
+      if (old && (list || []).indexOf(old) >= 0) select.value = old;
+      else select.value = '';
     }
 
     function getServicesTargetUserId() {
