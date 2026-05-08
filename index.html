@@ -935,6 +935,7 @@
       byId('servicesAddToggleBtn').onclick = toggleServicesForm;
       byId('servicesListToggleBtn').onclick = toggleServicesDetails;
       byId('servicesFinanceInput').onchange = syncServicesFinanceFields;
+      byId('servicesDealInput').onchange = syncServicesFinanceFields;
       ['servicesSpeakerInput','servicesDealInput','servicesFinanceInput'].forEach(function (id) {
         var select = byId(id);
         if (!select) return;
@@ -946,7 +947,7 @@
       byId('servicesInstallmentsInput').oninput = syncServicesTotalPrice;
       byId('servicesSaveBtn').onclick = saveMyMonthlyService;
       byId('servicesCancelEditBtn').onclick = resetServicesForm;
-      ['servicesDateInput','servicesBaInput','servicesConsultantInput','servicesSpeakerInput','servicesHelperInput','servicesCustomerInput','servicesDealInput','servicesFinanceInput','servicesUnitPriceInput','servicesInstallmentsInput','servicesTotalPriceInput'].forEach(function(id){ var el=byId(id); if(el) el.oninput=function(){ clearFieldError(id); }; if(el) el.onchange=function(){ clearFieldError(id); if(id==='servicesFinanceInput') syncServicesFinanceFields(); }; });
+      ['servicesDateInput','servicesBaInput','servicesConsultantInput','servicesSpeakerInput','servicesHelperInput','servicesCustomerInput','servicesDealInput','servicesFinanceInput','servicesUnitPriceInput','servicesInstallmentsInput','servicesTotalPriceInput'].forEach(function(id){ var el=byId(id); if(el) el.oninput=function(){ clearFieldError(id); if(id==='servicesUnitPriceInput' || id==='servicesInstallmentsInput') syncServicesTotalPrice(); }; if(el) el.onchange=function(){ clearFieldError(id); if(id==='servicesFinanceInput' || id==='servicesDealInput') syncServicesFinanceFields(); }; });
       byId('scheduleHomeBtn').onclick = showHome;
       byId('scheduleSearchBtn').onclick = loadTechSchedule;
       byId('scheduleMonthInput').onchange = function () { SCHEDULE_SELECTED_DATES = {}; renderScheduleEditCalendar(); loadTechSchedule(); };
@@ -1284,7 +1285,11 @@
         return;
       }
       apiCall('getMyMonthlyServices', { month: month, targetUserId: getServicesTargetUserId() }, renderMyMonthlyServices, function (err) {
-        showPanelMessage('servicesMessage', err, true);
+        var msg = String(err || '');
+        if (msg.indexOf('getMyMonthlyServices') !== -1) {
+          msg = '後台尚未更新「個人當月服務一覽」功能，請貼上新版 Code.gs 並重新部署 Apps Script。';
+        }
+        showPanelMessage('servicesMessage', msg, true);
         byId('servicesStatsArea').innerHTML = '';
       });
     }
@@ -1317,24 +1322,22 @@
         '<div class="headcountHero"><div class="headcountTotal">' + escapeHtml(result.displayName || result.staff || '') + '</div><div class="headcountTotalLabel">' + escapeHtml(monthText) + ' 服務一覽</div></div>' +
         '<div class="servicesStats"><div class="servicesStat"><div class="servicesStatValue">' + formatMoney(result.count || 0) + '</div><div class="servicesStatLabel">登記筆數</div></div><div class="servicesStat"><div class="servicesStatValue">' + formatMoney(result.dealCount || 0) + '</div><div class="servicesStatLabel">成交筆數</div></div><div class="servicesStat"><div class="servicesStatValue">$' + formatMoney(result.totalAmount || 0) + '</div><div class="servicesStatLabel">總價合計</div></div></div>';
       renderServicesTable();
+      expandServicesDetails();
       syncServicesFinanceFields();
     }
 
     function renderServicesTable() {
       var rows = window.SERVICES_DETAILS || [];
-      if (!rows.length) {
-        byId('servicesDetailArea').innerHTML = '<div class="slotBox empty">本月尚無服務資料</div>';
-        return;
-      }
       var head = ['日期','BA','諮詢者','主講','幫忙美容師','顧客姓名','是否成交','分期公司','單價','期數','總價','備註'];
       var html = '<div class="servicesTableWrap"><table class="servicesTable"><thead><tr>' + head.map(function (h) { return '<th>' + h + '</th>'; }).join('') + '</tr></thead><tbody>';
-      rows.forEach(function (r) {
-        html += '<tr data-service-row="' + escapeHtml(r.rowNumber || '') + '"><td>' + escapeHtml(String(r.date || '').replace(/-/g, '/')) + '</td><td>' + escapeHtml(r.ba || '') + '</td><td>' + escapeHtml(r.consultant || '') + '</td><td>' + escapeHtml(r.speaker || '') + '</td><td>' + escapeHtml(r.helper || '') + '</td><td>' + escapeHtml(r.customer || '') + '</td><td>' + escapeHtml(r.deal || '') + '</td><td>' + escapeHtml(r.finance || '') + '</td><td>' + escapeHtml(r.unitPrice ? formatMoney(r.unitPrice) : '') + '</td><td>' + escapeHtml(r.installments || '') + '</td><td>' + escapeHtml(formatMoney(r.totalPrice || 0)) + '</td><td>' + escapeHtml(r.note || '') + '</td></tr>';
+      var tableRows = rows.length ? rows : Array.from({ length: 12 }, function () { return {}; });
+      tableRows.forEach(function (r) {
+        html += '<tr data-service-row="' + escapeHtml(r.rowNumber || '') + '"><td>' + escapeHtml(String(r.date || '').replace(/-/g, '/')) + '</td><td>' + escapeHtml(r.ba || '') + '</td><td>' + escapeHtml(r.consultant || '') + '</td><td>' + escapeHtml(r.speaker || '') + '</td><td>' + escapeHtml(r.helper || '') + '</td><td>' + escapeHtml(r.customer || '') + '</td><td>' + escapeHtml(r.deal || '') + '</td><td>' + escapeHtml(r.finance || '') + '</td><td>' + escapeHtml(r.unitPrice ? formatMoney(r.unitPrice) : '') + '</td><td>' + escapeHtml(r.installments || '') + '</td><td>' + escapeHtml(r.totalPrice ? formatMoney(r.totalPrice) : '') + '</td><td>' + escapeHtml(r.note || '') + '</td></tr>';
       });
       html += '</tbody></table></div>';
       byId('servicesDetailArea').innerHTML = html;
       Array.prototype.forEach.call(document.querySelectorAll('[data-service-row]'), function (tr) {
-        tr.onclick = function () { editMonthlyService(Number(tr.getAttribute('data-service-row'))); };
+        if (tr.getAttribute('data-service-row')) tr.onclick = function () { editMonthlyService(Number(tr.getAttribute('data-service-row'))); };
       });
     }
 
@@ -1347,13 +1350,25 @@
 
     function isInstallmentFinance(value) { return ['仲信','裕富','遠信'].indexOf(value) !== -1; }
     function syncServicesFinanceFields() {
+      var noDeal = byId('servicesDealInput').value === '無';
       var finance = byId('servicesFinanceInput').value;
       var installment = isInstallmentFinance(finance);
-      byId('servicesUnitWrap').style.display = installment ? '' : 'none';
-      byId('servicesInstallmentWrap').style.display = installment ? '' : 'none';
-      byId('servicesTotalPriceInput').readOnly = installment;
-      if (installment) syncServicesTotalPrice();
-      else { byId('servicesUnitPriceInput').value = ''; byId('servicesInstallmentsInput').value = ''; }
+      byId('servicesFinanceInput').parentElement.style.display = noDeal ? 'none' : '';
+      byId('servicesUnitWrap').style.display = (!noDeal && installment) ? '' : 'none';
+      byId('servicesInstallmentWrap').style.display = (!noDeal && installment) ? '' : 'none';
+      byId('servicesTotalPriceInput').parentElement.style.display = noDeal ? 'none' : '';
+      byId('servicesTotalPriceInput').readOnly = !noDeal && installment;
+      if (noDeal) {
+        byId('servicesFinanceInput').value = '';
+        byId('servicesUnitPriceInput').value = '';
+        byId('servicesInstallmentsInput').value = '';
+        byId('servicesTotalPriceInput').value = '';
+      } else if (installment) {
+        syncServicesTotalPrice();
+      } else {
+        byId('servicesUnitPriceInput').value = '';
+        byId('servicesInstallmentsInput').value = '';
+      }
     }
     function syncServicesTotalPrice() {
       if (!isInstallmentFinance(byId('servicesFinanceInput').value)) return;
@@ -1363,10 +1378,14 @@
     }
 
     function validateServicesForm() {
-      var ids = ['servicesDateInput','servicesBaInput','servicesConsultantInput','servicesSpeakerInput','servicesHelperInput','servicesCustomerInput','servicesDealInput','servicesFinanceInput'];
+      var noDeal = byId('servicesDealInput').value === '無';
+      var ids = ['servicesDateInput','servicesBaInput','servicesConsultantInput','servicesSpeakerInput','servicesHelperInput','servicesCustomerInput','servicesDealInput'];
       ids.forEach(clearFieldError);
-      if (isInstallmentFinance(byId('servicesFinanceInput').value)) ids = ids.concat(['servicesUnitPriceInput','servicesInstallmentsInput']);
-      else ids.push('servicesTotalPriceInput');
+      if (!noDeal) {
+        ids.push('servicesFinanceInput');
+        if (isInstallmentFinance(byId('servicesFinanceInput').value)) ids = ids.concat(['servicesUnitPriceInput','servicesInstallmentsInput']);
+        else ids.push('servicesTotalPriceInput');
+      }
       for (var i = 0; i < ids.length; i++) {
         if (!String(byId(ids[i]).value || '').trim()) { markFieldError(ids[i]); scrollToField(ids[i]); return false; }
       }
@@ -1425,7 +1444,7 @@
           resetServicesForm(false);
           renderMyMonthlyServices(result);
           expandServicesDetails();
-        }, 1200);
+        }, 1500);
       }, function (err) { closeMonthlySaleProgress(); showPanelMessage('servicesMessage', err, true); });
     }
 
