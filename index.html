@@ -568,6 +568,8 @@
     .globalLoadingCard { min-width: 210px; border-radius: 22px; padding: 22px 24px; background: rgba(255,253,247,.96); border: 3px solid rgba(76,127,105,.22); box-shadow: 0 18px 50px rgba(31,48,38,.22); text-align: center; color: var(--ink); font-weight: 950; font-size: clamp(18px, 4vw, 25px); }
     .hourglassFlip { display: block; font-size: 44px; line-height: 1; margin-bottom: 8px; animation: hourglassFlip 1.15s infinite ease-in-out; transform-origin: 50% 50%; }
     @keyframes hourglassFlip { 0%, 20% { transform: rotate(0deg); } 50%, 70% { transform: rotate(180deg); } 100% { transform: rotate(360deg); } }
+    body.loadingLocked { overflow: hidden !important; touch-action: none; }
+    body.loadingLocked .globalLoadingOverlay { pointer-events: auto; }
     @media (max-width: 760px) {
       .trialSlotGrid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
       .trialSlot { min-height: 66px; font-size: 14px; }
@@ -944,7 +946,7 @@
         '<main class="page">',
           '<section class="hero"><button class="reportIcon" id="reportBtn" type="button" title="report"><span></span><span></span><span></span></button><div class="heroMain"><h1>', T.title, '</h1><div class="sub" id="statusText">', T.subtitle, '</div></div><div class="heroTimeGrid"><div class="heroTimeRow"><div class="todayLabel">\u4eca\u5929\u65e5\u671f</div><div class="todayValue" id="todayDateText"></div></div><div class="heroTimeRow"><div class="todayLabel">\u73fe\u5728\u6642\u9593</div><div class="todayValue" id="todayTimeText"></div></div></div></section>',
           '<section class="modeSwitcher" id="modeSwitcher"><button class="modeBtn" id="modeManageBtn" type="button">\u7ba1\u7406\u8005\u6a21\u5f0f</button><button class="modeBtn" id="modeReadBtn" type="button">\u552f\u8b80\u6a21\u5f0f</button></section>',
-          '<nav class="tabs homeTabs portalTabs" id="homeTabs"><button class="tab" id="portalBookingBtn" type="button"><span class="portalIcon portalIconBooking"></span><span class="portalText">排房預約系統</span></button><button class="tab" id="portalHeadcountBtn" type="button"><span class="portalIcon portalIconHeadcount"></span><span class="portalText">美技人頭計算</span></button><button class="tab" id="portalScheduleBtn" type="button"><span class="portalIcon portalIconSchedule"></span><span class="portalText">美技班表</span></button><button class="tab" id="portalBonusBtn" type="button"><span class="portalIcon portalIconBonus"></span><span class="portalText">工獎計算</span></button><button class="tab" id="portalSalesBtn" type="button"><span class="portalIcon portalIconSales"></span><span class="portalText">個人當月業績</span></button><button class="tab" id="portalServicesBtn" type="button"><span class="portalIcon portalIconServices"></span><span class="portalText">個人當月服務一覽</span></button><button class="tab" id="portalTrialBtn" type="button"><span class="portalIcon portalIconSchedule"></span><span class="portalText">試用預約</span></button><button class="tab" id="tabSchedule" type="button" style="display:none"></button><button class="tab" id="tabPeople" type="button" style="display:none"></button></nav>',
+          '<nav class="tabs homeTabs portalTabs" id="homeTabs"><button class="tab" id="portalBookingBtn" type="button"><span class="portalIcon portalIconBooking"></span><span class="portalText">排房預約系統</span></button><button class="tab" id="portalHeadcountBtn" type="button"><span class="portalIcon portalIconHeadcount"></span><span class="portalText">美技人頭計算</span></button><button class="tab" id="portalScheduleBtn" type="button"><span class="portalIcon portalIconSchedule"></span><span class="portalText">美技班表</span></button><button class="tab" id="portalBonusBtn" type="button"><span class="portalIcon portalIconBonus"></span><span class="portalText">工獎計算</span></button><button class="tab" id="portalSalesBtn" type="button"><span class="portalIcon portalIconSales"></span><span class="portalText">個人當月業績</span></button><button class="tab" id="portalServicesBtn" type="button"><span class="portalIcon portalIconServices"></span><span class="portalText">個人當月服務一覽</span></button><button class="tab" id="portalTrialBtn" type="button" style="display:none"><span class="portalIcon portalIconSchedule"></span><span class="portalText">試用預約</span></button><button class="tab" id="tabSchedule" type="button" style="display:none"></button><button class="tab" id="tabPeople" type="button" style="display:none"></button></nav>',
           '<nav class="tabs subTabs" id="scheduleTabs"><button class="tab active" id="tabSummary" type="button">', T.summary, '</button><button class="tab" id="tabBook" type="button">', T.book, '</button><button class="tab" id="tabCancel" type="button">', T.cancel, '</button></nav>',
           '<section class="panel" id="bookPanel"><div class="sectionTitle">', T.bookTitle, '</div><div class="sectionNote">', T.bookNote, '</div><div class="grid"><div><label for="dateInput">', T.date, '</label><input id="dateInput" type="date"></div><div><label for="roomSelect">', T.room, '</label><select id="roomSelect"></select></div><div><label for="startSelect">', T.start, '</label><select id="startSelect"></select></div><div><label for="endSelect">', T.end, '</label><select id="endSelect"></select></div><div><label for="technicianInput">', T.tech, '</label><select id="technicianInput"></select></div><div class="wide"><label for="serviceTargetInput">服務對象</label><div id="serviceTargetInput" class="serviceCheckGrid serviceTargetGrid"></div></div><div id="techNameWrap" class="techNameWrap"><label for="techNameInput">美容師 / 支援技師姓名</label><input id="techNameInput" type="text" autocomplete="off"></div><div id="coupleWrap" class="coupleWrap"><label for="coupleSelect">\u5169\u4eba\u540c\u623f</label><select id="coupleSelect"></select></div><div id="secondTechWrap" class="secondTechWrap"><label for="technicianInput2">\u7b2c\u4e8c\u4f4d\u6280\u5e2b</label><select id="technicianInput2"></select></div><div id="techNameWrap2" class="techNameWrap"><label for="techNameInput2">第二位姓名</label><input id="techNameInput2" type="text" autocomplete="off"></div><div class="wide"><label>', T.service, '</label><div id="serviceInput" class="serviceCheckGrid"></div></div><div id="mainCustomerWrap" class="mainCustomerWrap"><label for="mainCustomerSelect">服務項目標記</label><select id="mainCustomerSelect"><option value="">請選擇</option><option value="B">B</option><option value="F">F</option><option value="BF">BF</option></select></div><div><label for="customerInput">', T.customer, '</label><input id="customerInput" type="text" autocomplete="off"></div><div><label for="userNameInput">', T.user, '</label><input id="userNameInput" type="text" autocomplete="off" readonly></div></div><div class="actions"><button class="btn" id="bookBtn" type="button">', T.bookBtn, '</button><button class="btn reset" id="resetBtn" type="button">', T.resetBtn, '</button></div><div id="message" class="message"></div><div class="availableTitle">', T.available, '</div><div id="availableSlots" class="slotBoxGrid"></div></section>',
           '<section class="panel" id="cancelPanel"><div class="sectionTitle">', T.cancelTitle, '</div><div class="sectionNote">', T.cancelNote, '</div><div class="summaryControls"><div><label for="cancelDateInput">', T.date, '</label><input id="cancelDateInput" type="date"></div><button class="btn refresh" id="cancelSearchBtn" type="button">', T.searchCancel, '</button></div><div id="cancelMessage" class="message"></div><div id="cancelList" class="bookingList"></div></section>',
@@ -3809,6 +3811,7 @@
 
     function showGlobalLoading() {
       window.GLOBAL_LOADING_COUNT = (window.GLOBAL_LOADING_COUNT || 0) + 1;
+      document.body.classList.add('loadingLocked');
       if (document.getElementById('globalLoadingOverlay')) return;
       var wrap = document.createElement('div');
       wrap.id = 'globalLoadingOverlay';
@@ -3820,6 +3823,7 @@
     function hideGlobalLoading() {
       window.GLOBAL_LOADING_COUNT = Math.max(0, (window.GLOBAL_LOADING_COUNT || 0) - 1);
       if (window.GLOBAL_LOADING_COUNT > 0) return;
+      document.body.classList.remove('loadingLocked');
       var old = document.getElementById('globalLoadingOverlay');
       if (old) old.remove();
     }
@@ -3864,6 +3868,7 @@
   </script>
 </body>
 </html>
+
 
 
 
