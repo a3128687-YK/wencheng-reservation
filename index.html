@@ -532,7 +532,7 @@
     .trialModeSwitch { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin: 12px 0 18px; }
     .trialModeSwitch .btn { min-height: 82px; font-size: clamp(22px, 4.8vw, 32px); }
     .trialModeTitle { margin: 10px 0 14px; padding: 14px 16px; border-radius: 16px; background: #eef6f3; border: 2px solid rgba(76,127,105,.24); color: var(--ink); font-size: clamp(22px, 5vw, 32px); font-weight: 950; text-align: center; }
-    .trialBoxShell { border: 2px solid rgba(76,127,105,.18); border-radius: 18px; background: rgba(255,255,255,.90); padding: 16px; box-shadow: 0 10px 24px rgba(53,82,61,.08); min-height: 430px; }
+    .trialBoxShell { border: 2px solid rgba(76,127,105,.18); border-radius: 18px; background: rgba(255,255,255,.90); padding: 18px; box-shadow: 0 10px 24px rgba(53,82,61,.08); min-height: 540px; }
     .trialSlotGrid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; margin-top: 14px; }
     .trialSlotGrid .slotBox.empty { grid-column: 1 / -1; white-space: nowrap; min-height: 74px; display: grid; place-items: center; }
     .trialSlot {
@@ -564,6 +564,10 @@
     .trialActions { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin-top: 12px; }
     .trialActions .btn { min-height: 54px; font-size: clamp(14px, 3.2vw, 18px); padding: 8px 6px; }
     .trialCancelBtn, .trialRejectBtn { background: #b33a3a !important; }
+    .globalLoadingOverlay { position: fixed; inset: 0; z-index: 95; display: grid; place-items: center; pointer-events: none; background: rgba(255,255,255,.18); }
+    .globalLoadingCard { min-width: 210px; border-radius: 22px; padding: 22px 24px; background: rgba(255,253,247,.96); border: 3px solid rgba(76,127,105,.22); box-shadow: 0 18px 50px rgba(31,48,38,.22); text-align: center; color: var(--ink); font-weight: 950; font-size: clamp(18px, 4vw, 25px); }
+    .hourglassFlip { display: block; font-size: 44px; line-height: 1; margin-bottom: 8px; animation: hourglassFlip 1.15s infinite ease-in-out; transform-origin: 50% 50%; }
+    @keyframes hourglassFlip { 0%, 20% { transform: rotate(0deg); } 50%, 70% { transform: rotate(180deg); } 100% { transform: rotate(360deg); } }
     @media (max-width: 760px) {
       .trialSlotGrid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
       .trialSlot { min-height: 66px; font-size: 14px; }
@@ -955,7 +959,7 @@
 
             document.querySelector('main.page').insertAdjacentHTML('beforeend', '<section class="panel" id="myMonthlyServicesPanel"><button class="btn headcountBack" id="servicesHomeBtn" type="button">返回首頁</button><div class="sectionTitle">個人當月服務一覽</div><div class="sectionNote">每人只能查看與編輯自己的服務資料；最高權限者可切換查詢人員。</div><div class="summaryControls"><div><label for="servicesMonthInput">查詢月份</label><input id="servicesMonthInput" type="month"></div><button class="btn refresh" id="servicesSearchBtn" type="button">查詢</button></div><div class="salesAdminPicker" id="servicesPersonWrap"><label for="servicesPersonSelect">查詢人員</label><select id="servicesPersonSelect"></select></div><div id="servicesStatsArea"></div><div id="servicesMessage" class="message"></div><div class="servicesActionToggles"><button class="btn refresh" id="servicesAddToggleBtn" type="button">新增服務</button><button class="btn reset" id="servicesListToggleBtn" type="button">服務一覽</button></div><div class="servicesFormBox collapsed" id="servicesFormBox"><div class="sectionTitle" id="servicesFormTitle">新增服務</div><div class="grid"><div><label for="servicesOwnerInput">登入者</label><input id="servicesOwnerInput" type="text" readonly></div><div><label for="servicesDateInput">日期</label><input id="servicesDateInput" type="date"></div><div><label for="servicesBaInput">BA</label><input id="servicesBaInput" type="text"></div><div><label for="servicesConsultantInput">諮詢者</label><input id="servicesConsultantInput" type="text" placeholder="沒有則填無"></div><div><label for="servicesSpeakerInput">主講</label><select id="servicesSpeakerInput"></select></div><div><label for="servicesHelperInput">幫忙美容師</label><input id="servicesHelperInput" type="text" placeholder="沒有則填無"></div><div><label for="servicesCustomerInput">顧客姓名</label><input id="servicesCustomerInput" type="text"></div><div><label for="servicesDealInput">是否成交</label><select id="servicesDealInput"></select></div><div><label for="servicesFinanceInput">分期公司</label><select id="servicesFinanceInput"></select></div><div id="servicesUnitWrap"><label for="servicesUnitPriceInput">單價</label><input id="servicesUnitPriceInput" type="text" inputmode="text" pattern="-?[0-9,]*"></div><div id="servicesInstallmentWrap"><label for="servicesInstallmentsInput">期數</label><input id="servicesInstallmentsInput" type="number" inputmode="numeric"></div><div class="salesAmountWrap" id="servicesTotalWrap"><label for="servicesTotalPriceInput">總價</label><input id="servicesTotalPriceInput" type="text" inputmode="text" pattern="-?[0-9,]*"><button class="salesMinusBtn" id="servicesTotalMinusBtn" type="button">−</button></div><div class="wide"><label for="servicesNoteInput">備註</label><input id="servicesNoteInput" type="text"></div></div><div class="servicesEditActions"><button class="btn refresh" id="servicesSaveBtn" type="button">登記服務</button><button class="btn servicesDeleteBtn" id="servicesDeleteBtn" type="button">刪除此筆</button><button class="btn reset" id="servicesCancelEditBtn" type="button">取消編輯</button></div></div><div id="servicesDetailArea" class="collapsed"></div></section>');
       document.querySelector('main.page').insertAdjacentHTML('beforeend', '<section class="panel" id="bonusCalcPanel"><button class="btn headcountBack" id="bonusHomeBtn" type="button">返回首頁</button><div class="sectionTitle">工獎計算</div><div class="sectionNote">只計入服務對象為「主顧客」的有效預約；體驗客與第一次服務不列入。B=2部位、F=1部位、BF=3部位。</div><div class="summaryControls"><div><label for="bonusMonthInput">查詢月份</label><input id="bonusMonthInput" type="month"></div><button class="btn refresh" id="bonusSearchBtn" type="button">查詢</button></div><div id="bonusMessage" class="message"></div><div id="bonusArea"></div><div id="bonusDetailArea"></div></section>');
-      document.querySelector('main.page').insertAdjacentHTML('beforeend', '<section class="panel" id="trialBookingPanel"><button class="btn headcountBack" id="trialHomeBtn" type="button">返回首頁</button><div class="sectionTitle">試用版自動預約</div><div class="sectionNote">客人可先選時段送出待確認；技師確認後才算正式成立。系統會同步檢查美技班表與正式排房。</div><div id="trialModeTitle" class="trialModeTitle">顧客預約模式</div><div class="trialModeSwitch" id="trialModeSwitch"><button class="btn refresh" id="trialCustomerModeBtn" type="button">客人預約</button><button class="btn reset" id="trialTechModeBtn" type="button">技師確認</button></div><div id="trialCustomerBox" class="trialBoxShell"><div class="grid"><div><label for="trialTechSelect">技師</label><select id="trialTechSelect"></select></div><div><label for="trialDateInput">日期</label><input id="trialDateInput" type="date"></div><div><label for="trialServiceSelect">服務</label><select id="trialServiceSelect"></select></div><div><label for="trialSelectedTime">選擇時段</label><input id="trialSelectedTime" type="text" readonly></div><div class="wide"><label for="trialNoteInput">備註</label><input id="trialNoteInput" type="text" placeholder="可不填"></div></div><div id="trialMessage" class="message"></div><div id="trialSlotGrid" class="trialSlotGrid"></div><button class="btn refresh" id="trialSubmitBtn" type="button">送出待確認</button><div class="sectionTitle">我的試用預約</div><div id="trialMyList" class="trialBookingList"></div></div><div id="trialTechBox" class="trialBoxShell" style="display:none"><div class="grid"><div class="wide"><label for="trialManageTechSelect">技師</label><select id="trialManageTechSelect"></select></div></div><button class="btn refresh" id="trialManageSearchBtn" type="button">列出全部待確認</button><div id="trialManageMessage" class="message"></div><div id="trialManageList" class="trialBookingList"></div></div></section>');
+      document.querySelector('main.page').insertAdjacentHTML('beforeend', '<section class="panel" id="trialBookingPanel"><button class="btn headcountBack" id="trialHomeBtn" type="button">返回首頁</button><div class="sectionTitle">試用版自動預約</div><div class="sectionNote">客人可先選時段送出待確認；技師確認後才算正式成立。系統會同步檢查美技班表與正式排房。</div><div id="trialModeTitle" class="trialModeTitle">顧客預約模式</div><div class="trialModeSwitch" id="trialModeSwitch"><button class="btn refresh" id="trialCustomerModeBtn" type="button">客人預約</button><button class="btn reset" id="trialTechModeBtn" type="button">技師確認</button></div><div id="trialCustomerBox" class="trialBoxShell"><div class="grid"><div><label for="trialTechSelect">技師</label><select id="trialTechSelect"></select></div><div><label for="trialDateInput">日期</label><input id="trialDateInput" type="date"></div><div><label for="trialServiceSelect">服務</label><select id="trialServiceSelect"></select></div><div><label for="trialSelectedTime">選擇時段</label><input id="trialSelectedTime" type="text" readonly></div><div class="wide"><label for="trialNoteInput">備註</label><input id="trialNoteInput" type="text" placeholder="可不填"></div></div><div id="trialMessage" class="message"></div><div id="trialSlotGrid" class="trialSlotGrid"></div><button class="btn refresh" id="trialSubmitBtn" type="button">送出待確認</button><div class="sectionTitle">我的試用預約</div><div id="trialMyList" class="trialBookingList"></div></div><div id="trialTechBox" class="trialBoxShell" style="display:none"><div class="grid"><div class="wide"><label for="trialManageTechSelect">技師</label><select id="trialManageTechSelect"></select></div></div><button class="btn refresh" id="trialManageSearchBtn" type="button">列出全部待確認</button><div id="trialManageMessage" class="message"></div><div class="sectionTitle">待確認項目</div><div id="trialManageList" class="trialBookingList"></div><div class="sectionTitle">已確認可取消</div><div id="trialConfirmedList" class="trialBookingList"></div></div></section>');
       document.querySelector('main.page').insertAdjacentHTML('beforeend', '<section class="panel" id="portalConstructionPanel"><button class="btn headcountBack" id="constructionHomeBtn" type="button">\u8fd4\u56de\u9996\u9801</button><div class="sectionTitle" id="constructionTitle">\u529f\u80fd\u5efa\u7f6e\u4e2d</div><div class="sectionNote" id="constructionText">\u9019\u500b\u529f\u80fd\u6b63\u5728\u65bd\u5de5\u4e2d\uff0c\u5b8c\u6210\u5f8c\u5c31\u6703\u958b\u653e\u4f7f\u7528\u3002</div><div class="slotBox empty">\u2692\ufe0f<br>\u65bd\u5de5\u4e2d</div></section>');
 
       byId('portalBookingBtn').onclick = showScheduleHome;
@@ -2544,14 +2548,13 @@
       };
       showBookingProgress('預約中...');
       apiCall('createTrialBooking', data, function (result) {
-        showBookingProgress('👌 預約完成');
-        setTimeout(function () {
-          closeBookingProgress();
+        closeBookingProgress();
+        openTrialCustomerDoneConfirm(function () {
           showPanelMessage('trialMessage', (result && result.message) || '已送出，等待技師確認', false);
           byId('trialNoteInput').value = '';
           loadTrialAvailability();
           loadTrialMyList();
-        }, 1500);
+        });
       }, function (err) {
         closeBookingProgress();
         showPanelMessage('trialMessage', err, true);
@@ -2574,8 +2577,20 @@
       }
       apiCall('getTrialBookings', { mode: 'tech', technician: technician, onlyPending: 'true' }, function (result) {
         renderTrialList('trialManageList', result.rows || [], 'tech');
+        loadTrialConfirmedList();
       }, function (err) {
         showPanelMessage('trialManageMessage', err, true);
+      });
+    }
+
+    function loadTrialConfirmedList() {
+      var technician = byId('trialManageTechSelect').value;
+      if (!technician) return;
+      apiCall('getTrialBookings', { mode: 'tech', technician: technician }, function (result) {
+        var rows = (result.rows || []).filter(function (row) { return row.status === '已確認'; });
+        renderTrialList('trialConfirmedList', rows, 'techConfirmed');
+      }, function (err) {
+        byId('trialConfirmedList').innerHTML = '<div class="slotBox empty">' + escapeHtml(err) + '</div>';
       });
     }
 
@@ -2590,6 +2605,8 @@
         var actions = '';
         if (mode === 'tech') {
           actions = '<div class="trialActions"><button class="btn refresh" data-action="confirm" data-row="' + row.rowNumber + '">確認</button><button class="btn trialRejectBtn" data-action="reject" data-row="' + row.rowNumber + '">拒絕</button><button class="btn trialCancelBtn" data-action="cancelByTech" data-row="' + row.rowNumber + '">取消</button></div>';
+        } else if (mode === 'techConfirmed') {
+          actions = '<div class="trialActions"><button class="btn trialCancelBtn" data-action="cancelByTech" data-row="' + row.rowNumber + '">取消這筆</button></div>';
         } else {
           actions = '<div class="trialActions"><button class="btn trialCancelBtn" data-action="cancelByCustomer" data-row="' + row.rowNumber + '">取消這筆</button></div>';
         }
@@ -2625,7 +2642,7 @@
         setTimeout(function () {
           closeBookingProgress();
           showPanelMessage(mode === 'tech' ? 'trialManageMessage' : 'trialMessage', '已更新預約狀態', false);
-          if (mode === 'tech') renderTrialList('trialManageList', result.rows || [], 'tech');
+          if (mode === 'tech' || mode === 'techConfirmed') loadTrialManageList();
           else loadTrialMyList();
           loadTrialAvailability();
         }, 1500);
@@ -2633,6 +2650,19 @@
         closeBookingProgress();
         showPanelMessage(mode === 'tech' ? 'trialManageMessage' : 'trialMessage', err, true);
       });
+    }
+
+    function openTrialCustomerDoneConfirm(afterClose) {
+      var wrap = document.createElement('div');
+      wrap.id = 'trialCustomerDoneOverlay';
+      wrap.className = 'cancelConfirmOverlay';
+      wrap.innerHTML = '<div class="cancelConfirmCard bookingSuccessCard"><div class="cancelConfirmTitle">登記完成</div><div class="cancelConfirmText">待技師確認中；技師完成確認將發簡訊通知您</div><div class="cancelConfirmActions"><button class="btn" id="trialCustomerDoneOk" type="button">確認</button></div></div>';
+      document.body.appendChild(wrap);
+      byId('trialCustomerDoneOk').onclick = function () {
+        var old = document.getElementById('trialCustomerDoneOverlay');
+        if (old) old.remove();
+        if (afterClose) afterClose();
+      };
     }
 
     function showConstructionPage(title, text) {
@@ -3764,16 +3794,34 @@
 
     function apiCall(action, payload, onSuccess, onError) {
       if (!hasBackend()) { if (onError) onError('???? Apps Script API ??'); return; }
+      showGlobalLoading();
       payload = payload || {}; payload.idToken = LINE_ID_TOKEN || ''; payload.readOnlyMode = !canManageBookings();
       var callbackName = '__wcApi_' + Date.now() + '_' + Math.floor(Math.random() * 100000);
       var done = false; var script = document.createElement('script');
       var timer = setTimeout(function () { if (done) return; done = true; cleanup(); if (onError) onError('????????????'); }, 15000);
       window[callbackName] = function (res) { if (done) return; done = true; clearTimeout(timer); cleanup(); if (res && res.ok) { if (onSuccess) onSuccess(res.data); } else { if (onError) onError(res && res.error ? res.error : '??????'); } };
-      function cleanup() { try { delete window[callbackName]; } catch (err) { window[callbackName] = null; } if (script && script.parentNode) script.parentNode.removeChild(script); }
+      function cleanup() { hideGlobalLoading(); try { delete window[callbackName]; } catch (err) { window[callbackName] = null; } if (script && script.parentNode) script.parentNode.removeChild(script); }
       var params = 'api=' + encodeURIComponent(action) + '&callback=' + encodeURIComponent(callbackName) + '&payload=' + encodeURIComponent(JSON.stringify(payload));
       script.onerror = function () { if (done) return; done = true; clearTimeout(timer); cleanup(); if (onError) onError('????? Apps Script API'); };
       script.src = API_URL + (API_URL.indexOf('?') >= 0 ? '&' : '?') + params;
       document.body.appendChild(script);
+    }
+
+    function showGlobalLoading() {
+      window.GLOBAL_LOADING_COUNT = (window.GLOBAL_LOADING_COUNT || 0) + 1;
+      if (document.getElementById('globalLoadingOverlay')) return;
+      var wrap = document.createElement('div');
+      wrap.id = 'globalLoadingOverlay';
+      wrap.className = 'globalLoadingOverlay';
+      wrap.innerHTML = '<div class="globalLoadingCard"><span class="hourglassFlip">⌛</span><div>資料處理中...</div></div>';
+      document.body.appendChild(wrap);
+    }
+
+    function hideGlobalLoading() {
+      window.GLOBAL_LOADING_COUNT = Math.max(0, (window.GLOBAL_LOADING_COUNT || 0) - 1);
+      if (window.GLOBAL_LOADING_COUNT > 0) return;
+      var old = document.getElementById('globalLoadingOverlay');
+      if (old) old.remove();
     }
 
     function showToast(text, isError) {
@@ -3816,6 +3864,7 @@
   </script>
 </body>
 </html>
+
 
 
 
