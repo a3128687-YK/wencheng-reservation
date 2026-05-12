@@ -529,6 +529,43 @@
       font-weight: 950 !important;
       line-height: 1.1 !important;
     }
+    .trialModeSwitch { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin: 12px 0 18px; }
+    .trialModeSwitch .btn { min-height: 64px; }
+    .trialSlotGrid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; margin-top: 14px; }
+    .trialSlot {
+      border: 2px solid #9dc9a3;
+      background: #f1fbf1;
+      color: #1f6b35;
+      border-radius: 14px;
+      min-height: 74px;
+      padding: 8px 6px;
+      font-weight: 900;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      line-height: 1.18;
+      text-align: center;
+      cursor: pointer;
+    }
+    .trialSlot.selected { outline: 4px solid rgba(231, 126, 88, .42); border-color: #e77e58; background: #fff3ed; color: #9c3e25; }
+    .trialSlot.pending { border-color: #dfb85c; background: #fff8df; color: #8b6400; cursor: not-allowed; }
+    .trialSlot.busy { border-color: #d98b8b; background: #fff0f0; color: #a33b3b; cursor: not-allowed; }
+    .trialSlot.off { border-color: #b8c4cf; background: #f4f6f8; color: #607080; cursor: not-allowed; }
+    .trialBookingList { display: grid; gap: 12px; margin-top: 14px; }
+    .trialCard { border: 2px solid #e1d5c8; background: rgba(255,255,255,.9); border-radius: 16px; padding: 14px; box-shadow: 0 10px 20px rgba(77,68,56,.08); }
+    .trialCard.pending { border-color: #dfb85c; }
+    .trialCard.confirmed { border-color: #75b985; }
+    .trialCard .title { font-size: clamp(18px, 4vw, 24px); font-weight: 900; margin-bottom: 8px; }
+    .trialCard .meta { color: var(--muted); font-weight: 800; line-height: 1.5; }
+    .trialActions { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin-top: 12px; }
+    .trialActions .btn { min-height: 54px; font-size: clamp(14px, 3.2vw, 18px); padding: 8px 6px; }
+    .trialCancelBtn, .trialRejectBtn { background: #b33a3a !important; }
+    @media (max-width: 760px) {
+      .trialSlotGrid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+      .trialSlot { min-height: 66px; font-size: 14px; }
+      .trialActions { grid-template-columns: 1fr; }
+    }
     .topFloatBtn.dragReady { box-shadow: 0 0 0 5px rgba(76,127,105,.22), 0 10px 26px rgba(0,0,0,.18); }
     .topFloatBtn.dragging { opacity: .86; transition: none; }
     body.scheduleOnly .modeSwitcher,
@@ -900,7 +937,7 @@
         '<main class="page">',
           '<section class="hero"><button class="reportIcon" id="reportBtn" type="button" title="report"><span></span><span></span><span></span></button><div class="heroMain"><h1>', T.title, '</h1><div class="sub" id="statusText">', T.subtitle, '</div></div><div class="heroTimeGrid"><div class="heroTimeRow"><div class="todayLabel">\u4eca\u5929\u65e5\u671f</div><div class="todayValue" id="todayDateText"></div></div><div class="heroTimeRow"><div class="todayLabel">\u73fe\u5728\u6642\u9593</div><div class="todayValue" id="todayTimeText"></div></div></div></section>',
           '<section class="modeSwitcher" id="modeSwitcher"><button class="modeBtn" id="modeManageBtn" type="button">\u7ba1\u7406\u8005\u6a21\u5f0f</button><button class="modeBtn" id="modeReadBtn" type="button">\u552f\u8b80\u6a21\u5f0f</button></section>',
-          '<nav class="tabs homeTabs portalTabs" id="homeTabs"><button class="tab" id="portalBookingBtn" type="button"><span class="portalIcon portalIconBooking"></span><span class="portalText">排房預約系統</span></button><button class="tab" id="portalHeadcountBtn" type="button"><span class="portalIcon portalIconHeadcount"></span><span class="portalText">美技人頭計算</span></button><button class="tab" id="portalScheduleBtn" type="button"><span class="portalIcon portalIconSchedule"></span><span class="portalText">美技班表</span></button><button class="tab" id="portalBonusBtn" type="button"><span class="portalIcon portalIconBonus"></span><span class="portalText">工獎計算</span></button><button class="tab" id="portalSalesBtn" type="button"><span class="portalIcon portalIconSales"></span><span class="portalText">個人當月業績</span></button><button class="tab" id="portalServicesBtn" type="button"><span class="portalIcon portalIconServices"></span><span class="portalText">個人當月服務一覽</span></button><button class="tab" id="tabSchedule" type="button" style="display:none"></button><button class="tab" id="tabPeople" type="button" style="display:none"></button></nav>',
+          '<nav class="tabs homeTabs portalTabs" id="homeTabs"><button class="tab" id="portalBookingBtn" type="button"><span class="portalIcon portalIconBooking"></span><span class="portalText">排房預約系統</span></button><button class="tab" id="portalHeadcountBtn" type="button"><span class="portalIcon portalIconHeadcount"></span><span class="portalText">美技人頭計算</span></button><button class="tab" id="portalScheduleBtn" type="button"><span class="portalIcon portalIconSchedule"></span><span class="portalText">美技班表</span></button><button class="tab" id="portalBonusBtn" type="button"><span class="portalIcon portalIconBonus"></span><span class="portalText">工獎計算</span></button><button class="tab" id="portalSalesBtn" type="button"><span class="portalIcon portalIconSales"></span><span class="portalText">個人當月業績</span></button><button class="tab" id="portalServicesBtn" type="button"><span class="portalIcon portalIconServices"></span><span class="portalText">個人當月服務一覽</span></button><button class="tab" id="portalTrialBtn" type="button"><span class="portalIcon portalIconSchedule"></span><span class="portalText">試用預約</span></button><button class="tab" id="tabSchedule" type="button" style="display:none"></button><button class="tab" id="tabPeople" type="button" style="display:none"></button></nav>',
           '<nav class="tabs subTabs" id="scheduleTabs"><button class="tab active" id="tabSummary" type="button">', T.summary, '</button><button class="tab" id="tabBook" type="button">', T.book, '</button><button class="tab" id="tabCancel" type="button">', T.cancel, '</button></nav>',
           '<section class="panel" id="bookPanel"><div class="sectionTitle">', T.bookTitle, '</div><div class="sectionNote">', T.bookNote, '</div><div class="grid"><div><label for="dateInput">', T.date, '</label><input id="dateInput" type="date"></div><div><label for="roomSelect">', T.room, '</label><select id="roomSelect"></select></div><div><label for="startSelect">', T.start, '</label><select id="startSelect"></select></div><div><label for="endSelect">', T.end, '</label><select id="endSelect"></select></div><div><label for="technicianInput">', T.tech, '</label><select id="technicianInput"></select></div><div class="wide"><label for="serviceTargetInput">服務對象</label><div id="serviceTargetInput" class="serviceCheckGrid serviceTargetGrid"></div></div><div id="techNameWrap" class="techNameWrap"><label for="techNameInput">美容師 / 支援技師姓名</label><input id="techNameInput" type="text" autocomplete="off"></div><div id="coupleWrap" class="coupleWrap"><label for="coupleSelect">\u5169\u4eba\u540c\u623f</label><select id="coupleSelect"></select></div><div id="secondTechWrap" class="secondTechWrap"><label for="technicianInput2">\u7b2c\u4e8c\u4f4d\u6280\u5e2b</label><select id="technicianInput2"></select></div><div id="techNameWrap2" class="techNameWrap"><label for="techNameInput2">第二位姓名</label><input id="techNameInput2" type="text" autocomplete="off"></div><div class="wide"><label>', T.service, '</label><div id="serviceInput" class="serviceCheckGrid"></div></div><div id="mainCustomerWrap" class="mainCustomerWrap"><label for="mainCustomerSelect">服務項目標記</label><select id="mainCustomerSelect"><option value="">請選擇</option><option value="B">B</option><option value="F">F</option><option value="BF">BF</option></select></div><div><label for="customerInput">', T.customer, '</label><input id="customerInput" type="text" autocomplete="off"></div><div><label for="userNameInput">', T.user, '</label><input id="userNameInput" type="text" autocomplete="off" readonly></div></div><div class="actions"><button class="btn" id="bookBtn" type="button">', T.bookBtn, '</button><button class="btn reset" id="resetBtn" type="button">', T.resetBtn, '</button></div><div id="message" class="message"></div><div class="availableTitle">', T.available, '</div><div id="availableSlots" class="slotBoxGrid"></div></section>',
           '<section class="panel" id="cancelPanel"><div class="sectionTitle">', T.cancelTitle, '</div><div class="sectionNote">', T.cancelNote, '</div><div class="summaryControls"><div><label for="cancelDateInput">', T.date, '</label><input id="cancelDateInput" type="date"></div><button class="btn refresh" id="cancelSearchBtn" type="button">', T.searchCancel, '</button></div><div id="cancelMessage" class="message"></div><div id="cancelList" class="bookingList"></div></section>',
@@ -915,6 +952,7 @@
 
             document.querySelector('main.page').insertAdjacentHTML('beforeend', '<section class="panel" id="myMonthlyServicesPanel"><button class="btn headcountBack" id="servicesHomeBtn" type="button">返回首頁</button><div class="sectionTitle">個人當月服務一覽</div><div class="sectionNote">每人只能查看與編輯自己的服務資料；最高權限者可切換查詢人員。</div><div class="summaryControls"><div><label for="servicesMonthInput">查詢月份</label><input id="servicesMonthInput" type="month"></div><button class="btn refresh" id="servicesSearchBtn" type="button">查詢</button></div><div class="salesAdminPicker" id="servicesPersonWrap"><label for="servicesPersonSelect">查詢人員</label><select id="servicesPersonSelect"></select></div><div id="servicesStatsArea"></div><div id="servicesMessage" class="message"></div><div class="servicesActionToggles"><button class="btn refresh" id="servicesAddToggleBtn" type="button">新增服務</button><button class="btn reset" id="servicesListToggleBtn" type="button">服務一覽</button></div><div class="servicesFormBox collapsed" id="servicesFormBox"><div class="sectionTitle" id="servicesFormTitle">新增服務</div><div class="grid"><div><label for="servicesOwnerInput">登入者</label><input id="servicesOwnerInput" type="text" readonly></div><div><label for="servicesDateInput">日期</label><input id="servicesDateInput" type="date"></div><div><label for="servicesBaInput">BA</label><input id="servicesBaInput" type="text"></div><div><label for="servicesConsultantInput">諮詢者</label><input id="servicesConsultantInput" type="text" placeholder="沒有則填無"></div><div><label for="servicesSpeakerInput">主講</label><select id="servicesSpeakerInput"></select></div><div><label for="servicesHelperInput">幫忙美容師</label><input id="servicesHelperInput" type="text" placeholder="沒有則填無"></div><div><label for="servicesCustomerInput">顧客姓名</label><input id="servicesCustomerInput" type="text"></div><div><label for="servicesDealInput">是否成交</label><select id="servicesDealInput"></select></div><div><label for="servicesFinanceInput">分期公司</label><select id="servicesFinanceInput"></select></div><div id="servicesUnitWrap"><label for="servicesUnitPriceInput">單價</label><input id="servicesUnitPriceInput" type="text" inputmode="text" pattern="-?[0-9,]*"></div><div id="servicesInstallmentWrap"><label for="servicesInstallmentsInput">期數</label><input id="servicesInstallmentsInput" type="number" inputmode="numeric"></div><div class="salesAmountWrap" id="servicesTotalWrap"><label for="servicesTotalPriceInput">總價</label><input id="servicesTotalPriceInput" type="text" inputmode="text" pattern="-?[0-9,]*"><button class="salesMinusBtn" id="servicesTotalMinusBtn" type="button">−</button></div><div class="wide"><label for="servicesNoteInput">備註</label><input id="servicesNoteInput" type="text"></div></div><div class="servicesEditActions"><button class="btn refresh" id="servicesSaveBtn" type="button">登記服務</button><button class="btn servicesDeleteBtn" id="servicesDeleteBtn" type="button">刪除此筆</button><button class="btn reset" id="servicesCancelEditBtn" type="button">取消編輯</button></div></div><div id="servicesDetailArea" class="collapsed"></div></section>');
       document.querySelector('main.page').insertAdjacentHTML('beforeend', '<section class="panel" id="bonusCalcPanel"><button class="btn headcountBack" id="bonusHomeBtn" type="button">返回首頁</button><div class="sectionTitle">工獎計算</div><div class="sectionNote">只計入服務對象為「主顧客」的有效預約；體驗客與第一次服務不列入。B=2部位、F=1部位、BF=3部位。</div><div class="summaryControls"><div><label for="bonusMonthInput">查詢月份</label><input id="bonusMonthInput" type="month"></div><button class="btn refresh" id="bonusSearchBtn" type="button">查詢</button></div><div id="bonusMessage" class="message"></div><div id="bonusArea"></div><div id="bonusDetailArea"></div></section>');
+      document.querySelector('main.page').insertAdjacentHTML('beforeend', '<section class="panel" id="trialBookingPanel"><button class="btn headcountBack" id="trialHomeBtn" type="button">返回首頁</button><div class="sectionTitle">試用版自動預約</div><div class="sectionNote">客人可先選時段送出待確認；技師確認後才算正式成立。系統會同步檢查美技班表與正式排房。</div><div class="trialModeSwitch"><button class="btn refresh" id="trialCustomerModeBtn" type="button">客人預約</button><button class="btn reset" id="trialTechModeBtn" type="button">技師確認</button></div><div id="trialCustomerBox"><div class="grid"><div><label for="trialTechSelect">技師</label><select id="trialTechSelect"></select></div><div><label for="trialDateInput">日期</label><input id="trialDateInput" type="date"></div><div><label for="trialServiceSelect">服務</label><select id="trialServiceSelect"></select></div><div><label for="trialSelectedTime">選擇時段</label><input id="trialSelectedTime" type="text" readonly></div><div class="wide"><label for="trialNoteInput">備註</label><input id="trialNoteInput" type="text" placeholder="可不填"></div></div><div id="trialMessage" class="message"></div><div id="trialSlotGrid" class="trialSlotGrid"></div><button class="btn refresh" id="trialSubmitBtn" type="button">送出待確認</button><div class="sectionTitle">我的試用預約</div><div id="trialMyList" class="trialBookingList"></div></div><div id="trialTechBox" style="display:none"><div class="grid"><div><label for="trialManageTechSelect">技師</label><select id="trialManageTechSelect"></select></div><div><label for="trialManageDateInput">日期</label><input id="trialManageDateInput" type="date"></div></div><button class="btn refresh" id="trialManageSearchBtn" type="button">查詢待確認</button><div id="trialManageMessage" class="message"></div><div id="trialManageList" class="trialBookingList"></div></div></section>');
       document.querySelector('main.page').insertAdjacentHTML('beforeend', '<section class="panel" id="portalConstructionPanel"><button class="btn headcountBack" id="constructionHomeBtn" type="button">\u8fd4\u56de\u9996\u9801</button><div class="sectionTitle" id="constructionTitle">\u529f\u80fd\u5efa\u7f6e\u4e2d</div><div class="sectionNote" id="constructionText">\u9019\u500b\u529f\u80fd\u6b63\u5728\u65bd\u5de5\u4e2d\uff0c\u5b8c\u6210\u5f8c\u5c31\u6703\u958b\u653e\u4f7f\u7528\u3002</div><div class="slotBox empty">\u2692\ufe0f<br>\u65bd\u5de5\u4e2d</div></section>');
 
       byId('portalBookingBtn').onclick = showScheduleHome;
@@ -924,6 +962,7 @@
       byId('portalBonusBtn').onclick = showBonusCalcPanel;
       byId('portalSalesBtn').onclick = showMyMonthlySalesPanel;
       byId('portalServicesBtn').onclick = showMyMonthlyServicesPanel;
+      byId('portalTrialBtn').onclick = showTrialBookingPanel;
       byId('constructionHomeBtn').onclick = showHome;
       byId('tabBook').onclick = function () { showTab('book'); };
       setupReportButton();
@@ -1003,6 +1042,16 @@
       byId('servicesSaveBtn').onclick = saveMyMonthlyService;
       byId('servicesDeleteBtn').onclick = deleteMonthlyService;
       byId('servicesCancelEditBtn').onclick = resetServicesForm;
+      byId('trialHomeBtn').onclick = showHome;
+      byId('trialCustomerModeBtn').onclick = function () { switchTrialMode('customer'); };
+      byId('trialTechModeBtn').onclick = function () { switchTrialMode('tech'); };
+      byId('trialTechSelect').onchange = loadTrialAvailability;
+      byId('trialDateInput').onchange = loadTrialAvailability;
+      byId('trialServiceSelect').onchange = loadTrialAvailability;
+      byId('trialSubmitBtn').onclick = submitTrialBooking;
+      byId('trialManageSearchBtn').onclick = loadTrialManageList;
+      byId('trialManageTechSelect').onchange = loadTrialManageList;
+      byId('trialManageDateInput').onchange = loadTrialManageList;
       ['servicesDateInput','servicesBaInput','servicesConsultantInput','servicesSpeakerInput','servicesHelperInput','servicesCustomerInput','servicesDealInput','servicesFinanceInput','servicesUnitPriceInput','servicesInstallmentsInput','servicesTotalPriceInput'].forEach(function(id){ var el=byId(id); if(el) el.oninput=function(){ clearFieldError(id); if(id==='servicesUnitPriceInput' || id==='servicesInstallmentsInput') syncServicesTotalPrice(); }; if(el) el.onchange=function(){ clearFieldError(id); if(id==='servicesFinanceInput' || id==='servicesDealInput') syncServicesFinanceFields(); }; });
       byId('scheduleHomeBtn').onclick = showHome;
       byId('scheduleSearchBtn').onclick = loadTechSchedule;
@@ -1185,6 +1234,10 @@
         showMyMonthlyServicesPanel();
         return;
       }
+      if (page === 'trialBooking' || page === 'trial') {
+        showTrialBookingPanel();
+        return;
+      }
       showHome();
     }
 
@@ -1210,6 +1263,7 @@
       if (byId('myMonthlySalesPanel')) byId('myMonthlySalesPanel').classList.remove('active');
       if (byId('myMonthlyServicesPanel')) byId('myMonthlyServicesPanel').classList.remove('active');
       if (byId('bonusCalcPanel')) byId('bonusCalcPanel').classList.remove('active');
+      if (byId('trialBookingPanel')) byId('trialBookingPanel').classList.remove('active');
       byId('techHeadcountPanel').classList.add('active');
       if (!byId('headcountMonthInput').value) byId('headcountMonthInput').value = currentMonthValue();
       loadTechHeadcount();
@@ -1425,6 +1479,7 @@
       if (byId('myMonthlySalesPanel')) byId('myMonthlySalesPanel').classList.remove('active');
       if (byId('myMonthlyServicesPanel')) byId('myMonthlyServicesPanel').classList.remove('active');
       if (byId('bonusCalcPanel')) byId('bonusCalcPanel').classList.remove('active');
+      if (byId('trialBookingPanel')) byId('trialBookingPanel').classList.remove('active');
       byId('myMonthlyServicesPanel').classList.add('active');
       fillServicesDefaults();
       resetServicesForm(false);
@@ -1768,6 +1823,7 @@
       if (byId('techHeadcountPanel')) byId('techHeadcountPanel').classList.remove('active');
       if (byId('techSchedulePanel')) byId('techSchedulePanel').classList.remove('active');
       if (byId('bonusCalcPanel')) byId('bonusCalcPanel').classList.remove('active');
+      if (byId('trialBookingPanel')) byId('trialBookingPanel').classList.remove('active');
       byId('myMonthlySalesPanel').classList.add('active');
       fillSalesDefaults();
       resetSalesForm(false);
@@ -2097,6 +2153,7 @@
       if (byId('myMonthlySalesPanel')) byId('myMonthlySalesPanel').classList.remove('active');
       if (byId('myMonthlyServicesPanel')) byId('myMonthlyServicesPanel').classList.remove('active');
       if (byId('bonusCalcPanel')) byId('bonusCalcPanel').classList.remove('active');
+      if (byId('trialBookingPanel')) byId('trialBookingPanel').classList.remove('active');
       byId('techSchedulePanel').classList.add('active');
       if (!byId('scheduleMonthInput').value) byId('scheduleMonthInput').value = currentMonthValue();
       fillScheduleEditControls();
@@ -2345,6 +2402,7 @@
       if (byId('myMonthlySalesPanel')) byId('myMonthlySalesPanel').classList.remove('active');
       if (byId('myMonthlyServicesPanel')) byId('myMonthlyServicesPanel').classList.remove('active');
       if (byId('bonusCalcPanel')) byId('bonusCalcPanel').classList.remove('active');
+      if (byId('trialBookingPanel')) byId('trialBookingPanel').classList.remove('active');
       byId('scheduleTabs').classList.remove('active');
       byId('tabSchedule').classList.remove('active');
       byId('tabPeople').classList.remove('active');
@@ -2355,6 +2413,195 @@
         if (panel) panel.classList.remove('active');
       });
       window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function showTrialBookingPanel() {
+      document.body.classList.remove('reportShotMode');
+      document.body.classList.remove('headcountOnly');
+      document.body.classList.remove('scheduleOnly');
+      document.body.classList.remove('salesOnly');
+      document.body.classList.remove('servicesOnly');
+      document.body.classList.remove('bonusOnly');
+      byId('reportPanel').classList.remove('active');
+      byId('adminPanel').classList.remove('active');
+      if (byId('portalConstructionPanel')) byId('portalConstructionPanel').classList.remove('active');
+      if (byId('techHeadcountPanel')) byId('techHeadcountPanel').classList.remove('active');
+      if (byId('techSchedulePanel')) byId('techSchedulePanel').classList.remove('active');
+      if (byId('myMonthlySalesPanel')) byId('myMonthlySalesPanel').classList.remove('active');
+      if (byId('myMonthlyServicesPanel')) byId('myMonthlyServicesPanel').classList.remove('active');
+      if (byId('bonusCalcPanel')) byId('bonusCalcPanel').classList.remove('active');
+      if (byId('trialBookingPanel')) byId('trialBookingPanel').classList.remove('active');
+      byId('scheduleTabs').classList.remove('active');
+      ['book','cancel','summary','query'].forEach(function (tab) {
+        var tabBtn = byId('tab' + cap(tab));
+        var panel = byId(tab + 'Panel');
+        if (tabBtn) tabBtn.classList.remove('active');
+        if (panel) panel.classList.remove('active');
+      });
+      byId('trialBookingPanel').classList.add('active');
+      if (!byId('trialDateInput').value) setToday('trialDateInput');
+      if (!byId('trialManageDateInput').value) setToday('trialManageDateInput');
+      loadTrialConfig();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function switchTrialMode(mode) {
+      var isTech = mode === 'tech';
+      byId('trialCustomerBox').style.display = isTech ? 'none' : '';
+      byId('trialTechBox').style.display = isTech ? '' : 'none';
+      if (isTech) loadTrialManageList();
+      else {
+        loadTrialAvailability();
+        loadTrialMyList();
+      }
+    }
+
+    function loadTrialConfig() {
+      apiCall('getTrialConfig', {}, function (cfg) {
+        window.TRIAL_CONFIG = cfg || {};
+        var techs = (cfg.technicians || []).map(function (item) { return item.name; });
+        fillSelect('trialTechSelect', techs, byId('trialTechSelect').value, '請選擇技師');
+        fillSelect('trialManageTechSelect', techs, byId('trialManageTechSelect').value, '請選擇技師');
+        fillSelect('trialServiceSelect', cfg.services || ['身體','臉','身體+臉'], byId('trialServiceSelect').value, '請選擇服務');
+        if (!byId('trialServiceSelect').value && (cfg.services || []).length) byId('trialServiceSelect').value = cfg.services[0];
+        loadTrialAvailability();
+        loadTrialMyList();
+      }, function (err) {
+        showPanelMessage('trialMessage', err, true);
+      });
+    }
+
+    function loadTrialAvailability() {
+      if (!byId('trialBookingPanel') || !byId('trialBookingPanel').classList.contains('active')) return;
+      var technician = byId('trialTechSelect').value;
+      var date = byId('trialDateInput').value;
+      var service = byId('trialServiceSelect').value;
+      byId('trialSelectedTime').value = '';
+      window.TRIAL_SELECTED_SLOT = null;
+      if (!technician || !date || !service) {
+        byId('trialSlotGrid').innerHTML = '<div class="slotBox empty">請先選擇技師、日期與服務</div>';
+        return;
+      }
+      apiCall('getTrialAvailability', { technician: technician, date: date, service: service }, function (result) {
+        renderTrialSlots(result.slots || []);
+      }, function (err) {
+        showPanelMessage('trialMessage', err, true);
+      });
+    }
+
+    function renderTrialSlots(slots) {
+      var box = byId('trialSlotGrid');
+      if (!slots.length) {
+        box.innerHTML = '<div class="slotBox empty">無可選擇時段</div>';
+        return;
+      }
+      box.innerHTML = slots.map(function (slot) {
+        var cls = slot.status === '待確認' ? 'pending' : slot.status === '忙碌' ? 'busy' : slot.status === '休假' ? 'off' : '';
+        return '<button class="trialSlot ' + cls + '" type="button" data-start="' + escapeHtml(slot.start) + '" data-end="' + escapeHtml(slot.end) + '" data-can="' + (slot.canBook ? '1' : '0') + '"><span>' + escapeHtml(slot.start + '-' + slot.end) + '</span><span>' + escapeHtml(slot.status) + '</span></button>';
+      }).join('');
+      Array.prototype.forEach.call(box.querySelectorAll('.trialSlot'), function (btn) {
+        btn.onclick = function () {
+          if (btn.getAttribute('data-can') !== '1') return;
+          Array.prototype.forEach.call(box.querySelectorAll('.trialSlot'), function (item) { item.classList.remove('selected'); });
+          btn.classList.add('selected');
+          window.TRIAL_SELECTED_SLOT = { start: btn.getAttribute('data-start'), end: btn.getAttribute('data-end') };
+          byId('trialSelectedTime').value = window.TRIAL_SELECTED_SLOT.start + '-' + window.TRIAL_SELECTED_SLOT.end;
+        };
+      });
+    }
+
+    function submitTrialBooking() {
+      clearBox('trialMessage');
+      var slot = window.TRIAL_SELECTED_SLOT;
+      if (!slot) {
+        showPanelMessage('trialMessage', '請先選擇可預約時段', true);
+        return;
+      }
+      var data = {
+        technician: byId('trialTechSelect').value,
+        date: byId('trialDateInput').value,
+        service: byId('trialServiceSelect').value,
+        start: slot.start,
+        note: byId('trialNoteInput').value
+      };
+      apiCall('createTrialBooking', data, function (result) {
+        showPanelMessage('trialMessage', (result && result.message) || '已送出，等待技師確認', false);
+        byId('trialNoteInput').value = '';
+        loadTrialAvailability();
+        loadTrialMyList();
+      }, function (err) {
+        showPanelMessage('trialMessage', err, true);
+      });
+    }
+
+    function loadTrialMyList() {
+      apiCall('getTrialBookings', { mode: 'my' }, function (result) {
+        renderTrialList('trialMyList', result.rows || [], 'my');
+      }, function (err) {
+        byId('trialMyList').innerHTML = '<div class="slotBox empty">' + escapeHtml(err) + '</div>';
+      });
+    }
+
+    function loadTrialManageList() {
+      var technician = byId('trialManageTechSelect').value;
+      var date = byId('trialManageDateInput').value;
+      if (!technician) {
+        byId('trialManageList').innerHTML = '<div class="slotBox empty">請先選擇技師</div>';
+        return;
+      }
+      apiCall('getTrialBookings', { mode: 'tech', technician: technician, date: date }, function (result) {
+        renderTrialList('trialManageList', result.rows || [], 'tech');
+      }, function (err) {
+        showPanelMessage('trialManageMessage', err, true);
+      });
+    }
+
+    function renderTrialList(id, rows, mode) {
+      var box = byId(id);
+      if (!rows.length) {
+        box.innerHTML = '<div class="slotBox empty">目前沒有資料</div>';
+        return;
+      }
+      box.innerHTML = rows.map(function (row) {
+        var cls = row.status === '待確認' ? 'pending' : 'confirmed';
+        var actions = '';
+        if (mode === 'tech') {
+          actions = '<div class="trialActions"><button class="btn refresh" data-action="confirm" data-row="' + row.rowNumber + '">確認</button><button class="btn trialRejectBtn" data-action="reject" data-row="' + row.rowNumber + '">拒絕</button><button class="btn trialCancelBtn" data-action="cancelByTech" data-row="' + row.rowNumber + '">取消</button></div>';
+        } else {
+          actions = '<div class="trialActions"><button class="btn trialCancelBtn" data-action="cancelByCustomer" data-row="' + row.rowNumber + '">取消這筆</button></div>';
+        }
+        return '<div class="trialCard ' + cls + '"><div class="title">' + escapeHtml(row.date + ' ' + row.start + '-' + row.end) + '</div><div class="meta">技師：' + escapeHtml(row.technician) + '<br>服務：' + escapeHtml(row.service) + '<br>客人：' + escapeHtml(row.customerName || '') + '<br>狀態：' + escapeHtml(row.status) + (row.note ? '<br>備註：' + escapeHtml(row.note) : '') + '</div>' + actions + '</div>';
+      }).join('');
+      Array.prototype.forEach.call(box.querySelectorAll('button[data-action]'), function (btn) {
+        btn.onclick = function () {
+          var action = btn.getAttribute('data-action');
+          var reason = '';
+          if (action === 'reject') {
+            reason = prompt('請輸入拒絕原因');
+            if (!reason) return;
+          }
+          updateTrialBookingStatus(btn.getAttribute('data-row'), action, reason, mode);
+        };
+      });
+    }
+
+    function updateTrialBookingStatus(rowNumber, actionType, rejectReason, mode) {
+      var payload = {
+        rowNumber: rowNumber,
+        actionType: actionType,
+        rejectReason: rejectReason || '',
+        mode: mode,
+        technician: byId('trialManageTechSelect').value,
+        date: byId('trialManageDateInput').value
+      };
+      apiCall('updateTrialBookingStatus', payload, function (result) {
+        showPanelMessage(mode === 'tech' ? 'trialManageMessage' : 'trialMessage', '已更新預約狀態', false);
+        if (mode === 'tech') renderTrialList('trialManageList', result.rows || [], 'tech');
+        else loadTrialMyList();
+        loadTrialAvailability();
+      }, function (err) {
+        showPanelMessage(mode === 'tech' ? 'trialManageMessage' : 'trialMessage', err, true);
+      });
     }
 
     function showConstructionPage(title, text) {
@@ -2371,6 +2618,7 @@
       if (byId('myMonthlySalesPanel')) byId('myMonthlySalesPanel').classList.remove('active');
       if (byId('myMonthlyServicesPanel')) byId('myMonthlyServicesPanel').classList.remove('active');
       if (byId('bonusCalcPanel')) byId('bonusCalcPanel').classList.remove('active');
+      if (byId('trialBookingPanel')) byId('trialBookingPanel').classList.remove('active');
       byId('scheduleTabs').classList.remove('active');
       byId('tabSchedule').classList.remove('active');
       byId('tabPeople').classList.remove('active');
@@ -2417,6 +2665,7 @@
       if (byId('myMonthlySalesPanel')) byId('myMonthlySalesPanel').classList.remove('active');
       if (byId('myMonthlyServicesPanel')) byId('myMonthlyServicesPanel').classList.remove('active');
       if (byId('bonusCalcPanel')) byId('bonusCalcPanel').classList.remove('active');
+      if (byId('trialBookingPanel')) byId('trialBookingPanel').classList.remove('active');
       ['book','cancel','summary','query'].forEach(function (tab) {
         var tabBtn = byId('tab' + cap(tab));
         var panel = byId(tab + 'Panel');
@@ -2546,6 +2795,7 @@
       if (byId('myMonthlySalesPanel')) byId('myMonthlySalesPanel').classList.remove('active');
       if (byId('myMonthlyServicesPanel')) byId('myMonthlyServicesPanel').classList.remove('active');
       if (byId('bonusCalcPanel')) byId('bonusCalcPanel').classList.remove('active');
+      if (byId('trialBookingPanel')) byId('trialBookingPanel').classList.remove('active');
       byId('adminPanel').classList.add('active');
       setToday('adminDateInput');
       byId('adminLogList').innerHTML = '';
@@ -2887,6 +3137,7 @@
       if (byId('myMonthlySalesPanel')) byId('myMonthlySalesPanel').classList.remove('active');
       if (byId('myMonthlyServicesPanel')) byId('myMonthlyServicesPanel').classList.remove('active');
       if (byId('bonusCalcPanel')) byId('bonusCalcPanel').classList.remove('active');
+      if (byId('trialBookingPanel')) byId('trialBookingPanel').classList.remove('active');
       byId('reportPanel').classList.add('active');
       byId('reportDateText').textContent = '載入中...';
       byId('reportArea').innerHTML = '<div class="slotBox empty">載入中...</div>';
@@ -3534,6 +3785,7 @@
   </script>
 </body>
 </html>
+
 
 
 
