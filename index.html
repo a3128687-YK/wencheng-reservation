@@ -530,10 +530,11 @@
       line-height: 1.1 !important;
     }
     .trialModeSwitch { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin: 12px 0 18px; }
-    .trialModeSwitch .btn { min-height: 64px; }
-    .trialModeTitle { margin: 10px 0 14px; padding: 14px 16px; border-radius: 16px; background: #fff7e8; border: 2px solid rgba(217,95,63,.22); color: var(--ink); font-size: clamp(22px, 5vw, 32px); font-weight: 950; text-align: center; }
-    .trialBoxShell { border: 2px solid rgba(76,127,105,.18); border-radius: 18px; background: rgba(255,255,255,.90); padding: 16px; box-shadow: 0 10px 24px rgba(53,82,61,.08); min-height: 320px; }
+    .trialModeSwitch .btn { min-height: 82px; font-size: clamp(22px, 4.8vw, 32px); }
+    .trialModeTitle { margin: 10px 0 14px; padding: 14px 16px; border-radius: 16px; background: #eef6f3; border: 2px solid rgba(76,127,105,.24); color: var(--ink); font-size: clamp(22px, 5vw, 32px); font-weight: 950; text-align: center; }
+    .trialBoxShell { border: 2px solid rgba(76,127,105,.18); border-radius: 18px; background: rgba(255,255,255,.90); padding: 16px; box-shadow: 0 10px 24px rgba(53,82,61,.08); min-height: 430px; }
     .trialSlotGrid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; margin-top: 14px; }
+    .trialSlotGrid .slotBox.empty { grid-column: 1 / -1; white-space: nowrap; min-height: 74px; display: grid; place-items: center; }
     .trialSlot {
       border: 2px solid #9dc9a3;
       background: #f1fbf1;
@@ -954,7 +955,7 @@
 
             document.querySelector('main.page').insertAdjacentHTML('beforeend', '<section class="panel" id="myMonthlyServicesPanel"><button class="btn headcountBack" id="servicesHomeBtn" type="button">返回首頁</button><div class="sectionTitle">個人當月服務一覽</div><div class="sectionNote">每人只能查看與編輯自己的服務資料；最高權限者可切換查詢人員。</div><div class="summaryControls"><div><label for="servicesMonthInput">查詢月份</label><input id="servicesMonthInput" type="month"></div><button class="btn refresh" id="servicesSearchBtn" type="button">查詢</button></div><div class="salesAdminPicker" id="servicesPersonWrap"><label for="servicesPersonSelect">查詢人員</label><select id="servicesPersonSelect"></select></div><div id="servicesStatsArea"></div><div id="servicesMessage" class="message"></div><div class="servicesActionToggles"><button class="btn refresh" id="servicesAddToggleBtn" type="button">新增服務</button><button class="btn reset" id="servicesListToggleBtn" type="button">服務一覽</button></div><div class="servicesFormBox collapsed" id="servicesFormBox"><div class="sectionTitle" id="servicesFormTitle">新增服務</div><div class="grid"><div><label for="servicesOwnerInput">登入者</label><input id="servicesOwnerInput" type="text" readonly></div><div><label for="servicesDateInput">日期</label><input id="servicesDateInput" type="date"></div><div><label for="servicesBaInput">BA</label><input id="servicesBaInput" type="text"></div><div><label for="servicesConsultantInput">諮詢者</label><input id="servicesConsultantInput" type="text" placeholder="沒有則填無"></div><div><label for="servicesSpeakerInput">主講</label><select id="servicesSpeakerInput"></select></div><div><label for="servicesHelperInput">幫忙美容師</label><input id="servicesHelperInput" type="text" placeholder="沒有則填無"></div><div><label for="servicesCustomerInput">顧客姓名</label><input id="servicesCustomerInput" type="text"></div><div><label for="servicesDealInput">是否成交</label><select id="servicesDealInput"></select></div><div><label for="servicesFinanceInput">分期公司</label><select id="servicesFinanceInput"></select></div><div id="servicesUnitWrap"><label for="servicesUnitPriceInput">單價</label><input id="servicesUnitPriceInput" type="text" inputmode="text" pattern="-?[0-9,]*"></div><div id="servicesInstallmentWrap"><label for="servicesInstallmentsInput">期數</label><input id="servicesInstallmentsInput" type="number" inputmode="numeric"></div><div class="salesAmountWrap" id="servicesTotalWrap"><label for="servicesTotalPriceInput">總價</label><input id="servicesTotalPriceInput" type="text" inputmode="text" pattern="-?[0-9,]*"><button class="salesMinusBtn" id="servicesTotalMinusBtn" type="button">−</button></div><div class="wide"><label for="servicesNoteInput">備註</label><input id="servicesNoteInput" type="text"></div></div><div class="servicesEditActions"><button class="btn refresh" id="servicesSaveBtn" type="button">登記服務</button><button class="btn servicesDeleteBtn" id="servicesDeleteBtn" type="button">刪除此筆</button><button class="btn reset" id="servicesCancelEditBtn" type="button">取消編輯</button></div></div><div id="servicesDetailArea" class="collapsed"></div></section>');
       document.querySelector('main.page').insertAdjacentHTML('beforeend', '<section class="panel" id="bonusCalcPanel"><button class="btn headcountBack" id="bonusHomeBtn" type="button">返回首頁</button><div class="sectionTitle">工獎計算</div><div class="sectionNote">只計入服務對象為「主顧客」的有效預約；體驗客與第一次服務不列入。B=2部位、F=1部位、BF=3部位。</div><div class="summaryControls"><div><label for="bonusMonthInput">查詢月份</label><input id="bonusMonthInput" type="month"></div><button class="btn refresh" id="bonusSearchBtn" type="button">查詢</button></div><div id="bonusMessage" class="message"></div><div id="bonusArea"></div><div id="bonusDetailArea"></div></section>');
-      document.querySelector('main.page').insertAdjacentHTML('beforeend', '<section class="panel" id="trialBookingPanel"><button class="btn headcountBack" id="trialHomeBtn" type="button">返回首頁</button><div class="sectionTitle">試用版自動預約</div><div class="sectionNote">客人可先選時段送出待確認；技師確認後才算正式成立。系統會同步檢查美技班表與正式排房。</div><div id="trialModeTitle" class="trialModeTitle">顧客預約模式</div><div class="trialModeSwitch" id="trialModeSwitch"><button class="btn refresh" id="trialCustomerModeBtn" type="button">客人預約</button><button class="btn reset" id="trialTechModeBtn" type="button">技師確認</button></div><div id="trialCustomerBox" class="trialBoxShell"><div class="grid"><div><label for="trialTechSelect">技師</label><select id="trialTechSelect"></select></div><div><label for="trialDateInput">日期</label><input id="trialDateInput" type="date"></div><div><label for="trialServiceSelect">服務</label><select id="trialServiceSelect"></select></div><div><label for="trialSelectedTime">選擇時段</label><input id="trialSelectedTime" type="text" readonly></div><div class="wide"><label for="trialNoteInput">備註</label><input id="trialNoteInput" type="text" placeholder="可不填"></div></div><div id="trialMessage" class="message"></div><div id="trialSlotGrid" class="trialSlotGrid"></div><button class="btn refresh" id="trialSubmitBtn" type="button">送出待確認</button><div class="sectionTitle">我的試用預約</div><div id="trialMyList" class="trialBookingList"></div></div><div id="trialTechBox" class="trialBoxShell" style="display:none"><div class="grid"><div><label for="trialManageTechSelect">技師</label><select id="trialManageTechSelect"></select></div><div><label for="trialManageDateInput">日期</label><input id="trialManageDateInput" type="date"></div></div><button class="btn refresh" id="trialManageSearchBtn" type="button">列出待確認</button><div id="trialManageMessage" class="message"></div><div id="trialManageList" class="trialBookingList"></div></div></section>');
+      document.querySelector('main.page').insertAdjacentHTML('beforeend', '<section class="panel" id="trialBookingPanel"><button class="btn headcountBack" id="trialHomeBtn" type="button">返回首頁</button><div class="sectionTitle">試用版自動預約</div><div class="sectionNote">客人可先選時段送出待確認；技師確認後才算正式成立。系統會同步檢查美技班表與正式排房。</div><div id="trialModeTitle" class="trialModeTitle">顧客預約模式</div><div class="trialModeSwitch" id="trialModeSwitch"><button class="btn refresh" id="trialCustomerModeBtn" type="button">客人預約</button><button class="btn reset" id="trialTechModeBtn" type="button">技師確認</button></div><div id="trialCustomerBox" class="trialBoxShell"><div class="grid"><div><label for="trialTechSelect">技師</label><select id="trialTechSelect"></select></div><div><label for="trialDateInput">日期</label><input id="trialDateInput" type="date"></div><div><label for="trialServiceSelect">服務</label><select id="trialServiceSelect"></select></div><div><label for="trialSelectedTime">選擇時段</label><input id="trialSelectedTime" type="text" readonly></div><div class="wide"><label for="trialNoteInput">備註</label><input id="trialNoteInput" type="text" placeholder="可不填"></div></div><div id="trialMessage" class="message"></div><div id="trialSlotGrid" class="trialSlotGrid"></div><button class="btn refresh" id="trialSubmitBtn" type="button">送出待確認</button><div class="sectionTitle">我的試用預約</div><div id="trialMyList" class="trialBookingList"></div></div><div id="trialTechBox" class="trialBoxShell" style="display:none"><div class="grid"><div class="wide"><label for="trialManageTechSelect">技師</label><select id="trialManageTechSelect"></select></div></div><button class="btn refresh" id="trialManageSearchBtn" type="button">列出全部待確認</button><div id="trialManageMessage" class="message"></div><div id="trialManageList" class="trialBookingList"></div></div></section>');
       document.querySelector('main.page').insertAdjacentHTML('beforeend', '<section class="panel" id="portalConstructionPanel"><button class="btn headcountBack" id="constructionHomeBtn" type="button">\u8fd4\u56de\u9996\u9801</button><div class="sectionTitle" id="constructionTitle">\u529f\u80fd\u5efa\u7f6e\u4e2d</div><div class="sectionNote" id="constructionText">\u9019\u500b\u529f\u80fd\u6b63\u5728\u65bd\u5de5\u4e2d\uff0c\u5b8c\u6210\u5f8c\u5c31\u6703\u958b\u653e\u4f7f\u7528\u3002</div><div class="slotBox empty">\u2692\ufe0f<br>\u65bd\u5de5\u4e2d</div></section>');
 
       byId('portalBookingBtn').onclick = showScheduleHome;
@@ -1053,7 +1054,6 @@
       byId('trialSubmitBtn').onclick = submitTrialBooking;
       byId('trialManageSearchBtn').onclick = loadTrialManageList;
       byId('trialManageTechSelect').onchange = loadTrialManageList;
-      byId('trialManageDateInput').onchange = loadTrialManageList;
       ['servicesDateInput','servicesBaInput','servicesConsultantInput','servicesSpeakerInput','servicesHelperInput','servicesCustomerInput','servicesDealInput','servicesFinanceInput','servicesUnitPriceInput','servicesInstallmentsInput','servicesTotalPriceInput'].forEach(function(id){ var el=byId(id); if(el) el.oninput=function(){ clearFieldError(id); if(id==='servicesUnitPriceInput' || id==='servicesInstallmentsInput') syncServicesTotalPrice(); }; if(el) el.onchange=function(){ clearFieldError(id); if(id==='servicesFinanceInput' || id==='servicesDealInput') syncServicesFinanceFields(); }; });
       byId('scheduleHomeBtn').onclick = showHome;
       byId('scheduleSearchBtn').onclick = loadTechSchedule;
@@ -2442,7 +2442,6 @@
       });
       byId('trialBookingPanel').classList.add('active');
       if (!byId('trialDateInput').value) setToday('trialDateInput');
-      if (!byId('trialManageDateInput').value) setToday('trialManageDateInput');
       loadTrialConfig();
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
@@ -2498,7 +2497,7 @@
       byId('trialSelectedTime').value = '';
       window.TRIAL_SELECTED_SLOT = null;
       if (!technician || !date || !service) {
-        byId('trialSlotGrid').innerHTML = '<div class="slotBox empty">請先選擇技師、日期與服務</div>';
+        byId('trialSlotGrid').innerHTML = '<div class="slotBox empty">請先選擇技師、日期、服務</div>';
         return;
       }
       apiCall('getTrialAvailability', { technician: technician, date: date, service: service }, function (result) {
@@ -2569,12 +2568,11 @@
 
     function loadTrialManageList() {
       var technician = byId('trialManageTechSelect').value;
-      var date = byId('trialManageDateInput').value;
       if (!technician) {
         byId('trialManageList').innerHTML = '<div class="slotBox empty">請先選擇技師</div>';
         return;
       }
-      apiCall('getTrialBookings', { mode: 'tech', technician: technician, date: date, onlyPending: 'true' }, function (result) {
+      apiCall('getTrialBookings', { mode: 'tech', technician: technician, onlyPending: 'true' }, function (result) {
         renderTrialList('trialManageList', result.rows || [], 'tech');
       }, function (err) {
         showPanelMessage('trialManageMessage', err, true);
@@ -2617,7 +2615,7 @@
         rejectReason: rejectReason || '',
         mode: mode,
         technician: byId('trialManageTechSelect').value,
-        date: byId('trialManageDateInput').value
+        date: ''
       };
       var progressText = actionType === 'confirm' ? '確認中...' : actionType === 'reject' ? '拒絕中...' : '取消中...';
       var doneText = actionType === 'confirm' ? '✅ 確認完成' : actionType === 'reject' ? '✅ 已拒絕' : '✅ 取消完成';
@@ -3818,6 +3816,7 @@
   </script>
 </body>
 </html>
+
 
 
 
