@@ -1031,7 +1031,7 @@
       byId('salesHomeBtn').onclick = showHome;
       byId('salesSearchBtn').onclick = loadMyMonthlySales;
       byId('salesAddToggleBtn').onclick = toggleSalesForm;
-      byId('salesListToggleBtn').onclick = toggleSalesDetails;
+      byId('salesListToggleBtn').onclick = showCurrentSalesDetails;
       byId('salesHistoryBtn').onclick = loadArchivedMonthlySales;
       byId('salesMonthInput').onchange = loadMyMonthlySales;
       byId('salesPersonSelect').onchange = loadMyMonthlySales;
@@ -2000,6 +2000,21 @@
       } else {
         collapseSalesDetails();
       }
+    }
+
+    function showCurrentSalesDetails() {
+      if (window.SALES_ARCHIVE_MODE) {
+        window.SALES_ARCHIVE_MODE = false;
+        loadMonthlySalesByMode(false);
+        setTimeout(function () { expandSalesDetails(); }, 500);
+        return;
+      }
+      if (!window.SALES_DETAILS || !window.SALES_DETAILS.length) {
+        loadMonthlySalesByMode(false);
+        setTimeout(function () { expandSalesDetails(); }, 500);
+        return;
+      }
+      toggleSalesDetails();
     }
     function toggleSalesMinus() {
       var input = byId('salesAmountInput');
