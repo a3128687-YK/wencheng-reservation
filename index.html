@@ -452,6 +452,16 @@
     .salesFormBox { margin-top: 16px; padding: 14px; border-radius: 20px; background: #fffaf1; border: 2px solid rgba(187,139,76,.22); }
     .salesDetailList { display: grid; gap: 10px; margin-top: 14px; }
     #salesDetailArea .headcountDetailTitle { white-space: nowrap; font-size: clamp(20px, 5vw, 30px); line-height: 1.15; }
+    .salesTableWrap { overflow-x: auto; border-radius: 18px; border: 2px solid rgba(189,95,69,.18); background: rgba(255,253,247,.92); box-shadow: 0 10px 26px rgba(85,52,38,.08); }
+    .salesTable { width: 100%; min-width: 620px; border-collapse: separate; border-spacing: 0; font-weight: 850; color: var(--ink); }
+    .salesTable th { position: sticky; top: 0; z-index: 1; background: #f7d8cc; color: #8c2f21; font-size: clamp(14px, 3vw, 18px); padding: 10px 8px; border-bottom: 2px solid rgba(189,95,69,.22); white-space: nowrap; text-align: center; }
+    .salesTable td { padding: 10px 8px; border-bottom: 1px solid rgba(96,83,67,.12); background: rgba(255,255,255,.72); font-size: clamp(14px, 3.1vw, 18px); white-space: nowrap; text-align: center; }
+    .salesTable tr:nth-child(even) td { background: rgba(255,247,239,.9); }
+    .salesTable tr[data-sales-row] { cursor: pointer; }
+    .salesTable tr[data-sales-row]:active td { background: #ffe6da; }
+    .salesTable .amountCell { color: #c5482d; font-weight: 950; text-align: right; }
+    .salesTable .placeCell { max-width: 150px; overflow: hidden; text-overflow: ellipsis; }
+    .salesTableHint { margin: 8px 2px 0; color: var(--muted); font-weight: 850; font-size: clamp(13px, 3vw, 16px); }
     .salesDetailItem { width: 100%; text-align: left; cursor: pointer; font-family: inherit; border-radius: 16px; padding: 12px; background: #fffdf7; border: 2px solid rgba(70,126,88,.16); box-shadow: 0 6px 16px rgba(53,82,61,.07); }
     .salesDetailItem:disabled { opacity: 1; color: inherit; cursor: default; }
     .salesDetailMain { font-size: clamp(18px, 4vw, 24px); font-weight: 950; color: var(--ink); }
@@ -1921,12 +1931,7 @@
       }).join('');
       var details = result.details || [];
       var emptyText = isArchive ? '此月份沒有歷史業績資料' : '本月尚無業績資料';
-      var detailHtml = details.length ? '<div class="salesDetailList">' + details.map(function (row) {
-        var place = row.venue ? ('會館：' + row.venue) : ('專櫃：' + (row.counter || ''));
-        var note = isArchive ? '歷史資料僅供查詢' : '點我修改或刪除這筆';
-        var attr = isArchive ? '' : ' data-sales-row="' + escapeHtml(row.rowNumber || '') + '"';
-        return '<button class="salesDetailItem" type="button"' + attr + (isArchive ? ' disabled' : '') + '><div class="salesDetailMain">' + escapeHtml(String(row.date || '').replace(/-/g, '/') + '　$' + formatMoney(row.amount || 0)) + '</div><div class="salesDetailSub">' + escapeHtml(place) + '<br>登記者：' + escapeHtml(row.createdBy || '') + '<br>操作時間：' + escapeHtml(row.createdAt || '') + '<br>' + escapeHtml(note) + '</div></button>';
-      }).join('') + '</div>' : '<div class="slotBox empty">' + escapeHtml(emptyText) + '</div>';
+      var detailHtml = details.length ? buildSalesTableHtml(details, isArchive) : '<div class="slotBox empty">' + escapeHtml(emptyText) + '</div>';
       byId('salesArea').innerHTML = '<div class="headcountHero"><div class="headcountTotal">' + escapeHtml(result.displayName || result.staff || '') + '</div><div class="headcountTotalLabel">' + escapeHtml(monthText) + (isArchive ? ' 歷史業績統計' : ' 業績統計') + '</div></div><div class="salesStats">' + stats + '</div>';
       byId('salesDetailArea').innerHTML = '<div class="headcountDetailTitle">' + (isArchive ? '歷史業績一覽（唯讀）' : '本月業績一覽') + '</div>' + detailHtml;
       if (isArchive) collapseSalesForm();
@@ -1935,6 +1940,19 @@
         btn.onclick = function () { editMonthlySale(Number(btn.getAttribute('data-sales-row'))); };
       });
       if (isArchive) expandSalesDetails();
+    }
+
+    function buildSalesTableHtml(details, isArchive) {
+      var rows = details.map(function (row) {
+        var dateText = String(row.date || '').replace(/-/g, '/');
+        var parts = dateText.split('/');
+        var month = parts.length >= 2 ? Number(parts[1]) + '月' : '';
+        var day = parts.length >= 3 ? Number(parts[2]) : '';
+        var place = row.venue || row.counter || '';
+        var attr = isArchive ? '' : ' data-sales-row="' + escapeHtml(row.rowNumber || '') + '"';
+        return '<tr' + attr + '><td>' + escapeHtml(month) + '</td><td>' + escapeHtml(day) + '</td><td class="amountCell">$' + escapeHtml(formatMoney(row.amount || 0)) + '</td><td class="placeCell">' + escapeHtml(row.venue ? '會館' : '現場') + '</td><td class="placeCell">' + escapeHtml(place) + '</td><td>' + escapeHtml(row.createdAt || '') + '</td></tr>';
+      }).join('');
+      return '<div class="salesTableWrap"><table class="salesTable"><thead><tr><th>月</th><th>日</th><th>業績</th><th>會館/現場</th><th>櫃</th><th>操作時間</th></tr></thead><tbody>' + rows + '</tbody></table></div><div class="salesTableHint">' + (isArchive ? '歷史資料僅供查詢，不能修改。' : '點選任一列即可修改該筆業績。') + '</div>';
     }
 
     function expandSalesForm() {
