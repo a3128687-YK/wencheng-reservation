@@ -350,7 +350,8 @@
     .summaryCell { border-radius: 10px; padding: 6px 4px; min-height: 82px; font-weight: 900; border: 2px solid transparent; overflow: hidden; cursor: pointer; text-align: left; width: 100%; font-family: inherit; }
     .summaryCell.free { background: #eff9f0; color: #21713f; border-color: #94ca93; }
     .summaryCell.free:active, .summaryCell.busy:active, .summaryCell.experience:active, .summaryCell.mainCustomer:active { transform: scale(.98); filter: brightness(.97); }
-    .summaryCell.past { opacity: .62; cursor: default; filter: grayscale(.18); }
+    .summaryCell.past { background: #fff1f1; color: #a94a4a; border-color: #efb0b0; opacity: .72; cursor: default; filter: grayscale(.08); }
+    .summaryCell.past.busy, .summaryCell.past.mainCustomer, .summaryCell.past.experience { cursor: pointer; }
     .summaryCell.busy { background: #fff0f0; color: #b32020; border-color: #e07b7b; }
     .summaryCell.mainCustomer { background: #ffe8e8; color: #b32020; border-color: #e05252; }
     .summaryCell.experience { background: #eaf3ff; color: #1d5f9f; border-color: #76a9df; }
@@ -382,7 +383,9 @@
       justify-content: flex-start;
     }
     .reportPanel .summaryTime { flex: 0 0 6px; font-size: clamp(4.4px, 1.08vw, 5.5px); font-weight: 950; line-height: 1; white-space: nowrap; overflow: hidden; text-align: center; }
-    .reportPanel .summaryDetail { flex: 1 1 auto; min-height: 0; font-size: clamp(4px, .98vw, 5px); font-weight: 950; line-height: 1; text-align: center; overflow: hidden; word-break: keep-all; white-space: nowrap; display: flex; align-items: flex-start; justify-content: center; padding-top: 1px; }
+    .reportPanel .summaryDetail { flex: 1 1 auto; min-height: 0; font-size: clamp(3.5px, .86vw, 4.5px); font-weight: 950; line-height: .98; text-align: center; overflow: hidden; word-break: keep-all; white-space: normal; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; padding-top: 1px; gap: 0; }
+    .reportPanel .reportTech, .reportPanel .reportCustomer { display: block; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; line-height: .98; }
+    .reportPanel .reportCustomer { font-weight: 900; opacity: .92; }
     .reportShotMode .hero,
     .reportShotMode .quickInfo,
     .reportShotMode .modeSwitcher,
@@ -2816,7 +2819,7 @@
         BOOKING_DETAILS[String(b.rowNumber)] = b;
         var main = escapeHtml(b.date + ' ' + b.start + '-' + b.end + '  ' + b.room);
         var sub = escapeHtml((b.technician || '') + ' / ' + (b.customer || '') + ' / ' + (b.service || ''));
-        var actionHtml = (!canManageBookings() || isPastBooking(b)) ? '' : '<div class="miniActions"><button class="btn editOne" type="button" data-edit="' + b.rowNumber + '">\u7de8\u8f2f</button><button class="btn cancelOne" type="button" data-row="' + b.rowNumber + '">\u53d6\u6d88</button></div>';
+        var actionHtml = (!canManageBookings()) ? '' : '<div class="miniActions"><button class="btn editOne" type="button" data-edit="' + b.rowNumber + '">\u7de8\u8f2f</button><button class="btn cancelOne" type="button" data-row="' + b.rowNumber + '">\u53d6\u6d88</button></div>';
         return '<div class="bookingItem" data-detail="' + b.rowNumber + '"><div><div class="bookingMain">' + main + '</div><div class="bookingSub">' + sub + '</div>' + actionHtml + '</div></div>';
       }).join('');
       Array.prototype.forEach.call(target.querySelectorAll('[data-detail]'), function (item) { item.onclick = function () { openBookingDetail(item.getAttribute('data-detail')); }; });
@@ -2849,7 +2852,6 @@
       if (!canManageBookings()) { denyManageAction('queryMessage'); return; }
       var b = CANCEL_BOOKINGS[String(rowNumber)] || BOOKING_DETAILS[String(rowNumber)];
       if (!b) return;
-      if (isPastBooking(b)) { openBookingDetail(rowNumber); return; }
       EDIT_ROW_NUMBER = Number(rowNumber);
       showTab('book');
       byId('dateInput').value = String(b.date || '').replace(/\//g, '-');
@@ -3060,7 +3062,7 @@
         BOOKING_DETAILS[String(b.rowNumber)] = b;
         var main = escapeHtml(b.start + '-' + b.end + '  ' + b.room);
         var sub = escapeHtml((b.technician || '') + ' / ' + (b.customer || '') + ' / ' + (b.service || '') + ' / ' + (b.userName || ''));
-        var btn = allowCancel && !isPastBooking(b) ? '<div class="miniActions"><button class="btn editOne" type="button" data-edit="' + b.rowNumber + '">\u7de8\u8f2f\u9019\u7b46</button><button class="btn cancelOne" type="button" data-row="' + b.rowNumber + '">' + T.cancelOne + '</button></div>' : '';
+        var btn = allowCancel ? '<div class="miniActions"><button class="btn editOne" type="button" data-edit="' + b.rowNumber + '">\u7de8\u8f2f\u9019\u7b46</button><button class="btn cancelOne" type="button" data-row="' + b.rowNumber + '">' + T.cancelOne + '</button></div>' : '';
         return '<div class="bookingItem" data-detail="' + b.rowNumber + '"><div><div class="bookingMain">' + main + '</div><div class="bookingSub">' + sub + '</div></div>' + btn + '</div>';
       }).join('');
       Array.prototype.forEach.call(target.querySelectorAll('[data-detail]'), function (item) { item.onclick = function () { openBookingDetail(item.getAttribute('data-detail')); }; });
@@ -3077,8 +3079,7 @@
       var cardClass = 'cancelConfirmCard bookingDetailCard ' + (isCancelled ? 'cancelledStatus' : 'activeStatus');
       var actions = '<button class="btn cancelConfirmNo" id="detailCloseBtn" type="button">\u95dc\u9589</button>';
       var actionRow = booking.rowNumber || booking.row || (/^\d+$/.test(String(rowNumber)) ? rowNumber : '');
-      var isPast = isPastBooking(booking);
-      if (canManageBookings() && !isCancelled && !isPast && actionRow) {
+      if (canManageBookings() && !isCancelled && actionRow) {
         actions = '<button class="btn editOne" id="detailEditBtn" type="button">\u7de8\u8f2f\u9019\u7b46</button><button class="btn cancelOne" id="detailCancelBtn" type="button">\u53d6\u6d88\u9019\u7b46</button>' + actions;
       }
       wrap.id = 'bookingDetailOverlay';
@@ -3161,7 +3162,6 @@
       if (!canManageBookings()) { denyManageAction('cancelMessage'); return; }
       var booking = CANCEL_BOOKINGS[String(rowNumber)] || BOOKING_DETAILS[String(rowNumber)];
       if (!booking) return;
-      if (isPastBooking(booking)) { openBookingDetail(rowNumber); return; }
       closeCancelConfirm();
       var wrap = document.createElement('div');
       wrap.id = 'cancelConfirmOverlay';
@@ -3192,7 +3192,6 @@
       if (!canManageBookings()) { denyManageAction('cancelMessage'); return; }
       var messageId = getActiveMessageId();
       var booking = CANCEL_BOOKINGS[String(rowNumber)] || BOOKING_DETAILS[String(rowNumber)];
-      if (booking && isPastBooking(booking)) { openBookingDetail(rowNumber); return; }
       if (!requireLineReady(messageId)) return;
       showBookingProgress('\u53d6\u6d88\u4e2d...', true);
       apiCall('cancelReservationByRow', { rowNumber: rowNumber }, function () {
@@ -3689,7 +3688,14 @@
     function formatReportSlotDetail(booking) {
       booking = booking || {};
       var technician = formatReportTechnicianName(booking.technician);
-      return escapeHtml(technician);
+      var customer = formatReportCustomerName(booking.customer);
+      return '<span class="reportTech">' + escapeHtml(technician) + '</span><span class="reportCustomer">' + escapeHtml(customer) + '</span>';
+    }
+
+    function formatReportCustomerName(value) {
+      var text = String(value || '').trim();
+      if (!text || text === '\u672a\u6307\u5b9a') return '';
+      return text.replace(/\s+/g, '');
     }
 
     function formatReportTechnicianName(value) {
