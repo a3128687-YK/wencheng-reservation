@@ -372,9 +372,9 @@
       gap: 1px;
     }
     .reportPanel .summaryCell {
-      height: 24px;
-      min-height: 24px;
-      padding: 6px 1px 1px;
+      height: 25px;
+      min-height: 25px;
+      padding: 2px 1px 1px;
       border-radius: 4px;
       border-width: 1px;
       display: flex;
@@ -382,10 +382,9 @@
       align-items: stretch;
       justify-content: flex-start;
     }
-    .reportPanel .summaryTime { flex: 0 0 6px; font-size: clamp(4.4px, 1.08vw, 5.5px); font-weight: 950; line-height: 1; white-space: nowrap; overflow: hidden; text-align: center; }
-    .reportPanel .summaryDetail { flex: 1 1 auto; min-height: 0; font-size: clamp(3.5px, .86vw, 4.5px); font-weight: 950; line-height: .98; text-align: center; overflow: hidden; word-break: keep-all; white-space: normal; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; padding-top: 1px; gap: 0; }
-    .reportPanel .reportTech, .reportPanel .reportCustomer { display: block; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; line-height: .98; }
-    .reportPanel .reportCustomer { font-weight: 900; opacity: .92; }
+    .reportPanel .summaryTime { flex: 0 0 auto; font-size: clamp(5px, 1.22vw, 6.5px); font-weight: 950; line-height: 1; white-space: nowrap; overflow: hidden; text-align: center; margin-bottom: 1px; }
+    .reportPanel .summaryDetail { flex: 1 1 auto; min-height: 0; font-size: clamp(4px, .98vw, 5.2px); font-weight: 950; line-height: 1; text-align: center; overflow: hidden; word-break: keep-all; white-space: nowrap; display: block; padding-top: 0; }
+    .reportPanel .reportLine { display: block; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; line-height: 1; }
     .reportShotMode .hero,
     .reportShotMode .quickInfo,
     .reportShotMode .modeSwitcher,
@@ -396,7 +395,7 @@
     @media (min-width: 560px) { .summaryGrid { grid-template-columns: repeat(5, minmax(0, 1fr)); } }
     @media (max-width: 720px) {
       .reportPanel .summaryGrid { grid-template-columns: repeat(12, minmax(0, 1fr)); }
-      .reportPanel .summaryCell { height: 24px; min-height: 24px; }
+      .reportPanel .summaryCell { height: 25px; min-height: 25px; }
     }
     .summaryTime { font-size: clamp(7px, 1.95vw, 11px); margin-bottom: 4px; line-height: 1.05; font-weight: 950; white-space: nowrap; letter-spacing: 0; }
     .summaryDetail { font-size: clamp(7px, 2vw, 10px); line-height: 1.14; font-weight: 950; word-break: break-word; overflow-wrap: anywhere; }
@@ -844,6 +843,7 @@
     var BOOKING_DETAILS = {};
     var EDIT_ROW_NUMBER = null;
     var PENDING_SUMMARY_START = '';
+    var DAY_DATA_CACHE = {};
 
     window.onload = function () {
       buildUI();
@@ -3195,6 +3195,7 @@
       if (!requireLineReady(messageId)) return;
       showBookingProgress('\u53d6\u6d88\u4e2d...', true);
       apiCall('cancelReservationByRow', { rowNumber: rowNumber }, function () {
+        DAY_DATA_CACHE = {};
         showBookingProgress('\u274c \u53d6\u6d88\u6210\u529f', true);
         setTimeout(function () {
           closeBookingProgress();
@@ -3255,7 +3256,11 @@
         byId('reportArea').innerHTML = '<div class="slotBox empty">' + T.backendFail + '</div>';
         return;
       }
-      apiCall('getDay', { date: date }, function (data) { renderTomorrowReport(data || {}); }, function (err) {
+      if (DAY_DATA_CACHE[date]) { renderTomorrowReport(DAY_DATA_CACHE[date] || {}); return; }
+      apiCall('getDay', { date: date }, function (data) {
+        DAY_DATA_CACHE[date] = data;
+        renderTomorrowReport(data || {});
+      }, function (err) {
         byId('reportArea').innerHTML = '<div class="message err">' + escapeHtml(err) + '</div>';
       });
     }
@@ -3331,9 +3336,9 @@
       showBookingProgress('\u9810\u7d04\u4e2d...');
       if (EDIT_ROW_NUMBER) {
         data.rowNumber = EDIT_ROW_NUMBER;
-        apiCall('updateReservation', data, function () { showBookingSuccessAndReset(); }, function (err) { closeBookingProgress(); showMessage(err, true); showToast(err, true); });
+        apiCall('updateReservation', data, function () { DAY_DATA_CACHE = {}; showBookingSuccessAndReset(); }, function (err) { closeBookingProgress(); showMessage(err, true); showToast(err, true); });
       } else {
-        apiCall('createReservation', data, function () { showBookingSuccessAndReset(); }, function (err) { var msg = String(err).indexOf('??') >= 0 ? T.conflict : err; closeBookingProgress(); showMessage(msg, true); showToast(msg, true); updateAvailableSlots(); loadSummary(); });
+        apiCall('createReservation', data, function () { DAY_DATA_CACHE = {}; showBookingSuccessAndReset(); }, function (err) { var msg = String(err).indexOf('??') >= 0 ? T.conflict : err; closeBookingProgress(); showMessage(msg, true); showToast(msg, true); updateAvailableSlots(); loadSummary(); });
       }
     }
 
@@ -3365,7 +3370,18 @@
       }, 1500);
     }
 
-    function loadSummary() { var area = byId('summaryArea'); if (!area) return; area.innerHTML = '<div class="sectionNote">' + T.loading + '</div>'; if (!hasBackend() || !LINE_READY) { renderFallbackSummary(); return; } apiCall('getDay', { date: byId('summaryDateInput').value }, renderSummary, function (err) { area.innerHTML = '<div class="message err">' + escapeHtml(err) + '</div>'; }); }
+    function loadSummary() {
+      var area = byId('summaryArea');
+      if (!area) return;
+      var date = byId('summaryDateInput').value;
+      area.innerHTML = '<div class="sectionNote">' + T.loading + '</div>';
+      if (!hasBackend() || !LINE_READY) { renderFallbackSummary(); return; }
+      if (DAY_DATA_CACHE[date]) { renderSummary(DAY_DATA_CACHE[date]); return; }
+      apiCall('getDay', { date: date }, function (data) {
+        DAY_DATA_CACHE[date] = data;
+        renderSummary(data);
+      }, function (err) { area.innerHTML = '<div class="message err">' + escapeHtml(err) + '</div>'; });
+    }
 
     function renderSummary(data) {
       var area = byId('summaryArea');
@@ -3689,13 +3705,26 @@
       booking = booking || {};
       var technician = formatReportTechnicianName(booking.technician);
       var customer = formatReportCustomerName(booking.customer);
-      return '<span class="reportTech">' + escapeHtml(technician) + '</span><span class="reportCustomer">' + escapeHtml(customer) + '</span>';
+      var mark = getReportServiceMark(booking.service);
+      var parts = [customer, mark, technician].filter(Boolean);
+      return '<span class="reportLine">' + escapeHtml(parts.join('/')) + '</span>';
     }
 
     function formatReportCustomerName(value) {
       var text = String(value || '').trim();
       if (!text || text === '\u672a\u6307\u5b9a') return '';
       return text.replace(/\s+/g, '');
+    }
+
+    function getReportServiceMark(service) {
+      var text = String(service || '');
+      if (text.indexOf('BF') !== -1) return 'BF';
+      if (text.indexOf('B') !== -1) return 'B';
+      if (text.indexOf('F') !== -1) return 'F';
+      if (text.indexOf('\u8eab\u9ad4+\u81c9') !== -1) return 'BF';
+      if (text.indexOf('\u8eab\u9ad4') !== -1) return 'B';
+      if (text.indexOf('\u81c9') !== -1) return 'F';
+      return '';
     }
 
     function formatReportTechnicianName(value) {
