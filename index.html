@@ -3811,18 +3811,27 @@
 
     function showGlobalLoading() {
       window.GLOBAL_LOADING_COUNT = (window.GLOBAL_LOADING_COUNT || 0) + 1;
-      document.body.classList.add('loadingLocked');
-      if (document.getElementById('globalLoadingOverlay')) return;
-      var wrap = document.createElement('div');
-      wrap.id = 'globalLoadingOverlay';
-      wrap.className = 'globalLoadingOverlay';
-      wrap.innerHTML = '<div class="globalLoadingCard"><span class="hourglassFlip">⌛</span><div>資料處理中...</div></div>';
-      document.body.appendChild(wrap);
+      if (window.GLOBAL_LOADING_TIMER) return;
+      window.GLOBAL_LOADING_TIMER = setTimeout(function () {
+        window.GLOBAL_LOADING_TIMER = null;
+        if ((window.GLOBAL_LOADING_COUNT || 0) <= 0) return;
+        document.body.classList.add('loadingLocked');
+        if (document.getElementById('globalLoadingOverlay')) return;
+        var wrap = document.createElement('div');
+        wrap.id = 'globalLoadingOverlay';
+        wrap.className = 'globalLoadingOverlay';
+        wrap.innerHTML = '<div class="globalLoadingCard"><span class="hourglassFlip">⌛</span><div>資料處理中...</div></div>';
+        document.body.appendChild(wrap);
+      }, 600);
     }
 
     function hideGlobalLoading() {
       window.GLOBAL_LOADING_COUNT = Math.max(0, (window.GLOBAL_LOADING_COUNT || 0) - 1);
       if (window.GLOBAL_LOADING_COUNT > 0) return;
+      if (window.GLOBAL_LOADING_TIMER) {
+        clearTimeout(window.GLOBAL_LOADING_TIMER);
+        window.GLOBAL_LOADING_TIMER = null;
+      }
       document.body.classList.remove('loadingLocked');
       var old = document.getElementById('globalLoadingOverlay');
       if (old) old.remove();
