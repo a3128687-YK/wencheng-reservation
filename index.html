@@ -459,6 +459,7 @@
     .salesTable tr:nth-child(even) td { background: rgba(255,247,239,.9); }
     .salesTable tr[data-sales-row] { cursor: pointer; }
     .salesTable tr[data-sales-row]:active td { background: #ffe6da; }
+    .salesTable tfoot td { background: #f7d8cc; color: #8c2f21; font-weight: 950; border-top: 2px solid rgba(189,95,69,.25); }
     .salesTable .amountCell { color: #c5482d; font-weight: 950; text-align: right; }
     .salesTable .placeCell { max-width: 150px; overflow: hidden; text-overflow: ellipsis; }
     .salesTableHint { margin: 8px 2px 0; color: var(--muted); font-weight: 850; font-size: clamp(13px, 3vw, 16px); }
@@ -1873,11 +1874,14 @@
         select.innerHTML = '';
         return;
       }
-      var selected = result.selectedUserId || select.value || '';
+      var selected = result.selectedUserId || select.value || (LINE_PROFILE.userId || '');
       select.innerHTML = '';
+      select.appendChild(new Option('我自己', LINE_PROFILE.userId || ''));
       select.appendChild(new Option('全部登記人', ''));
       (result.peopleOptions || []).forEach(function (person) {
-        select.appendChild(new Option(person.name || '未命名', person.userId || ''));
+        if ((person.userId || '') !== (LINE_PROFILE.userId || '')) {
+          select.appendChild(new Option(person.name || '未命名', person.userId || ''));
+        }
       });
       select.value = selected;
       wrap.classList.add('active');
@@ -1931,7 +1935,7 @@
       }).join('');
       var details = result.details || [];
       var emptyText = isArchive ? '此月份沒有歷史業績資料' : '本月尚無業績資料';
-      var detailHtml = details.length ? buildSalesTableHtml(details, isArchive) : '<div class="slotBox empty">' + escapeHtml(emptyText) + '</div>';
+      var detailHtml = details.length ? buildSalesTableHtml(details, isArchive, result.total || 0) : '<div class="slotBox empty">' + escapeHtml(emptyText) + '</div>';
       byId('salesArea').innerHTML = '<div class="headcountHero"><div class="headcountTotal">' + escapeHtml(result.displayName || result.staff || '') + '</div><div class="headcountTotalLabel">' + escapeHtml(monthText) + (isArchive ? ' 歷史業績統計' : ' 業績統計') + '</div></div><div class="salesStats">' + stats + '</div>';
       byId('salesDetailArea').innerHTML = '<div class="headcountDetailTitle">' + (isArchive ? '歷史業績一覽（唯讀）' : '本月業績一覽') + '</div>' + detailHtml;
       if (isArchive) collapseSalesForm();
@@ -1942,7 +1946,7 @@
       if (isArchive) expandSalesDetails();
     }
 
-    function buildSalesTableHtml(details, isArchive) {
+    function buildSalesTableHtml(details, isArchive, totalAmount) {
       var rows = details.map(function (row) {
         var dateText = String(row.date || '').replace(/-/g, '/');
         var parts = dateText.split('/');
@@ -1952,7 +1956,7 @@
         var attr = isArchive ? '' : ' data-sales-row="' + escapeHtml(row.rowNumber || '') + '"';
         return '<tr' + attr + '><td>' + escapeHtml(month) + '</td><td>' + escapeHtml(day) + '</td><td class="amountCell">$' + escapeHtml(formatMoney(row.amount || 0)) + '</td><td class="placeCell">' + escapeHtml(row.venue ? '會館' : '現場') + '</td><td class="placeCell">' + escapeHtml(place) + '</td><td>' + escapeHtml(row.createdAt || '') + '</td></tr>';
       }).join('');
-      return '<div class="salesTableWrap"><table class="salesTable"><thead><tr><th>月</th><th>日</th><th>業績</th><th>會館/現場</th><th>櫃</th><th>操作時間</th></tr></thead><tbody>' + rows + '</tbody></table></div><div class="salesTableHint">' + (isArchive ? '歷史資料僅供查詢，不能修改。' : '點選任一列即可修改該筆業績。') + '</div>';
+      return '<div class="salesTableWrap"><table class="salesTable"><thead><tr><th>月</th><th>日</th><th>業績</th><th>會館/現場</th><th>櫃</th><th>操作時間</th></tr></thead><tbody>' + rows + '</tbody><tfoot><tr><td colspan="2">當月累計</td><td class="amountCell">$' + escapeHtml(formatMoney(totalAmount || 0)) + '</td><td colspan="3">共 ' + escapeHtml(formatMoney(details.length || 0)) + ' 筆</td></tr></tfoot></table></div><div class="salesTableHint">' + (isArchive ? '歷史資料僅供查詢，不能修改。' : '點選任一列即可修改該筆業績。') + '</div>';
     }
 
     function expandSalesForm() {
