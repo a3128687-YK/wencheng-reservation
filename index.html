@@ -362,19 +362,19 @@
       border-radius: 0;
       box-shadow: none;
     }
-    .reportPanel .sectionTitle { font-size: clamp(14px, 3.6vw, 20px); margin: 0 0 1px; line-height: 1; }
-    .reportPanel .sectionNote { font-size: clamp(7px, 1.9vw, 10px); color: #263329; margin-bottom: 2px; line-height: 1; }
-    .reportPanel .summaryRoom { margin: 1px 0 3px; }
-    .reportPanel .roomName { font-size: clamp(9px, 2.6vw, 13px); margin: 0 0 1px; line-height: 1; gap: 2px; }
+    .reportPanel .sectionTitle { font-size: clamp(12px, 3.2vw, 18px); margin: 0; line-height: .98; }
+    .reportPanel .sectionNote { font-size: clamp(6px, 1.65vw, 9px); color: #263329; margin-bottom: 1px; line-height: 1; }
+    .reportPanel .summaryRoom { margin: 0 0 2px; }
+    .reportPanel .roomName { font-size: clamp(8px, 2.25vw, 12px); margin: 0; line-height: .98; gap: 2px; }
     .reportPanel .roomEquip { font-size: clamp(6px, 1.7vw, 8px); }
     .reportPanel .summaryGrid {
       grid-template-columns: repeat(12, minmax(0, 1fr));
       gap: 1px;
     }
     .reportPanel .summaryCell {
-      height: 38px;
-      min-height: 38px;
-      padding: 2px 1px 3px;
+      height: 34px;
+      min-height: 34px;
+      padding: 1px 1px 2px;
       border-radius: 4px;
       border-width: 1px;
       display: flex;
@@ -382,11 +382,11 @@
       align-items: stretch;
       justify-content: space-between;
     }
-    .reportPanel .summaryTime { flex: 0 0 auto; font-size: clamp(4.8px, 1.14vw, 6.1px); font-weight: 950; line-height: 1; white-space: nowrap; overflow: hidden; text-align: center; margin-bottom: 1px; }
-    .reportPanel .summaryDetail { flex: 1 1 auto; min-height: 0; font-size: clamp(3.1px, .78vw, 4.3px); font-weight: 950; line-height: 1; text-align: center; overflow: hidden; word-break: keep-all; white-space: nowrap; display: flex; flex-direction: column; justify-content: space-between; padding-top: 2px; gap: 3px; }
-    .reportPanel .reportLine { display: flex; align-items: center; justify-content: center; max-width: 100%; overflow: hidden; text-overflow: clip; white-space: nowrap; line-height: 1; min-height: 7px; }
-    .reportPanel .reportLine.reportCustomerLine { flex: 0 0 auto; align-items: center; margin-bottom: 2px; }
-    .reportPanel .reportLine.reportTechLine { flex: 0 0 auto; align-items: flex-end; margin-top: 2px; }
+    .reportPanel .summaryTime { flex: 0 0 auto; font-size: clamp(4.4px, 1.06vw, 5.8px); font-weight: 950; line-height: 1; white-space: nowrap; overflow: hidden; text-align: center; margin-bottom: 0; }
+    .reportPanel .summaryDetail { flex: 1 1 auto; min-height: 0; font-size: clamp(2.9px, .72vw, 4px); font-weight: 950; line-height: 1; text-align: center; overflow: hidden; word-break: keep-all; white-space: nowrap; display: flex; flex-direction: column; justify-content: space-between; padding-top: 1px; gap: 2px; }
+    .reportPanel .reportLine { display: flex; align-items: center; justify-content: center; max-width: 100%; overflow: hidden; text-overflow: clip; white-space: nowrap; line-height: 1; min-height: 6px; }
+    .reportPanel .reportLine.reportCustomerLine { flex: 0 0 auto; align-items: center; margin-bottom: 1px; }
+    .reportPanel .reportLine.reportTechLine { flex: 0 0 auto; align-items: flex-end; margin-top: 1px; }
     .reportShotMode .hero,
     .reportShotMode .quickInfo,
     .reportShotMode .modeSwitcher,
@@ -397,7 +397,7 @@
     @media (min-width: 560px) { .summaryGrid { grid-template-columns: repeat(5, minmax(0, 1fr)); } }
     @media (max-width: 720px) {
       .reportPanel .summaryGrid { grid-template-columns: repeat(12, minmax(0, 1fr)); }
-      .reportPanel .summaryCell { height: 38px; min-height: 38px; }
+      .reportPanel .summaryCell { height: 34px; min-height: 34px; }
     }
     .summaryTime { font-size: clamp(7px, 1.95vw, 11px); margin-bottom: 4px; line-height: 1.05; font-weight: 950; white-space: nowrap; letter-spacing: 0; }
     .summaryDetail { font-size: clamp(7px, 2vw, 10px); line-height: 1.14; font-weight: 950; word-break: break-word; overflow-wrap: anywhere; }
