@@ -943,6 +943,16 @@
       return starts;
     }
 
+    function dedupeSlots(slots) {
+      var seen = {};
+      return (slots || []).filter(function (slot) {
+        var key = String(slot.start || '') + '|' + String(slot.end || '');
+        if (seen[key]) return false;
+        seen[key] = true;
+        return true;
+      });
+    }
+
     window.onload = function () {
       buildUI();
       startClock();
@@ -3426,7 +3436,7 @@
       var rooms = data.rooms || [];
       if (!rooms.length) { byId('reportArea').innerHTML = '<div class="slotBox empty">' + T.noBookings + '</div>'; return; }
       byId('reportArea').innerHTML = rooms.map(function (room) {
-        var cells = (room.slots || []).map(function (slot) {
+        var cells = dedupeSlots(room.slots || []).map(function (slot) {
           var klass = getBookingColorClass(slot);
           var detail = slot.available ? '\u7a7a' : formatReportSlotDetail(slot.booking);
           return '<div class="summaryCell ' + klass + '"><div class="summaryTime">' + escapeHtml(formatReportTimeLabel(slot.start)) + '</div><div class="summaryDetail">' + detail + '</div></div>';
@@ -3551,7 +3561,7 @@
       BOOKING_DETAILS = {};
       var summaryDate = String(data.date || byId('summaryDateInput').value || '').replace(/\//g, '-');
       area.innerHTML = data.rooms.map(function (room) {
-        var cells = room.slots.map(function (slot) {
+        var cells = dedupeSlots(room.slots || []).map(function (slot) {
           var klass = getBookingColorClass(slot);
           var detail = slot.available ? T.free : formatBookedSummaryDetail(slot.booking);
           var row = '';
