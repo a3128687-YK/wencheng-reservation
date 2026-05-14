@@ -3466,7 +3466,33 @@
       var invalid = findFirstInvalidBookingField(data, true);
       if (invalid) { showFieldError(invalid.id, invalid.message); return; }
       if (!hasBackend()) { showMessage(T.backendFail, true); return; }
-      openBookingReview(data);
+      verifyBookingSlotThenReview(data);
+    }
+
+    function verifyBookingSlotThenReview(data) {
+      showBookingProgress('確認時段中...');
+      clearCachedDate(data.date);
+      refreshDayCache(data.date, function (freshData) {
+        closeBookingProgress();
+        if (!freshData) {
+          showMessage('無法確認最新空房，請重新選擇日期與房間。', true);
+          updateAvailableSlots();
+          return;
+        }
+        var freshSlots = getAvailableSlotsFromDayData(data.date, data.room, freshData) || [];
+        var stillAvailable = freshSlots.some(function (slot) {
+          return slot.start === data.start && (slot.ends || []).indexOf(data.end) !== -1;
+        });
+        if (!EDIT_ROW_NUMBER && !stillAvailable) {
+          showMessage('此時段剛剛已被預約，請重新選擇其他時間。', true);
+          AVAILABLE_SLOTS = freshSlots;
+          AVAILABLE_SLOT_CACHE[data.date + '|' + data.room] = { time: Date.now(), slots: freshSlots };
+          fillStartOptions(freshSlots, '\u7121\u53ef\u9078\u64c7\u6642\u6bb5');
+          renderSlotBoxes(freshSlots);
+          return;
+        }
+        openBookingReview(data);
+      });
     }
 
     function openBookingReview(data) {
