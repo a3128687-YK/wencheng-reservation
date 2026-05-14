@@ -862,6 +862,87 @@
       return !!(entry && entry.time && Date.now() - entry.time < maxAgeMs);
     }
 
+    function cacheDayData(date, data) {
+      if (!date || !data) return;
+      DAY_DATA_CACHE[date] = { time: Date.now(), data: data };
+    }
+
+    function clearCachedDate(date) {
+      if (!date) return;
+      delete DAY_DATA_CACHE[date];
+      Object.keys(AVAILABLE_SLOT_CACHE).forEach(function (key) {
+        if (key.indexOf(date + '|') === 0) delete AVAILABLE_SLOT_CACHE[key];
+      });
+    }
+
+    function refreshDayCache(date, onDone) {
+      if (!date || !hasBackend() || !LINE_READY) {
+        if (onDone) onDone(null);
+        return;
+      }
+      apiCall('getDay', { date: date }, function (data) {
+        cacheDayData(date, data);
+        if (onDone) onDone(data);
+      }, function () {
+        if (onDone) onDone(null);
+      }, { silent: true });
+    }
+
+    function startBookingPreload() {
+      if (window.BOOKING_PRELOAD_STARTED || !hasBackend() || !LINE_READY) return;
+      window.BOOKING_PRELOAD_STARTED = true;
+      var offsets = [];
+      for (var i = 0; i < 15; i++) offsets.push(i);
+      preloadNextDay(offsets, 0);
+    }
+
+    function preloadNextDay(offsets, index) {
+      if (!offsets || index >= offsets.length || !LINE_READY) return;
+      var date = dateOffsetString(offsets[index]);
+      var cached = DAY_DATA_CACHE[date];
+      var nextDelay = index < 5 ? 300 : 500;
+      if (isCacheFresh(cached, getSummaryCacheMs())) {
+        setTimeout(function () { preloadNextDay(offsets, index + 1); }, nextDelay);
+        return;
+      }
+      refreshDayCache(date, function () {
+        setTimeout(function () { preloadNextDay(offsets, index + 1); }, nextDelay);
+      });
+    }
+
+    function getAvailableSlotsFromDayData(date, room, dayData) {
+      if (!dayData || !dayData.rooms || !room) return null;
+      var roomData = (dayData.rooms || []).find(function (item) { return item.room === room; });
+      if (!roomData || !roomData.slots) return null;
+      var availableByStart = {};
+      (roomData.slots || []).forEach(function (slot) {
+        availableByStart[slot.start] = !!slot.available;
+      });
+      var now = new Date();
+      var todayText = formatDateInput(now);
+      var currentMin = now.getHours() * 60 + now.getMinutes();
+      var starts = [];
+      for (var startMin = CONFIG.openHour * 60; startMin < CONFIG.closeHour * 60; startMin += 30) {
+        if (date === todayText && startMin <= currentMin) continue;
+        var start = minToTime(startMin);
+        if (!availableByStart[start]) continue;
+        var ends = [];
+        for (var endMin = startMin + 60; endMin <= CONFIG.closeHour * 60; endMin += 30) {
+          var blocked = false;
+          for (var checkMin = startMin; checkMin < endMin; checkMin += 30) {
+            if (!availableByStart[minToTime(checkMin)]) {
+              blocked = true;
+              break;
+            }
+          }
+          if (blocked) break;
+          ends.push(minToTime(endMin));
+        }
+        if (ends.length) starts.push({ start: start, end: ends[0], ends: ends });
+      }
+      return starts;
+    }
+
     window.onload = function () {
       buildUI();
       startClock();
@@ -921,7 +1002,7 @@
       });
     }
 
-    function registerLineProfile(profile) { LINE_PROFILE.userId = profile.userId || ''; LINE_PROFILE.displayName = profile.displayName || ''; LINE_ID_TOKEN = liff.getIDToken() || ''; setLineUserName(LINE_PROFILE.displayName); if (!hasBackend()) { clearTimeout(LIFF_TIMEOUT_ID); showLineLock('尚未設定 Apps Script API 網址，請先修改 index.html 的 API_URL。'); return; } apiCall('register', {}, function (user) { clearTimeout(LIFF_TIMEOUT_ID); LINE_PROFILE.role = user && user.role ? user.role : 'STAFF'; LINE_PROFILE.isAdmin = !!(user && user.isAdmin); APP_MODE = LINE_PROFILE.isAdmin ? 'MANAGE' : 'READONLY'; applyPermissionUi(); LINE_READY = true; hideLineLock(); showMessage(T.autoName, false); routeInitialPage(); connectBackend(); }, function (err) { clearTimeout(LIFF_TIMEOUT_ID); showLineLock(err); }); }
+    function registerLineProfile(profile) { LINE_PROFILE.userId = profile.userId || ''; LINE_PROFILE.displayName = profile.displayName || ''; LINE_ID_TOKEN = liff.getIDToken() || ''; setLineUserName(LINE_PROFILE.displayName); if (!hasBackend()) { clearTimeout(LIFF_TIMEOUT_ID); showLineLock('尚未設定 Apps Script API 網址，請先修改 index.html 的 API_URL。'); return; } apiCall('register', {}, function (user) { clearTimeout(LIFF_TIMEOUT_ID); LINE_PROFILE.role = user && user.role ? user.role : 'STAFF'; LINE_PROFILE.isAdmin = !!(user && user.isAdmin); APP_MODE = LINE_PROFILE.isAdmin ? 'MANAGE' : 'READONLY'; applyPermissionUi(); LINE_READY = true; startBookingPreload(); hideLineLock(); showMessage(T.autoName, false); routeInitialPage(); connectBackend(); }, function (err) { clearTimeout(LIFF_TIMEOUT_ID); showLineLock(err); }); }
 
     function lockUntilLineReady() {
       showLineLock('\u6b63\u5728\u78ba\u8a8d LINE \u8eab\u4efd\uff0c\u8acb\u7a0d\u5019...');
@@ -2806,7 +2887,65 @@
       if (name === 'summary') loadSummary();
     }
 
-    function updateAvailableSlots() { var date = byId('dateInput').value; var room = byId('roomSelect').value; clearBox('message'); if (!date || !room) { AVAILABLE_SLOTS = []; fillStartOptions([], T.pickTime); renderSlotBoxes([], T.pickDateRoom); return; } if (!hasBackend() || !LINE_READY) { var fallback = buildFallbackSlots(); AVAILABLE_SLOTS = fallback; fillStartOptions(fallback); renderSlotBoxes(fallback); applyPendingSummaryStart(); return; } var cacheKey = date + '|' + room; var cached = AVAILABLE_SLOT_CACHE[cacheKey]; var cacheMs = getSlotCacheMs(); var showedCached = false; if (cached) { AVAILABLE_SLOTS = cached.slots || []; fillStartOptions(AVAILABLE_SLOTS, '\u7121\u53ef\u9078\u64c7\u6642\u6bb5'); renderSlotBoxes(AVAILABLE_SLOTS); applyPendingSummaryStart(); showedCached = true; if (isCacheFresh(cached, cacheMs)) return; } if (!showedCached) renderSlotBoxes([], T.loading); apiCall('getAvailableSlots', { date: date, room: room }, function (result) { if (date !== byId('dateInput').value || room !== byId('roomSelect').value) return; AVAILABLE_SLOTS = result && result.slots ? result.slots : []; AVAILABLE_SLOT_CACHE[cacheKey] = { time: Date.now(), slots: AVAILABLE_SLOTS }; fillStartOptions(AVAILABLE_SLOTS, '\u7121\u53ef\u9078\u64c7\u6642\u6bb5'); renderSlotBoxes(AVAILABLE_SLOTS); if (!AVAILABLE_SLOTS.length) { showMessage('\u6b64\u65e5\u671f\u8207\u623f\u9593\u5df2\u6c92\u6709\u53ef\u9810\u7d04\u6642\u6bb5\uff0c\u8acb\u6539\u9078\u5176\u4ed6\u65e5\u671f\u6216\u623f\u9593\u3002', true); showToast('\u6b64\u65e5\u671f\u8207\u623f\u9593\u5df2\u6c92\u6709\u53ef\u9810\u7d04\u6642\u6bb5\uff0c\u8acb\u6539\u9078\u5176\u4ed6\u65e5\u671f\u6216\u623f\u9593\u3002', true); } applyPendingSummaryStart(); }, function (err) { if (!showedCached) { showMessage(err, true); AVAILABLE_SLOTS = []; fillStartOptions([], '\u7121\u53ef\u9078\u64c7\u6642\u6bb5'); renderSlotBoxes([], T.noSlots); } }); }
+    function updateAvailableSlots() {
+      var date = byId('dateInput').value;
+      var room = byId('roomSelect').value;
+      clearBox('message');
+      if (!date || !room) {
+        AVAILABLE_SLOTS = [];
+        fillStartOptions([], T.pickTime);
+        renderSlotBoxes([], T.pickDateRoom);
+        return;
+      }
+      if (!hasBackend() || !LINE_READY) {
+        var fallback = buildFallbackSlots();
+        AVAILABLE_SLOTS = fallback;
+        fillStartOptions(fallback);
+        renderSlotBoxes(fallback);
+        applyPendingSummaryStart();
+        return;
+      }
+      var cacheKey = date + '|' + room;
+      var cached = AVAILABLE_SLOT_CACHE[cacheKey];
+      var dayCached = DAY_DATA_CACHE[date];
+      var cacheMs = getSlotCacheMs();
+      var showedCached = false;
+
+      if (cached) {
+        AVAILABLE_SLOTS = cached.slots || [];
+        fillStartOptions(AVAILABLE_SLOTS, '\u7121\u53ef\u9078\u64c7\u6642\u6bb5');
+        renderSlotBoxes(AVAILABLE_SLOTS);
+        applyPendingSummaryStart();
+        showedCached = true;
+        if (isCacheFresh(cached, cacheMs)) return;
+      } else if (dayCached) {
+        var localSlots = getAvailableSlotsFromDayData(date, room, dayCached.data || dayCached);
+        if (localSlots) {
+          AVAILABLE_SLOTS = localSlots;
+          AVAILABLE_SLOT_CACHE[cacheKey] = { time: dayCached.time || Date.now(), slots: localSlots };
+          fillStartOptions(AVAILABLE_SLOTS, '\u7121\u53ef\u9078\u64c7\u6642\u6bb5');
+          renderSlotBoxes(AVAILABLE_SLOTS);
+          applyPendingSummaryStart();
+          showedCached = true;
+          if (isCacheFresh(dayCached, cacheMs)) return;
+        }
+      }
+
+      if (!showedCached) renderSlotBoxes([], T.loading);
+      refreshDayCache(date, function (data) {
+        if (!data || date !== byId('dateInput').value || room !== byId('roomSelect').value) return;
+        var slots = getAvailableSlotsFromDayData(date, room, data) || [];
+        AVAILABLE_SLOTS = slots;
+        AVAILABLE_SLOT_CACHE[cacheKey] = { time: Date.now(), slots: slots };
+        fillStartOptions(slots, '\u7121\u53ef\u9078\u64c7\u6642\u6bb5');
+        renderSlotBoxes(slots);
+        if (!slots.length) {
+          showMessage('\u6b64\u65e5\u671f\u8207\u623f\u9593\u5df2\u6c92\u6709\u53ef\u9810\u7d04\u6642\u6bb5\uff0c\u8acb\u6539\u9078\u5176\u4ed6\u65e5\u671f\u6216\u623f\u9593\u3002', true);
+          showToast('\u6b64\u65e5\u671f\u8207\u623f\u9593\u5df2\u6c92\u6709\u53ef\u9810\u7d04\u6642\u6bb5\uff0c\u8acb\u6539\u9078\u5176\u4ed6\u65e5\u671f\u6216\u623f\u9593\u3002', true);
+        }
+        applyPendingSummaryStart();
+      });
+    }
 
     function loadCancelBookings() { if (!canManageBookings()) { byId('cancelList').innerHTML = ''; denyManageAction('cancelMessage'); return; } var date = byId('cancelDateInput').value; clearBox('cancelMessage'); byId('cancelList').innerHTML = ''; if (!date) { showPanelMessage('cancelMessage', T.required, true); return; } if (!hasBackend() || !LINE_READY) { byId('cancelList').innerHTML = '<div class="slotBox empty">' + T.backendFail + '</div>'; return; } apiCall('getBookedByDate', { date: date }, function (result) { renderBookingList('cancelList', filterFutureBookings(result.bookings || [], date), true); }, function (err) { showPanelMessage('cancelMessage', err, true); }); }
 
@@ -3211,9 +3350,9 @@
       if (!requireLineReady(messageId)) return;
       showBookingProgress('\u53d6\u6d88\u4e2d...', true);
       apiCall('cancelReservationByRow', { rowNumber: rowNumber }, function () {
-        DAY_DATA_CACHE = {};
-        AVAILABLE_SLOT_CACHE = {};
+        clearCachedDate(booking && booking.date ? String(booking.date).replace(/\//g, '-') : byId('summaryDateInput').value);
         showBookingProgress('\u274c \u53d6\u6d88\u6210\u529f', true);
+        refreshDayCache(booking && booking.date ? String(booking.date).replace(/\//g, '-') : byId('summaryDateInput').value);
         setTimeout(function () {
           closeBookingProgress();
           clearBox(messageId);
@@ -3353,9 +3492,9 @@
       showBookingProgress('\u9810\u7d04\u4e2d...');
       if (EDIT_ROW_NUMBER) {
         data.rowNumber = EDIT_ROW_NUMBER;
-        apiCall('updateReservation', data, function () { DAY_DATA_CACHE = {}; AVAILABLE_SLOT_CACHE = {}; showBookingSuccessAndReset(); }, function (err) { closeBookingProgress(); showMessage(err, true); showToast(err, true); });
+        apiCall('updateReservation', data, function () { clearCachedDate(data.date); refreshDayCache(data.date, function () { if (byId('summaryDateInput').value === data.date) loadSummary(); }); showBookingSuccessAndReset(); }, function (err) { closeBookingProgress(); showMessage(err, true); showToast(err, true); });
       } else {
-        apiCall('createReservation', data, function () { DAY_DATA_CACHE = {}; AVAILABLE_SLOT_CACHE = {}; showBookingSuccessAndReset(); }, function (err) { var msg = String(err).indexOf('??') >= 0 ? T.conflict : err; closeBookingProgress(); showMessage(msg, true); showToast(msg, true); updateAvailableSlots(); loadSummary(); });
+        apiCall('createReservation', data, function () { clearCachedDate(data.date); refreshDayCache(data.date, function () { if (byId('summaryDateInput').value === data.date) loadSummary(); }); showBookingSuccessAndReset(); }, function (err) { var msg = String(err).indexOf('??') >= 0 ? T.conflict : err; closeBookingProgress(); showMessage(msg, true); showToast(msg, true); updateAvailableSlots(); loadSummary(); });
       }
     }
 
@@ -3899,15 +4038,16 @@
     function fillRoomSelect(id, list, keep, placeholder) { var select = byId(id); if (!select) return; var old = keep || select.value; select.innerHTML = ''; if (placeholder) select.appendChild(new Option(placeholder, '')); list.forEach(function (item) { select.appendChild(new Option(getRoomOptionLabel(item), item)); }); if (old && list.indexOf(old) >= 0) select.value = old; else select.value = ''; }
     function getRoomOptionLabel(roomName) { var label = ROOM_EQUIPMENT_LABELS[normalizeRoomKey(roomName)]; return label ? String(roomName || '') + '\uff08' + label + '\uff09' : String(roomName || ''); }
 
-    function apiCall(action, payload, onSuccess, onError) {
+    function apiCall(action, payload, onSuccess, onError, options) {
       if (!hasBackend()) { if (onError) onError('???? Apps Script API ??'); return; }
-      showGlobalLoading();
+      options = options || {};
+      if (!options.silent) showGlobalLoading();
       payload = payload || {}; payload.idToken = LINE_ID_TOKEN || ''; payload.readOnlyMode = !canManageBookings();
       var callbackName = '__wcApi_' + Date.now() + '_' + Math.floor(Math.random() * 100000);
       var done = false; var script = document.createElement('script');
       var timer = setTimeout(function () { if (done) return; done = true; cleanup(); if (onError) onError('????????????'); }, 15000);
       window[callbackName] = function (res) { if (done) return; done = true; clearTimeout(timer); cleanup(); if (res && res.ok) { if (onSuccess) onSuccess(res.data); } else { if (onError) onError(res && res.error ? res.error : '??????'); } };
-      function cleanup() { hideGlobalLoading(); try { delete window[callbackName]; } catch (err) { window[callbackName] = null; } if (script && script.parentNode) script.parentNode.removeChild(script); }
+      function cleanup() { if (!options.silent) hideGlobalLoading(); try { delete window[callbackName]; } catch (err) { window[callbackName] = null; } if (script && script.parentNode) script.parentNode.removeChild(script); }
       var params = 'api=' + encodeURIComponent(action) + '&callback=' + encodeURIComponent(callbackName) + '&payload=' + encodeURIComponent(JSON.stringify(payload));
       script.onerror = function () { if (done) return; done = true; clearTimeout(timer); cleanup(); if (onError) onError('????? Apps Script API'); };
       script.src = API_URL + (API_URL.indexOf('?') >= 0 ? '&' : '?') + params;
