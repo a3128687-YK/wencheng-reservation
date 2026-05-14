@@ -888,6 +888,23 @@
       }, { silent: true });
     }
 
+    function refreshVisibleDayAfterChange(date) {
+      refreshDayCache(date, function (freshData) {
+        if (!freshData) return;
+        if (byId('summaryDateInput') && byId('summaryDateInput').value === date && byId('summaryPanel') && byId('summaryPanel').classList.contains('active')) {
+          renderSummary(freshData);
+        }
+        if (byId('dateInput') && byId('roomSelect') && byId('dateInput').value === date && byId('bookPanel') && byId('bookPanel').classList.contains('active')) {
+          var room = byId('roomSelect').value;
+          var slots = getAvailableSlotsFromDayData(date, room, freshData) || [];
+          AVAILABLE_SLOTS = slots;
+          AVAILABLE_SLOT_CACHE[date + '|' + room] = { time: Date.now(), slots: slots };
+          fillStartOptions(slots, '\u7121\u53ef\u9078\u64c7\u6642\u6bb5');
+          renderSlotBoxes(slots);
+        }
+      });
+    }
+
     function startBookingPreload() {
       if (window.BOOKING_PRELOAD_STARTED || !hasBackend() || !LINE_READY) return;
       window.BOOKING_PRELOAD_STARTED = true;
@@ -3360,15 +3377,14 @@
       if (!requireLineReady(messageId)) return;
       showBookingProgress('\u53d6\u6d88\u4e2d...', true);
       apiCall('cancelReservationByRow', { rowNumber: rowNumber }, function () {
-        clearCachedDate(booking && booking.date ? String(booking.date).replace(/\//g, '-') : byId('summaryDateInput').value);
+        var changedDate = booking && booking.date ? String(booking.date).replace(/\//g, '-') : byId('summaryDateInput').value;
+        clearCachedDate(changedDate);
         showBookingProgress('\u274c \u53d6\u6d88\u6210\u529f', true);
-        refreshDayCache(booking && booking.date ? String(booking.date).replace(/\//g, '-') : byId('summaryDateInput').value);
+        refreshVisibleDayAfterChange(changedDate);
         setTimeout(function () {
           closeBookingProgress();
           clearBox(messageId);
           refreshVisibleLists();
-          loadSummary();
-          updateAvailableSlots();
         }, 1500);
       }, function (err) {
         closeBookingProgress();
@@ -3428,7 +3444,7 @@
         renderTomorrowReport(data || {});
       }, function (err) {
         byId('reportArea').innerHTML = '<div class="message err">' + escapeHtml(err) + '</div>';
-      });
+      }, { silent: true });
     }
 
     function renderTomorrowReport(data) {
@@ -3528,9 +3544,9 @@
       showBookingProgress('\u9810\u7d04\u4e2d...');
       if (EDIT_ROW_NUMBER) {
         data.rowNumber = EDIT_ROW_NUMBER;
-        apiCall('updateReservation', data, function () { clearCachedDate(data.date); refreshDayCache(data.date, function () { if (byId('summaryDateInput').value === data.date) loadSummary(); }); showBookingSuccessAndReset(); }, function (err) { closeBookingProgress(); showMessage(err, true); showToast(err, true); });
+        apiCall('updateReservation', data, function () { clearCachedDate(data.date); refreshVisibleDayAfterChange(data.date); showBookingSuccessAndReset(); }, function (err) { closeBookingProgress(); showMessage(err, true); showToast(err, true); }, { silent: true });
       } else {
-        apiCall('createReservation', data, function () { clearCachedDate(data.date); refreshDayCache(data.date, function () { if (byId('summaryDateInput').value === data.date) loadSummary(); }); showBookingSuccessAndReset(); }, function (err) { var msg = String(err).indexOf('??') >= 0 ? T.conflict : err; closeBookingProgress(); showMessage(msg, true); showToast(msg, true); updateAvailableSlots(); loadSummary(); });
+        apiCall('createReservation', data, function () { clearCachedDate(data.date); refreshVisibleDayAfterChange(data.date); showBookingSuccessAndReset(); }, function (err) { var msg = String(err).indexOf('??') >= 0 ? T.conflict : err; closeBookingProgress(); showMessage(msg, true); showToast(msg, true); updateAvailableSlots(); loadSummary(); }, { silent: true });
       }
     }
 
@@ -3557,7 +3573,6 @@
         EDIT_ROW_NUMBER = null;
         byId('bookBtn').textContent = T.bookBtn;
         resetBookingForm(false);
-        loadSummary();
         window.scrollTo({ top: 0, behavior: 'smooth' });
       }, 1500);
     }
