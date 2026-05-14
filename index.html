@@ -372,21 +372,22 @@
       gap: 1px;
     }
     .reportPanel .summaryCell {
-      height: 34px;
-      min-height: 34px;
+      height: 28px;
+      min-height: 28px;
       padding: 1px 1px 2px;
       border-radius: 4px;
       border-width: 1px;
-      display: flex;
-      flex-direction: column;
+      display: grid;
+      grid-template-rows: 8px 8px 7px;
       align-items: stretch;
-      justify-content: space-between;
+      justify-content: stretch;
+      align-content: space-between;
     }
-    .reportPanel .summaryTime { flex: 0 0 auto; font-size: clamp(4.4px, 1.06vw, 5.8px); font-weight: 950; line-height: 1; white-space: nowrap; overflow: hidden; text-align: center; margin-bottom: 0; }
-    .reportPanel .summaryDetail { flex: 1 1 auto; min-height: 0; font-size: clamp(2.9px, .72vw, 4px); font-weight: 950; line-height: 1; text-align: center; overflow: hidden; word-break: keep-all; white-space: nowrap; display: flex; flex-direction: column; justify-content: space-between; padding-top: 1px; gap: 2px; }
-    .reportPanel .reportLine { display: flex; align-items: center; justify-content: center; max-width: 100%; overflow: hidden; text-overflow: clip; white-space: nowrap; line-height: 1; min-height: 6px; }
-    .reportPanel .reportLine.reportCustomerLine { flex: 0 0 auto; align-items: center; margin-bottom: 1px; }
-    .reportPanel .reportLine.reportTechLine { flex: 0 0 auto; align-items: flex-end; margin-top: 1px; }
+    .reportPanel .summaryTime { grid-row: 1; display: flex; align-items: center; justify-content: center; font-size: clamp(4.1px, .98vw, 5.3px); font-weight: 950; line-height: 1; white-space: nowrap; overflow: hidden; text-align: center; margin: 0; }
+    .reportPanel .summaryDetail { grid-row: 2 / 4; min-height: 0; font-size: clamp(2.7px, .66vw, 3.6px); font-weight: 950; line-height: 1; text-align: center; overflow: hidden; word-break: keep-all; white-space: nowrap; display: grid; grid-template-rows: 8px 7px; align-content: space-between; padding: 0; gap: 1px; }
+    .reportPanel .reportLine { display: flex; align-items: center; justify-content: center; max-width: 100%; overflow: hidden; text-overflow: clip; white-space: nowrap; line-height: 1; min-height: 0; }
+    .reportPanel .reportLine.reportCustomerLine { grid-row: 1; align-items: center; margin: 0; }
+    .reportPanel .reportLine.reportTechLine { grid-row: 2; align-items: flex-end; margin: 0; }
     .reportShotMode .hero,
     .reportShotMode .quickInfo,
     .reportShotMode .modeSwitcher,
@@ -397,7 +398,7 @@
     @media (min-width: 560px) { .summaryGrid { grid-template-columns: repeat(5, minmax(0, 1fr)); } }
     @media (max-width: 720px) {
       .reportPanel .summaryGrid { grid-template-columns: repeat(12, minmax(0, 1fr)); }
-      .reportPanel .summaryCell { height: 34px; min-height: 34px; }
+      .reportPanel .summaryCell { height: 28px; min-height: 28px; }
     }
     .summaryTime { font-size: clamp(7px, 1.95vw, 11px); margin-bottom: 4px; line-height: 1.05; font-weight: 950; white-space: nowrap; letter-spacing: 0; }
     .summaryDetail { font-size: clamp(7px, 2vw, 10px); line-height: 1.14; font-weight: 950; word-break: break-word; overflow-wrap: anywhere; }
