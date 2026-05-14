@@ -4090,17 +4090,17 @@
     function getRoomOptionLabel(roomName) { var label = ROOM_EQUIPMENT_LABELS[normalizeRoomKey(roomName)]; return label ? String(roomName || '') + '\uff08' + label + '\uff09' : String(roomName || ''); }
 
     function apiCall(action, payload, onSuccess, onError, options) {
-      if (!hasBackend()) { if (onError) onError('???? Apps Script API ??'); return; }
+      if (!hasBackend()) { if (onError) onError('尚未設定 Apps Script API 網址'); return; }
       options = options || {};
       if (!options.silent) showGlobalLoading();
       payload = payload || {}; payload.idToken = LINE_ID_TOKEN || ''; payload.readOnlyMode = !canManageBookings();
       var callbackName = '__wcApi_' + Date.now() + '_' + Math.floor(Math.random() * 100000);
       var done = false; var script = document.createElement('script');
-      var timer = setTimeout(function () { if (done) return; done = true; cleanup(); if (onError) onError('????????????'); }, 15000);
-      window[callbackName] = function (res) { if (done) return; done = true; clearTimeout(timer); cleanup(); if (res && res.ok) { if (onSuccess) onSuccess(res.data); } else { if (onError) onError(res && res.error ? res.error : '??????'); } };
+      var timer = setTimeout(function () { if (done) return; done = true; cleanup(); if (onError) onError('連線逾時，請重新整理後確認資料是否已寫入'); }, 25000);
+      window[callbackName] = function (res) { if (done) return; done = true; clearTimeout(timer); cleanup(); if (res && res.ok) { if (onSuccess) onSuccess(res.data); } else { if (onError) onError(res && res.error ? res.error : '操作失敗，請稍後再試'); } };
       function cleanup() { if (!options.silent) hideGlobalLoading(); try { delete window[callbackName]; } catch (err) { window[callbackName] = null; } if (script && script.parentNode) script.parentNode.removeChild(script); }
       var params = 'api=' + encodeURIComponent(action) + '&callback=' + encodeURIComponent(callbackName) + '&payload=' + encodeURIComponent(JSON.stringify(payload));
-      script.onerror = function () { if (done) return; done = true; clearTimeout(timer); cleanup(); if (onError) onError('????? Apps Script API'); };
+      script.onerror = function () { if (done) return; done = true; clearTimeout(timer); cleanup(); if (onError) onError('無法連線到 Apps Script API'); };
       script.src = API_URL + (API_URL.indexOf('?') >= 0 ? '&' : '?') + params;
       document.body.appendChild(script);
     }
