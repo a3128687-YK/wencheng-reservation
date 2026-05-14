@@ -187,6 +187,7 @@
       z-index: 1;
     }
     .topFloatBtn {
+      display: none !important;
       position: fixed;
       right: max(8px, env(safe-area-inset-right));
       top: 33%;
@@ -842,11 +843,24 @@
     };
     var CONFIG = { rooms: DEFAULT_ROOMS.slice(), openHour: 9, closeHour: 21 };
     var AVAILABLE_SLOTS = [];
+    var AVAILABLE_SLOT_CACHE = {};
     var CANCEL_BOOKINGS = {};
     var BOOKING_DETAILS = {};
     var EDIT_ROW_NUMBER = null;
     var PENDING_SUMMARY_START = '';
     var DAY_DATA_CACHE = {};
+
+    function getSlotCacheMs() {
+      return canManageBookings() ? 2 * 60 * 1000 : 10 * 60 * 1000;
+    }
+
+    function getSummaryCacheMs() {
+      return 5 * 60 * 1000;
+    }
+
+    function isCacheFresh(entry, maxAgeMs) {
+      return !!(entry && entry.time && Date.now() - entry.time < maxAgeMs);
+    }
 
     window.onload = function () {
       buildUI();
@@ -975,7 +989,7 @@
           '<section class="panel reportPanel" id="reportPanel"><button class="btn reportBack" id="reportBackBtn" type="button">\u8fd4\u56de\u9996\u9801</button><div class="sectionTitle">\u623f\u9593\u5831\u8868</div><div class="reportControls"><div><label for="reportDateInput">\u5831\u8868\u65e5\u671f</label><input id="reportDateInput" type="date"></div><button class="btn refresh" id="reportSearchBtn" type="button">\u67e5\u8a62</button></div><div class="sectionNote" id="reportDateText">\u8f09\u5165\u4e2d...</div><div id="reportArea"></div></section>',
           '<section class="panel" id="techHeadcountPanel"><button class="btn headcountBack" id="headcountHomeBtn" type="button">\u8fd4\u56de\u9996\u9801</button><div class="sectionTitle">\u7f8e\u6280\u4eba\u982d\u8a08\u7b97</div><div class="sectionNote">\u53ea\u986f\u793a\u7f8e\u537f\u3001\u96ef\u8431\u3001\u839b\u7a4e\u3001\u4f73\u59a4\u3001\u7f8e\u73b2\u3001\u66fc\u7433\uff1b\u4f9d\u670d\u52d9\u65e5\u671f\u7d71\u8a08\u7576\u6708\u6709\u6548\u9810\u7d04\u3002</div><div class="summaryControls"><div><label for="headcountMonthInput">\u67e5\u8a62\u6708\u4efd</label><input id="headcountMonthInput" type="month"></div><button class="btn refresh" id="headcountSearchBtn" type="button">\u67e5\u8a62</button></div><div id="headcountMessage" class="message"></div><div id="headcountArea"></div><div id="headcountDetailArea"></div></section>',
           '<section class="panel" id="techSchedulePanel"><button class="btn headcountBack" id="scheduleHomeBtn" type="button">\u8fd4\u56de\u9996\u9801</button><div class="sectionTitle">\u7f8e\u6280\u73ed\u8868</div><div class="sectionNote">\u6ac3\u9577\u54c1\u85df\u8207\u516d\u4f4d\u6280\u5e2b\u7576\u6708\u73ed\u8868\uff1b\u7a7a\u767d\u4ee3\u8868\u6b63\u5e38\u4e0a\u73ed\uff0c\u7e3d\u8868\u53ea\u986f\u793a\u7c21\u5beb\uff1a\u4f8b\u3001\u7279\u3001\u4e8b\u3001\u98b1\u3001\u66e0\u3001\u503c\u3002</div><div class="summaryControls"><div><label for="scheduleMonthInput">\u67e5\u8a62\u6708\u4efd</label><input id="scheduleMonthInput" type="month"></div><button class="btn refresh" id="scheduleSearchBtn" type="button">\u67e5\u8a62</button></div><button class="btn scheduleEditToggle" id="scheduleEditToggleBtn" type="button">\u2699\ufe0f \u8a2d\u5b9a\u73ed\u8868</button><div id="scheduleMessage" class="message"></div><div id="scheduleArea"></div><div id="scheduleDetailArea"></div><div id="scheduleEditBox" class="scheduleEditBox"><div class="sectionNote">\u54c1\u85df\u8207\u7ba1\u7406\u54e1\u53ef\u8a2d\u5b9a\u73ed\u8868</div><div class="grid"><div><label for="scheduleEditStaff">\u4eba\u54e1</label><select id="scheduleEditStaff"></select></div><div class="wide"><label>\u65e5\u671f\uff08\u53ef\u8907\u9078\uff09</label><div id="scheduleCalendar" class="scheduleCalendar"></div><input id="scheduleEditDates" type="hidden"></div><div><label for="scheduleEditStatus">\u72c0\u614b</label><select id="scheduleEditStatus"></select></div><div><label for="scheduleEditNote">\u5099\u8a3b</label><input id="scheduleEditNote" type="text"></div></div><button class="btn refresh" id="scheduleSaveBtn" type="button">\u5132\u5b58\u73ed\u8868</button></div></section>',
-          '<section class="panel" id="myMonthlySalesPanel"><button class="btn headcountBack" id="salesHomeBtn" type="button">返回首頁</button><div class="sectionTitle">個人當月業績</div><div class="sectionNote">依你原本 Excel「業績累計」邏輯計算：業績加總、扣底、級距獎金比例與預估實領。</div><div id="salesArea"></div><div class="summaryControls"><div><label for="salesMonthInput">查詢月份</label><input id="salesMonthInput" type="month"></div><button class="btn refresh" id="salesSearchBtn" type="button">查詢</button></div><div class="salesAdminPicker" id="salesPersonWrap"><label for="salesPersonSelect">查詢人員</label><select id="salesPersonSelect"></select></div><div id="salesMessage" class="message"></div><div class="salesActionToggles"><button class="btn refresh salesBigToggle" id="salesAddToggleBtn" type="button">新增業績</button><button class="btn reset salesBigToggle" id="salesListToggleBtn" type="button">本月業績一覽</button><button class="btn reset salesBigToggle" id="salesHistoryBtn" type="button">歷史查詢</button></div><div class="salesFormBox collapsed" id="salesFormBox"><div class="sectionTitle" id="salesFormTitle">新增業績</div><div class="grid"><div><label for="salesOwnerInput">登入者</label><input id="salesOwnerInput" type="text" readonly></div><div><label for="salesDateInput">日期</label><input id="salesDateInput" type="date"></div><div class="salesAmountWrap"><label for="salesAmountInput">業績金額</label><input id="salesAmountInput" type="text" inputmode="text" pattern="-?[0-9,]*" placeholder="恭喜開包"><button class="salesMinusBtn" id="salesMinusBtn" type="button">−</button></div><div><label for="salesVenueInput">會館</label><select id="salesVenueInput"></select></div><div><label for="salesCounterInput">專櫃</label><select id="salesCounterInput"></select></div></div><div class="salesEditActions"><button class="btn refresh salesPrimaryAction" id="salesCreateBtn" type="button">儲存業績</button><button class="btn salesDeleteBtn" id="salesDeleteBtn" type="button">刪除業績</button><button class="btn reset" id="salesCancelEditBtn" type="button">取消編輯</button></div></div><div id="salesDetailArea" class="collapsed"></div></section>',        '</main><button class="topFloatBtn" id="topFloatBtn" type="button">TOP</button>'
+          '<section class="panel" id="myMonthlySalesPanel"><button class="btn headcountBack" id="salesHomeBtn" type="button">返回首頁</button><div class="sectionTitle">個人當月業績</div><div class="sectionNote">依你原本 Excel「業績累計」邏輯計算：業績加總、扣底、級距獎金比例與預估實領。</div><div id="salesArea"></div><div class="summaryControls"><div><label for="salesMonthInput">查詢月份</label><input id="salesMonthInput" type="month"></div><button class="btn refresh" id="salesSearchBtn" type="button">查詢</button></div><div class="salesAdminPicker" id="salesPersonWrap"><label for="salesPersonSelect">查詢人員</label><select id="salesPersonSelect"></select></div><div id="salesMessage" class="message"></div><div class="salesActionToggles"><button class="btn refresh salesBigToggle" id="salesAddToggleBtn" type="button">新增業績</button><button class="btn reset salesBigToggle" id="salesListToggleBtn" type="button">本月業績一覽</button><button class="btn reset salesBigToggle" id="salesHistoryBtn" type="button">歷史查詢</button></div><div class="salesFormBox collapsed" id="salesFormBox"><div class="sectionTitle" id="salesFormTitle">新增業績</div><div class="grid"><div><label for="salesOwnerInput">登入者</label><input id="salesOwnerInput" type="text" readonly></div><div><label for="salesDateInput">日期</label><input id="salesDateInput" type="date"></div><div class="salesAmountWrap"><label for="salesAmountInput">業績金額</label><input id="salesAmountInput" type="text" inputmode="text" pattern="-?[0-9,]*" placeholder="恭喜開包"><button class="salesMinusBtn" id="salesMinusBtn" type="button">−</button></div><div><label for="salesVenueInput">會館</label><select id="salesVenueInput"></select></div><div><label for="salesCounterInput">專櫃</label><select id="salesCounterInput"></select></div></div><div class="salesEditActions"><button class="btn refresh salesPrimaryAction" id="salesCreateBtn" type="button">儲存業績</button><button class="btn salesDeleteBtn" id="salesDeleteBtn" type="button">刪除業績</button><button class="btn reset" id="salesCancelEditBtn" type="button">取消編輯</button></div></div><div id="salesDetailArea" class="collapsed"></div></section>',        '</main>'
       ].join('');
 
             document.querySelector('main.page').insertAdjacentHTML('beforeend', '<section class="panel" id="myMonthlyServicesPanel"><button class="btn headcountBack" id="servicesHomeBtn" type="button">返回首頁</button><div class="sectionTitle">個人當月服務一覽</div><div class="sectionNote">每人只能查看與編輯自己的服務資料；最高權限者可切換查詢人員。</div><div class="summaryControls"><div><label for="servicesMonthInput">查詢月份</label><input id="servicesMonthInput" type="month"></div><button class="btn refresh" id="servicesSearchBtn" type="button">查詢</button></div><div class="salesAdminPicker" id="servicesPersonWrap"><label for="servicesPersonSelect">查詢人員</label><select id="servicesPersonSelect"></select></div><div id="servicesStatsArea"></div><div id="servicesMessage" class="message"></div><div class="servicesActionToggles"><button class="btn refresh" id="servicesAddToggleBtn" type="button">新增服務</button><button class="btn reset" id="servicesListToggleBtn" type="button">服務一覽</button></div><div class="servicesFormBox collapsed" id="servicesFormBox"><div class="sectionTitle" id="servicesFormTitle">新增服務</div><div class="grid"><div><label for="servicesOwnerInput">登入者</label><input id="servicesOwnerInput" type="text" readonly></div><div><label for="servicesDateInput">日期</label><input id="servicesDateInput" type="date"></div><div><label for="servicesBaInput">BA</label><input id="servicesBaInput" type="text"></div><div><label for="servicesConsultantInput">諮詢者</label><input id="servicesConsultantInput" type="text" placeholder="沒有則填無"></div><div><label for="servicesSpeakerInput">主講</label><select id="servicesSpeakerInput"></select></div><div><label for="servicesHelperInput">幫忙美容師</label><input id="servicesHelperInput" type="text" placeholder="沒有則填無"></div><div><label for="servicesCustomerInput">顧客姓名</label><input id="servicesCustomerInput" type="text"></div><div><label for="servicesDealInput">是否成交</label><select id="servicesDealInput"></select></div><div><label for="servicesFinanceInput">分期公司</label><select id="servicesFinanceInput"></select></div><div id="servicesUnitWrap"><label for="servicesUnitPriceInput">單價</label><input id="servicesUnitPriceInput" type="text" inputmode="text" pattern="-?[0-9,]*"></div><div id="servicesInstallmentWrap"><label for="servicesInstallmentsInput">期數</label><input id="servicesInstallmentsInput" type="number" inputmode="numeric"></div><div class="salesAmountWrap" id="servicesTotalWrap"><label for="servicesTotalPriceInput">總價</label><input id="servicesTotalPriceInput" type="text" inputmode="text" pattern="-?[0-9,]*"><button class="salesMinusBtn" id="servicesTotalMinusBtn" type="button">−</button></div><div class="wide"><label for="servicesNoteInput">備註</label><input id="servicesNoteInput" type="text"></div></div><div class="servicesEditActions"><button class="btn refresh" id="servicesSaveBtn" type="button">登記服務</button><button class="btn servicesDeleteBtn" id="servicesDeleteBtn" type="button">刪除此筆</button><button class="btn reset" id="servicesCancelEditBtn" type="button">取消編輯</button></div></div><div id="servicesDetailArea" class="collapsed"></div></section>');
@@ -984,7 +998,6 @@
       document.querySelector('main.page').insertAdjacentHTML('beforeend', '<section class="panel" id="portalConstructionPanel"><button class="btn headcountBack" id="constructionHomeBtn" type="button">\u8fd4\u56de\u9996\u9801</button><div class="sectionTitle" id="constructionTitle">\u529f\u80fd\u5efa\u7f6e\u4e2d</div><div class="sectionNote" id="constructionText">\u9019\u500b\u529f\u80fd\u6b63\u5728\u65bd\u5de5\u4e2d\uff0c\u5b8c\u6210\u5f8c\u5c31\u6703\u958b\u653e\u4f7f\u7528\u3002</div><div class="slotBox empty">\u2692\ufe0f<br>\u65bd\u5de5\u4e2d</div></section>');
 
       byId('portalBookingBtn').onclick = showScheduleHome;
-      setupTopFloatButton();
       byId('portalHeadcountBtn').onclick = showTechHeadcountPanel;
       byId('portalScheduleBtn').onclick = showTechSchedulePanel;
       byId('portalBonusBtn').onclick = showBonusCalcPanel;
@@ -2793,7 +2806,7 @@
       if (name === 'summary') loadSummary();
     }
 
-    function updateAvailableSlots() { var date = byId('dateInput').value; var room = byId('roomSelect').value; clearBox('message'); if (!date || !room) { AVAILABLE_SLOTS = []; fillStartOptions([], T.pickTime); renderSlotBoxes([], T.pickDateRoom); return; } if (!hasBackend() || !LINE_READY) { var fallback = buildFallbackSlots(); AVAILABLE_SLOTS = fallback; fillStartOptions(fallback); renderSlotBoxes(fallback); applyPendingSummaryStart(); return; } renderSlotBoxes([], T.loading); apiCall('getAvailableSlots', { date: date, room: room }, function (result) { AVAILABLE_SLOTS = result && result.slots ? result.slots : []; fillStartOptions(AVAILABLE_SLOTS, '\u7121\u53ef\u9078\u64c7\u6642\u6bb5'); renderSlotBoxes(AVAILABLE_SLOTS); if (!AVAILABLE_SLOTS.length) { showMessage('\u6b64\u65e5\u671f\u8207\u623f\u9593\u5df2\u6c92\u6709\u53ef\u9810\u7d04\u6642\u6bb5\uff0c\u8acb\u6539\u9078\u5176\u4ed6\u65e5\u671f\u6216\u623f\u9593\u3002', true); showToast('\u6b64\u65e5\u671f\u8207\u623f\u9593\u5df2\u6c92\u6709\u53ef\u9810\u7d04\u6642\u6bb5\uff0c\u8acb\u6539\u9078\u5176\u4ed6\u65e5\u671f\u6216\u623f\u9593\u3002', true); } applyPendingSummaryStart(); }, function (err) { showMessage(err, true); AVAILABLE_SLOTS = []; fillStartOptions([], '\u7121\u53ef\u9078\u64c7\u6642\u6bb5'); renderSlotBoxes([], T.noSlots); }); }
+    function updateAvailableSlots() { var date = byId('dateInput').value; var room = byId('roomSelect').value; clearBox('message'); if (!date || !room) { AVAILABLE_SLOTS = []; fillStartOptions([], T.pickTime); renderSlotBoxes([], T.pickDateRoom); return; } if (!hasBackend() || !LINE_READY) { var fallback = buildFallbackSlots(); AVAILABLE_SLOTS = fallback; fillStartOptions(fallback); renderSlotBoxes(fallback); applyPendingSummaryStart(); return; } var cacheKey = date + '|' + room; var cached = AVAILABLE_SLOT_CACHE[cacheKey]; var cacheMs = getSlotCacheMs(); var showedCached = false; if (cached) { AVAILABLE_SLOTS = cached.slots || []; fillStartOptions(AVAILABLE_SLOTS, '\u7121\u53ef\u9078\u64c7\u6642\u6bb5'); renderSlotBoxes(AVAILABLE_SLOTS); applyPendingSummaryStart(); showedCached = true; if (isCacheFresh(cached, cacheMs)) return; } if (!showedCached) renderSlotBoxes([], T.loading); apiCall('getAvailableSlots', { date: date, room: room }, function (result) { if (date !== byId('dateInput').value || room !== byId('roomSelect').value) return; AVAILABLE_SLOTS = result && result.slots ? result.slots : []; AVAILABLE_SLOT_CACHE[cacheKey] = { time: Date.now(), slots: AVAILABLE_SLOTS }; fillStartOptions(AVAILABLE_SLOTS, '\u7121\u53ef\u9078\u64c7\u6642\u6bb5'); renderSlotBoxes(AVAILABLE_SLOTS); if (!AVAILABLE_SLOTS.length) { showMessage('\u6b64\u65e5\u671f\u8207\u623f\u9593\u5df2\u6c92\u6709\u53ef\u9810\u7d04\u6642\u6bb5\uff0c\u8acb\u6539\u9078\u5176\u4ed6\u65e5\u671f\u6216\u623f\u9593\u3002', true); showToast('\u6b64\u65e5\u671f\u8207\u623f\u9593\u5df2\u6c92\u6709\u53ef\u9810\u7d04\u6642\u6bb5\uff0c\u8acb\u6539\u9078\u5176\u4ed6\u65e5\u671f\u6216\u623f\u9593\u3002', true); } applyPendingSummaryStart(); }, function (err) { if (!showedCached) { showMessage(err, true); AVAILABLE_SLOTS = []; fillStartOptions([], '\u7121\u53ef\u9078\u64c7\u6642\u6bb5'); renderSlotBoxes([], T.noSlots); } }); }
 
     function loadCancelBookings() { if (!canManageBookings()) { byId('cancelList').innerHTML = ''; denyManageAction('cancelMessage'); return; } var date = byId('cancelDateInput').value; clearBox('cancelMessage'); byId('cancelList').innerHTML = ''; if (!date) { showPanelMessage('cancelMessage', T.required, true); return; } if (!hasBackend() || !LINE_READY) { byId('cancelList').innerHTML = '<div class="slotBox empty">' + T.backendFail + '</div>'; return; } apiCall('getBookedByDate', { date: date }, function (result) { renderBookingList('cancelList', filterFutureBookings(result.bookings || [], date), true); }, function (err) { showPanelMessage('cancelMessage', err, true); }); }
 
@@ -3199,6 +3212,7 @@
       showBookingProgress('\u53d6\u6d88\u4e2d...', true);
       apiCall('cancelReservationByRow', { rowNumber: rowNumber }, function () {
         DAY_DATA_CACHE = {};
+        AVAILABLE_SLOT_CACHE = {};
         showBookingProgress('\u274c \u53d6\u6d88\u6210\u529f', true);
         setTimeout(function () {
           closeBookingProgress();
@@ -3259,9 +3273,9 @@
         byId('reportArea').innerHTML = '<div class="slotBox empty">' + T.backendFail + '</div>';
         return;
       }
-      if (DAY_DATA_CACHE[date]) { renderTomorrowReport(DAY_DATA_CACHE[date] || {}); return; }
+      if (isCacheFresh(DAY_DATA_CACHE[date], getSummaryCacheMs())) { renderTomorrowReport(DAY_DATA_CACHE[date].data || {}); return; }
       apiCall('getDay', { date: date }, function (data) {
-        DAY_DATA_CACHE[date] = data;
+        DAY_DATA_CACHE[date] = { time: Date.now(), data: data };
         renderTomorrowReport(data || {});
       }, function (err) {
         byId('reportArea').innerHTML = '<div class="message err">' + escapeHtml(err) + '</div>';
@@ -3339,9 +3353,9 @@
       showBookingProgress('\u9810\u7d04\u4e2d...');
       if (EDIT_ROW_NUMBER) {
         data.rowNumber = EDIT_ROW_NUMBER;
-        apiCall('updateReservation', data, function () { DAY_DATA_CACHE = {}; showBookingSuccessAndReset(); }, function (err) { closeBookingProgress(); showMessage(err, true); showToast(err, true); });
+        apiCall('updateReservation', data, function () { DAY_DATA_CACHE = {}; AVAILABLE_SLOT_CACHE = {}; showBookingSuccessAndReset(); }, function (err) { closeBookingProgress(); showMessage(err, true); showToast(err, true); });
       } else {
-        apiCall('createReservation', data, function () { DAY_DATA_CACHE = {}; showBookingSuccessAndReset(); }, function (err) { var msg = String(err).indexOf('??') >= 0 ? T.conflict : err; closeBookingProgress(); showMessage(msg, true); showToast(msg, true); updateAvailableSlots(); loadSummary(); });
+        apiCall('createReservation', data, function () { DAY_DATA_CACHE = {}; AVAILABLE_SLOT_CACHE = {}; showBookingSuccessAndReset(); }, function (err) { var msg = String(err).indexOf('??') >= 0 ? T.conflict : err; closeBookingProgress(); showMessage(msg, true); showToast(msg, true); updateAvailableSlots(); loadSummary(); });
       }
     }
 
@@ -3379,11 +3393,17 @@
       var date = byId('summaryDateInput').value;
       area.innerHTML = '<div class="sectionNote">' + T.loading + '</div>';
       if (!hasBackend() || !LINE_READY) { renderFallbackSummary(); return; }
-      if (DAY_DATA_CACHE[date]) { renderSummary(DAY_DATA_CACHE[date]); return; }
+      var cached = DAY_DATA_CACHE[date];
+      var showedCached = false;
+      if (cached) {
+        renderSummary(cached.data || cached);
+        showedCached = true;
+        if (isCacheFresh(cached, getSummaryCacheMs())) return;
+      }
       apiCall('getDay', { date: date }, function (data) {
-        DAY_DATA_CACHE[date] = data;
+        DAY_DATA_CACHE[date] = { time: Date.now(), data: data };
         renderSummary(data);
-      }, function (err) { area.innerHTML = '<div class="message err">' + escapeHtml(err) + '</div>'; });
+      }, function (err) { if (!showedCached) area.innerHTML = '<div class="message err">' + escapeHtml(err) + '</div>'; });
     }
 
     function renderSummary(data) {
