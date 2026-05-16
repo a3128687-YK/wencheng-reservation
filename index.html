@@ -849,6 +849,46 @@
     var EDIT_ROW_NUMBER = null;
     var PENDING_SUMMARY_START = '';
     var DAY_DATA_CACHE = {};
+    var USER_PERMISSION_CACHE_MS = 48 * 60 * 60 * 1000;
+
+    function getCachedUserPermission(profile) {
+      if (!profile || !profile.userId || !window.localStorage) return null;
+      try {
+        var raw = localStorage.getItem('wencheng_user_permission_' + profile.userId);
+        if (!raw) return null;
+        var cached = JSON.parse(raw);
+        if (!cached || cached.userId !== profile.userId || !cached.time) return null;
+        if (Date.now() - cached.time > USER_PERMISSION_CACHE_MS) return null;
+        return cached;
+      } catch (err) {
+        return null;
+      }
+    }
+
+    function saveCachedUserPermission(user) {
+      if (!user || !user.userId || !window.localStorage) return;
+      try {
+        localStorage.setItem('wencheng_user_permission_' + user.userId, JSON.stringify({
+          userId: user.userId,
+          displayName: user.displayName || user.userName || '',
+          userName: user.userName || user.displayName || '',
+          role: user.role || 'STAFF',
+          isAdmin: !!user.isAdmin,
+          time: Date.now()
+        }));
+      } catch (err) {}
+    }
+
+    function applyUserPermission(user) {
+      LINE_PROFILE.role = user && user.role ? user.role : 'STAFF';
+      LINE_PROFILE.isAdmin = !!(user && user.isAdmin);
+      if (user && (user.displayName || user.userName)) {
+        LINE_PROFILE.displayName = user.displayName || user.userName;
+        setLineUserName(LINE_PROFILE.displayName);
+      }
+      APP_MODE = LINE_PROFILE.isAdmin ? 'MANAGE' : 'READONLY';
+      applyPermissionUi();
+    }
 
     function getSlotCacheMs() {
       return canManageBookings() ? 2 * 60 * 1000 : 10 * 60 * 1000;
@@ -1029,7 +1069,7 @@
       });
     }
 
-    function registerLineProfile(profile) { LINE_PROFILE.userId = profile.userId || ''; LINE_PROFILE.displayName = profile.displayName || ''; LINE_ID_TOKEN = liff.getIDToken() || ''; setLineUserName(LINE_PROFILE.displayName); if (!hasBackend()) { clearTimeout(LIFF_TIMEOUT_ID); showLineLock('尚未設定 Apps Script API 網址，請先修改 index.html 的 API_URL。'); return; } apiCall('register', {}, function (user) { clearTimeout(LIFF_TIMEOUT_ID); LINE_PROFILE.role = user && user.role ? user.role : 'STAFF'; LINE_PROFILE.isAdmin = !!(user && user.isAdmin); APP_MODE = LINE_PROFILE.isAdmin ? 'MANAGE' : 'READONLY'; applyPermissionUi(); LINE_READY = true; hideLineLock(); showMessage(T.autoName, false); routeInitialPage(); connectBackend(); }, function (err) { clearTimeout(LIFF_TIMEOUT_ID); showLineLock(err); }); }
+    function registerLineProfile(profile) { LINE_PROFILE.userId = profile.userId || ''; LINE_PROFILE.displayName = profile.displayName || ''; LINE_ID_TOKEN = liff.getIDToken() || ''; setLineUserName(LINE_PROFILE.displayName); if (!hasBackend()) { clearTimeout(LIFF_TIMEOUT_ID); showLineLock('尚未設定 Apps Script API 網址，請先修改 index.html 的 API_URL。'); return; } var cachedUser = getCachedUserPermission(LINE_PROFILE); if (cachedUser) { clearTimeout(LIFF_TIMEOUT_ID); applyUserPermission(cachedUser); LINE_READY = true; hideLineLock(); showMessage(T.autoName, false); routeInitialPage(); connectBackend(); apiCall('register', {}, function (user) { saveCachedUserPermission(user); applyUserPermission(user); }, function () {}, { silent: true }); return; } apiCall('register', {}, function (user) { clearTimeout(LIFF_TIMEOUT_ID); saveCachedUserPermission(user); applyUserPermission(user); LINE_READY = true; hideLineLock(); showMessage(T.autoName, false); routeInitialPage(); connectBackend(); }, function (err) { clearTimeout(LIFF_TIMEOUT_ID); showLineLock(err); }); }
 
     function lockUntilLineReady() {
       showLineLock('\u6b63\u5728\u78ba\u8a8d LINE \u8eab\u4efd\uff0c\u8acb\u7a0d\u5019...');
