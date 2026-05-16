@@ -3672,7 +3672,7 @@
         cell.onclick = function () {
           var row = cell.getAttribute('data-row');
           if (row) openBookingDetail(row);
-          else if (cell.getAttribute('data-past') !== '1') startBookingFromSummary(cell.getAttribute('data-date'), cell.getAttribute('data-room'), cell.getAttribute('data-start'));
+          else if (cell.getAttribute('data-past') !== '1' || canManageBookings()) startBookingFromSummary(cell.getAttribute('data-date'), cell.getAttribute('data-room'), cell.getAttribute('data-start'));
         };
       });
     }
