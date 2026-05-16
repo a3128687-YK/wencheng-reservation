@@ -3417,15 +3417,15 @@
       var booking = CANCEL_BOOKINGS[String(rowNumber)] || BOOKING_DETAILS[String(rowNumber)];
       if (!requireLineReady(messageId)) return;
       showBookingProgress('\u53d6\u6d88\u4e2d...', true);
-      apiCall('cancelReservationByRow', { rowNumber: rowNumber }, function () {
+        apiCall('cancelReservationByRow', { rowNumber: rowNumber }, function () {
         var changedDate = booking && booking.date ? String(booking.date).replace(/\//g, '-') : byId('summaryDateInput').value;
         clearCachedDate(changedDate);
         showBookingProgress('\u274c \u53d6\u6d88\u6210\u529f', true);
-        refreshVisibleDayAfterChange(changedDate);
         setTimeout(function () {
           closeBookingProgress();
           clearBox(messageId);
           refreshVisibleLists();
+          refreshVisibleDayAfterChange(changedDate);
         }, 1500);
       }, function (err) {
         closeBookingProgress();
@@ -3590,9 +3590,9 @@
       showBookingProgress('\u9810\u7d04\u4e2d...');
       if (EDIT_ROW_NUMBER) {
         data.rowNumber = EDIT_ROW_NUMBER;
-        apiCall('updateReservation', data, function () { clearCachedDate(data.date); refreshVisibleDayAfterChange(data.date); showBookingSuccessAndReset(); }, function (err) { closeBookingProgress(); showMessage(err, true); showToast(err, true); }, { silent: true });
+        apiCall('updateReservation', data, function () { clearCachedDate(data.date); showBookingSuccessAndReset(data.date); }, function (err) { closeBookingProgress(); showMessage(err, true); showToast(err, true); }, { silent: true });
       } else {
-        apiCall('createReservation', data, function () { clearCachedDate(data.date); refreshVisibleDayAfterChange(data.date); showBookingSuccessAndReset(); }, function (err) { var msg = String(err).indexOf('??') >= 0 ? T.conflict : err; closeBookingProgress(); showMessage(msg, true); showToast(msg, true); updateAvailableSlots(); loadSummary(); }, { silent: true });
+        apiCall('createReservation', data, function () { clearCachedDate(data.date); showBookingSuccessAndReset(data.date); }, function (err) { var msg = String(err).indexOf('??') >= 0 ? T.conflict : err; closeBookingProgress(); showMessage(msg, true); showToast(msg, true); updateAvailableSlots(); }, { silent: true });
       }
     }
 
@@ -3612,7 +3612,7 @@
       if (old) old.remove();
     }
 
-    function showBookingSuccessAndReset() {
+    function showBookingSuccessAndReset(changedDate) {
       showBookingProgress('\ud83d\udc4c \u9810\u7d04\u6210\u529f');
       setTimeout(function () {
         closeBookingProgress();
@@ -3620,6 +3620,7 @@
         byId('bookBtn').textContent = T.bookBtn;
         resetBookingForm(false);
         window.scrollTo({ top: 0, behavior: 'smooth' });
+        if (changedDate) refreshVisibleDayAfterChange(changedDate);
       }, 1500);
     }
 
