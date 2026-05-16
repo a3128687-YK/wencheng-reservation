@@ -909,7 +909,7 @@
       if (window.BOOKING_PRELOAD_STARTED || !hasBackend() || !LINE_READY) return;
       window.BOOKING_PRELOAD_STARTED = true;
       var offsets = [];
-      for (var i = 0; i < 15; i++) offsets.push(i);
+      for (var i = 0; i < 5; i++) offsets.push(i);
       preloadNextDay(offsets, 0);
     }
 
@@ -917,7 +917,7 @@
       if (!offsets || index >= offsets.length || !LINE_READY) return;
       var date = dateOffsetString(offsets[index]);
       var cached = DAY_DATA_CACHE[date];
-      var nextDelay = index < 5 ? 300 : 500;
+      var nextDelay = 700;
       if (isCacheFresh(cached, getSummaryCacheMs())) {
         setTimeout(function () { preloadNextDay(offsets, index + 1); }, nextDelay);
         return;
@@ -1029,7 +1029,7 @@
       });
     }
 
-    function registerLineProfile(profile) { LINE_PROFILE.userId = profile.userId || ''; LINE_PROFILE.displayName = profile.displayName || ''; LINE_ID_TOKEN = liff.getIDToken() || ''; setLineUserName(LINE_PROFILE.displayName); if (!hasBackend()) { clearTimeout(LIFF_TIMEOUT_ID); showLineLock('尚未設定 Apps Script API 網址，請先修改 index.html 的 API_URL。'); return; } apiCall('register', {}, function (user) { clearTimeout(LIFF_TIMEOUT_ID); LINE_PROFILE.role = user && user.role ? user.role : 'STAFF'; LINE_PROFILE.isAdmin = !!(user && user.isAdmin); APP_MODE = LINE_PROFILE.isAdmin ? 'MANAGE' : 'READONLY'; applyPermissionUi(); LINE_READY = true; startBookingPreload(); hideLineLock(); showMessage(T.autoName, false); routeInitialPage(); connectBackend(); }, function (err) { clearTimeout(LIFF_TIMEOUT_ID); showLineLock(err); }); }
+    function registerLineProfile(profile) { LINE_PROFILE.userId = profile.userId || ''; LINE_PROFILE.displayName = profile.displayName || ''; LINE_ID_TOKEN = liff.getIDToken() || ''; setLineUserName(LINE_PROFILE.displayName); if (!hasBackend()) { clearTimeout(LIFF_TIMEOUT_ID); showLineLock('尚未設定 Apps Script API 網址，請先修改 index.html 的 API_URL。'); return; } apiCall('register', {}, function (user) { clearTimeout(LIFF_TIMEOUT_ID); LINE_PROFILE.role = user && user.role ? user.role : 'STAFF'; LINE_PROFILE.isAdmin = !!(user && user.isAdmin); APP_MODE = LINE_PROFILE.isAdmin ? 'MANAGE' : 'READONLY'; applyPermissionUi(); LINE_READY = true; hideLineLock(); showMessage(T.autoName, false); routeInitialPage(); connectBackend(); }, function (err) { clearTimeout(LIFF_TIMEOUT_ID); showLineLock(err); }); }
 
     function lockUntilLineReady() {
       showLineLock('\u6b63\u5728\u78ba\u8a8d LINE \u8eab\u4efd\uff0c\u8acb\u7a0d\u5019...');
@@ -2868,6 +2868,7 @@
       byId('tabPeople').classList.remove('active');
       byId('scheduleTabs').classList.add('active');
       showTab('summary');
+      setTimeout(startBookingPreload, 800);
     }
 
     function showPeopleHome() {
@@ -3393,8 +3394,8 @@
       });
     }
 
-    function fillStartOptions(slots, emptyLabel) { var select = byId('startSelect'); select.innerHTML = ''; if (!slots.length) { var emptyOption = new Option(emptyLabel || T.pickTime, ''); emptyOption.disabled = true; emptyOption.selected = true; select.appendChild(emptyOption); byId('endSelect').innerHTML = ''; var endEmptyOption = new Option(emptyLabel || T.pickTime, ''); endEmptyOption.disabled = true; endEmptyOption.selected = true; byId('endSelect').appendChild(endEmptyOption); return; } select.appendChild(new Option(T.start, '')); slots.forEach(function (slot) { select.appendChild(new Option(slot.start, slot.start)); }); byId('endSelect').innerHTML = ''; byId('endSelect').appendChild(new Option(T.pickTime, '')); }
-    function syncEndTime() { var start = byId('startSelect').value; var endSelect = byId('endSelect'); endSelect.innerHTML = ''; var slot = AVAILABLE_SLOTS.find(function (item) { return item.start === start; }); var ends = slot && slot.ends ? slot.ends : []; if (!ends.length && start) ends = buildFallbackEnds(start); if (!ends.length) { endSelect.appendChild(new Option(T.pickTime, '')); return; } endSelect.appendChild(new Option(T.end, '')); ends.forEach(function (end) { endSelect.appendChild(new Option(end, end)); }); }
+    function fillStartOptions(slots, emptyLabel) { var select = byId('startSelect'); var oldStart = select.value; var oldEnd = byId('endSelect').value; select.innerHTML = ''; if (!slots.length) { var emptyOption = new Option(emptyLabel || T.pickTime, ''); emptyOption.disabled = true; emptyOption.selected = true; select.appendChild(emptyOption); byId('endSelect').innerHTML = ''; var endEmptyOption = new Option(emptyLabel || T.pickTime, ''); endEmptyOption.disabled = true; endEmptyOption.selected = true; byId('endSelect').appendChild(endEmptyOption); return; } select.appendChild(new Option(T.start, '')); slots.forEach(function (slot) { select.appendChild(new Option(slot.start, slot.start)); }); if (oldStart && Array.prototype.some.call(select.options, function (option) { return option.value === oldStart; })) select.value = oldStart; byId('endSelect').innerHTML = ''; byId('endSelect').appendChild(new Option(T.pickTime, '')); if (select.value) syncEndTime(oldEnd); }
+    function syncEndTime(preferredEnd) { var start = byId('startSelect').value; var endSelect = byId('endSelect'); var oldEnd = preferredEnd || endSelect.value; endSelect.innerHTML = ''; var slot = AVAILABLE_SLOTS.find(function (item) { return item.start === start; }); var ends = slot && slot.ends ? slot.ends : []; if (!ends.length && start) ends = buildFallbackEnds(start); if (!ends.length) { endSelect.appendChild(new Option(T.pickTime, '')); return; } endSelect.appendChild(new Option(T.end, '')); ends.forEach(function (end) { endSelect.appendChild(new Option(end, end)); }); if (oldEnd && Array.prototype.some.call(endSelect.options, function (option) { return option.value === oldEnd; })) endSelect.value = oldEnd; }
     function renderSlotBoxes(slots, emptyText) { var box = byId('availableSlots'); if (!slots || !slots.length) { box.innerHTML = '<div class="slotBox empty">' + escapeHtml(emptyText || T.noSlots) + '</div>'; return; } box.innerHTML = slots.map(function (slot) { return '<button class="slotBox" type="button" data-start="' + escapeHtml(slot.start) + '">' + escapeHtml(slot.start) + '<small>' + T.canStart + '</small></button>'; }).join(''); Array.prototype.forEach.call(box.querySelectorAll('button'), function (btn) { btn.onclick = function () { byId('startSelect').value = btn.getAttribute('data-start'); syncEndTime(); }; }); }
     function filterFutureStartSlots(slots, dateValue) { if (!isTodayDate(dateValue)) return slots || []; var now = new Date(); var currentMin = now.getHours() * 60 + now.getMinutes(); return (slots || []).filter(function (slot) { return timeToMin(slot.start) > currentMin; }); }
     function isTodayDate(dateValue) { var d = parseLocalDate(dateValue); if (!d) return false; var today = new Date(); return d.getFullYear() === today.getFullYear() && d.getMonth() === today.getMonth() && d.getDate() === today.getDate(); }
@@ -3486,13 +3487,16 @@
     }
 
     function verifyBookingSlotThenReview(data) {
+      var cachedDay = DAY_DATA_CACHE[data.date];
+      if (isCacheFresh(cachedDay, getSlotCacheMs())) {
+        openBookingReview(data);
+        return;
+      }
       showBookingProgress('確認時段中...');
-      clearCachedDate(data.date);
       refreshDayCache(data.date, function (freshData) {
         closeBookingProgress();
         if (!freshData) {
           showMessage('無法確認最新空房，請重新選擇日期與房間。', true);
-          updateAvailableSlots();
           return;
         }
         var freshSlots = getAvailableSlotsFromDayData(data.date, data.room, freshData) || [];
@@ -3504,6 +3508,8 @@
           AVAILABLE_SLOTS = freshSlots;
           AVAILABLE_SLOT_CACHE[data.date + '|' + data.room] = { time: Date.now(), slots: freshSlots };
           fillStartOptions(freshSlots, '\u7121\u53ef\u9078\u64c7\u6642\u6bb5');
+          byId('startSelect').value = '';
+          syncEndTime();
           renderSlotBoxes(freshSlots);
           return;
         }
